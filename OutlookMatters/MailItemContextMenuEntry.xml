@@ -2,7 +2,9 @@
 <customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui" onLoad="Ribbon_Load">
   <contextMenus>
     <contextMenu idMso="ContextMenuMailItem">
-      <button id="MyContextMenuMailItem" label="Mattermost"/>
+      <menu id="MattermostContextMenu" label="Mattermost">
+        <button id="SettingsContextMenuItem" label="Settings..."/>
+      </menu>
     </contextMenu>
   </contextMenus>
 </customUI>
