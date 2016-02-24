@@ -6,21 +6,21 @@
              xmlns:local="clr-namespace:OutlookMatters"
              mc:Ignorable="d" 
              Title="Settings"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" Activated="SettingsWindow_OnActivated">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"></ColumnDefinition>
+            <ColumnDefinition Width="50"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0" Grid.Column="0">Mattermost URL:</Label>
-        <TextBox Grid.Row="0" Grid.Column="1"></TextBox>
+        <TextBox Name="url" Grid.Row="0" Grid.Column="1"></TextBox>
         <Label Grid.Row="1" Grid.Column="0">Channel ID:</Label>
         <TextBox Grid.Row="1" Grid.Column="1"></TextBox>
         <Label Grid.Row="2" Grid.Column="0">Username:</Label>
@@ -28,6 +28,6 @@
         <Label Grid.Row="3" Grid.Column="0">Password:</Label>
         <TextBox Grid.Row="3" Grid.Column="1"></TextBox>
         <Button Grid.Row="4" Grid.Column="0">Cancel</Button>
-        <Button Grid.Row="4" Grid.Column="1">Save</Button>
+        <Button Grid.Row="4" Grid.Column="1" Click="Button_Click">Save</Button>
     </Grid>
 </Window>

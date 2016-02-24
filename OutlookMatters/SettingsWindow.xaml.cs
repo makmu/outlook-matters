@@ -24,5 +24,17 @@ namespace OutlookMatters
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.MattermostUrl = url.Text;
+            Properties.Settings.Default.Save();
+            Close();
+        }
+
+        private void SettingsWindow_OnActivated(object sender, EventArgs e)
+        {
+            url.Text = Properties.Settings.Default.MattermostUrl;
+        }
     }
 }
