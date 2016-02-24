@@ -3,7 +3,7 @@
   <contextMenus>
     <contextMenu idMso="ContextMenuMailItem">
       <menu id="MattermostContextMenu" label="Mattermost">
-        <button id="SettingsContextMenuItem" label="Settings..."/>
+        <button id="SettingsContextMenuItem" label="Settings..." onAction="OnSettingsClick"/>
       </menu>
     </contextMenu>
   </contextMenus>
