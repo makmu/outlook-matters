@@ -20,6 +20,11 @@ namespace OutlookMatters
             //    must run when Outlook shuts down, see http://go.microsoft.com/fwlink/?LinkId=506785
         }
 
+        protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject()
+        {
+            return new MailItemContextMenuEntry();
+        }
+
         #region VSTO generated code
 
         /// <summary>
