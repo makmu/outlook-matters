@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 using Office = Microsoft.Office.Core;
 
 // 2. Create callback methods in the "Ribbon Callbacks" region of this class to handle user
@@ -43,15 +44,10 @@ namespace OutlookMatters
 
         #endregion
 
-        #region Ribbon Callbacks
-        //Create callback methods here. For more information about adding callback methods, visit http://go.microsoft.com/fwlink/?LinkID=271226
-
-        public void Ribbon_Load(Office.IRibbonUI ribbonUI)
+        public void OnSettingsClick(Office.IRibbonControl control)
         {
-            this.ribbon = ribbonUI;
+            MessageBox.Show("Checkpoint");
         }
-
-        #endregion
 
         #region Helpers
 
