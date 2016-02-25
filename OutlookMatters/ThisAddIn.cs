@@ -17,7 +17,10 @@ namespace OutlookMatters
 
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
-            return new MailItemContextMenuEntry();
+            return new MailItemContextMenuEntry(
+                new OutlookMailExplorer(),
+                new RestMattermost(new RestSessionFactory()),
+                new ApplicationSettingsProvider());
         }
 
         #region VSTO generated code

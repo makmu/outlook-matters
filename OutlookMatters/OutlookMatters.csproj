@@ -155,12 +155,22 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="ApplicationSettingsProvider.cs" />
+    <Compile Include="IMattermost.cs" />
+    <Compile Include="IMailExplorer.cs" />
+    <Compile Include="ISettingsProvider.cs" />
+    <Compile Include="ISession.cs" />
+    <Compile Include="ISessionFactory.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="MailItemContextMenuEntry.cs" />
+    <Compile Include="OutlookMailExplorer.cs" />
     <Compile Include="Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RestMattermost.cs" />
+    <Compile Include="RestSession.cs" />
+    <Compile Include="RestSessionFactory.cs" />
     <Compile Include="User.cs" />
     <Compile Include="View\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
