@@ -3,6 +3,7 @@
   <contextMenus>
     <contextMenu idMso="ContextMenuMailItem">
       <menu id="MattermostContextMenu" label="Mattermost">
+        <button id="Post" label="Post" onAction="OnPostClick"/>
         <button id="SettingsContextMenuItem" label="Settings..." onAction="OnSettingsClick"/>
       </menu>
     </contextMenu>
