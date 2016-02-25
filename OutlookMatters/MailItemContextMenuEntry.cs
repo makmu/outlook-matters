@@ -25,7 +25,8 @@ namespace OutlookMatters
 
         public void OnSettingsClick(Office.IRibbonControl control)
         {
-            MessageBox.Show("Checkpoint");
+            var window = new SettingsWindow();
+            window.ShowDialog();
         }
 
         #region Helpers
