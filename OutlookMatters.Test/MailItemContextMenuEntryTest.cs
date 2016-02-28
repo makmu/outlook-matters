@@ -43,8 +43,8 @@ namespace OutlookMatters.Test
             var mattermost = new Mock<IMattermost>();
             mattermost.Setup(x => x.LoginByUsername(url, teamId, username, password)).Returns(session.Object);
             mattermost.Setup(
-                x => x.LoginByUsername(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(Mock.Of<ISession>());
+                x => x.LoginByUsername(url, teamId, username, password))
+                .Returns(session.Object);
             var classUnderTest = new MailItemContextMenuEntry(explorer.Object, mattermost.Object, settings.Object);
 
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
