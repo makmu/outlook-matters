@@ -1,0 +1,9 @@
+﻿namespace OutlookMatters
+{
+    public interface IHttpRequest
+    {
+        IHttpRequest WithContentType(string contentType);
+        IHttpRequest WithHeader(string key, string value);
+        IHttpResponse Send(string payload);
+    }
+}

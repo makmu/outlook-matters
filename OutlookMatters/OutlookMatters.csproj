@@ -156,6 +156,11 @@
   -->
   <ItemGroup>
     <Compile Include="ApplicationSettingsProvider.cs" />
+    <Compile Include="DotNetHttpClient.cs" />
+    <Compile Include="DotNetHttpRequest.cs" />
+    <Compile Include="IHttpClient.cs" />
+    <Compile Include="IHttpRequest.cs" />
+    <Compile Include="IHttpResponse.cs" />
     <Compile Include="IMattermost.cs" />
     <Compile Include="IMailExplorer.cs" />
     <Compile Include="ISettingsProvider.cs" />
@@ -169,8 +174,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RestMattermost.cs" />
-    <Compile Include="RestSession.cs" />
-    <Compile Include="RestSessionFactory.cs" />
+    <Compile Include="UserSession.cs" />
+    <Compile Include="UserSessionFactory.cs" />
     <Compile Include="User.cs" />
     <Compile Include="View\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>

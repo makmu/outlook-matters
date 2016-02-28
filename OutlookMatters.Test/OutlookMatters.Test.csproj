@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="MailItemContextMenuEntryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserSessionTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

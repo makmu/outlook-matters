@@ -8,10 +8,12 @@ namespace OutlookMatters
     public class RestMattermost: IMattermost
     {
         private readonly ISessionFactory _sessionFactory;
+        private readonly IHttpClient _client;
 
-        public RestMattermost(ISessionFactory sessionFactory)
+        public RestMattermost(ISessionFactory sessionFactory, IHttpClient _client)
         {
             _sessionFactory = sessionFactory;
+            this._client = _client;
         }
 
         public ISession LoginByUsername(string url, string teamId, string username, string password)
@@ -23,26 +25,15 @@ namespace OutlookMatters
                 email = username,
                 password = password
             };
+            var response = _client.Post(loginUrl)
+                .WithContentType("text/json")
+                .Send(JsonConvert.SerializeObject(login));
 
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(loginUrl);
-            httpWebRequest.ContentType = "text/json";
-            httpWebRequest.Method = "Post";
-            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-            {
-                string json = JsonConvert.SerializeObject(login);
-                streamWriter.Write(json);
-                streamWriter.Flush();
-                streamWriter.Close();
-            }
-            var httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            var token = httpWebResponse.Headers["Token"];
+            var token = response.GetHeaderValue("Token");
+            var payload = response.GetPayload();
+            var user = JsonConvert.DeserializeObject<User>(payload);
 
-            using (var streamReader = new StreamReader(httpWebResponse.GetResponseStream()))
-            {
-                string result = streamReader.ReadToEnd();
-                var user = JsonConvert.DeserializeObject<User>(result);
-                return _sessionFactory.CreateSession(new Uri(url), token, user.id);
-            }
+            return _sessionFactory.CreateSession(new Uri(url), token, user.id);
         }
     }
 }

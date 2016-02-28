@@ -17,9 +17,10 @@ namespace OutlookMatters
 
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
+            var httpClient = new DotNetHttpClient();
             return new MailItemContextMenuEntry(
                 new OutlookMailExplorer(),
-                new RestMattermost(new RestSessionFactory()),
+                new RestMattermost(new UserSessionFactory(httpClient), httpClient),
                 new ApplicationSettingsProvider());
         }
 
