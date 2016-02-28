@@ -18,7 +18,7 @@ namespace OutlookMatters.Settings
             Properties.Settings.Default.MattermostUrl = url.Text;
             Properties.Settings.Default.ChannelId = channel.Text;
             Properties.Settings.Default.Password = password.Password;
-            Properties.Settings.Default.Email = email.Text;
+            Properties.Settings.Default.Username = username.Text;
             Properties.Settings.Default.TeamId = teamId.Text;
             Properties.Settings.Default.Save();
             Close();
@@ -28,7 +28,7 @@ namespace OutlookMatters.Settings
         {
             url.Text = Properties.Settings.Default.MattermostUrl;
             channel.Text = Properties.Settings.Default.ChannelId;
-            email.Text = Properties.Settings.Default.Email;
+            username.Text = Properties.Settings.Default.Username;
             teamId.Text = Properties.Settings.Default.TeamId;
         }
 

@@ -26,8 +26,8 @@
         <TextBox Name="teamId" Grid.Column="1" Grid.Row="1"></TextBox>
         <Label Grid.Row="1" Grid.Column="0">Team Id:</Label>
         <TextBox Name="channel" Grid.Row="2" Grid.Column="1"></TextBox>
-        <Label Grid.Row="3" Grid.Column="0">Email:</Label>
-        <TextBox Name="email" Grid.Row="3" Grid.Column="1"></TextBox>
+        <Label Grid.Row="3" Grid.Column="0">Username (email):</Label>
+        <TextBox Name="username" Grid.Row="3" Grid.Column="1"></TextBox>
         <Label Grid.Row="4" Grid.Column="0">Password:</Label>
         <PasswordBox Name="password" Grid.Row="4" Grid.Column="1"></PasswordBox>
         <Button Grid.Row="5" Grid.Column="0" Click="CancelButton_Click">Cancel</Button>

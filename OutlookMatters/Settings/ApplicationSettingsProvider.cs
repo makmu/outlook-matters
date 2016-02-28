@@ -22,8 +22,8 @@
 
         public string Username
         {
-            get { return Properties.Settings.Default.Email; }
-            set { Properties.Settings.Default.Email = value; }
+            get { return Properties.Settings.Default.Username; }
+            set { Properties.Settings.Default.Username = value; }
         }
 
         public string Password
