@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace OutlookMatters
+namespace OutlookMatters.Http
 {
     public class DotNetHttpClient: IHttpClient
     {

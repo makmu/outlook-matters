@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OutlookMatters
+namespace OutlookMatters.Mattermost
 {
     public interface ISessionFactory
     {

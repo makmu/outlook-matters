@@ -2,6 +2,10 @@
 using Microsoft.Office.Core;
 using Moq;
 using NUnit.Framework;
+using OutlookMatters.ContextMenu;
+using OutlookMatters.Mail;
+using OutlookMatters.Mattermost;
+using OutlookMatters.Settings;
 
 namespace OutlookMatters.Test
 {

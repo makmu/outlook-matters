@@ -1,4 +1,4 @@
-﻿namespace OutlookMatters
+﻿namespace OutlookMatters.Settings
 {
     public interface ISettingsProvider
     {

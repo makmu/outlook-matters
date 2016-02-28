@@ -1,0 +1,35 @@
+﻿namespace OutlookMatters.Settings
+{
+    public class ApplicationSettingsProvider: ISettingsProvider
+    {
+        public string ChannelId
+        {
+            get { return Properties.Settings.Default.ChannelId; }
+            set { Properties.Settings.Default.ChannelId = value; }
+        }
+
+        public string Url
+        {
+            get { return Properties.Settings.Default.MattermostUrl; }
+            set { Properties.Settings.Default.MattermostUrl = value; }
+        }
+
+        public string TeamId
+        {
+            get { return Properties.Settings.Default.TeamId; }
+            set { Properties.Settings.Default.TeamId = value; }
+        }
+
+        public string Username
+        {
+            get { return Properties.Settings.Default.Email; }
+            set { Properties.Settings.Default.Email = value; }
+        }
+
+        public string Password
+        {
+            get { return Properties.Settings.Default.Password; }
+            set { Properties.Settings.Default.Password = value; }
+        }
+    }
+}

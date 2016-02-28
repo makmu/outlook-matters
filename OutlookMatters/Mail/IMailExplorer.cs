@@ -1,4 +1,4 @@
-﻿namespace OutlookMatters
+﻿namespace OutlookMatters.Mail
 {
     public interface IMailExplorer
     {

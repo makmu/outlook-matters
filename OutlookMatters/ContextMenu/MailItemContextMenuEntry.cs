@@ -2,9 +2,12 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using OutlookMatters.Mail;
+using OutlookMatters.Mattermost;
+using OutlookMatters.Settings;
 using Office = Microsoft.Office.Core;
 
-namespace OutlookMatters
+namespace OutlookMatters.ContextMenu
 {
     [ComVisible(true)]
     public class MailItemContextMenuEntry : Office.IRibbonExtensibility
@@ -42,7 +45,7 @@ namespace OutlookMatters
             switch (ribbonId)
             {
                 case "Microsoft.Outlook.Explorer":
-                    return GetResourceText("OutlookMatters.MailItemContextMenuEntry.xml");
+                    return GetResourceText("OutlookMatters.ContextMenu.MailItemContextMenuEntry.xml");
                 default:
                     return string.Empty;
             }
@@ -50,7 +53,7 @@ namespace OutlookMatters
 
         public void OnSettingsClick(Office.IRibbonControl control)
         {
-            var window = new View.SettingsWindow();
+            var window = new SettingsWindow();
             window.ShowDialog();
         }
 

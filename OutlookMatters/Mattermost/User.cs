@@ -1,4 +1,4 @@
-namespace OutlookMatters
+namespace OutlookMatters.Mattermost
 {
     public class User
     {

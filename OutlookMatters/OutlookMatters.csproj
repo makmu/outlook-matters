@@ -155,29 +155,30 @@
     can be found.
   -->
   <ItemGroup>
-    <Compile Include="ApplicationSettingsProvider.cs" />
-    <Compile Include="DotNetHttpClient.cs" />
-    <Compile Include="DotNetHttpRequest.cs" />
-    <Compile Include="IHttpClient.cs" />
-    <Compile Include="IHttpRequest.cs" />
-    <Compile Include="IHttpResponse.cs" />
-    <Compile Include="IMattermost.cs" />
-    <Compile Include="IMailExplorer.cs" />
-    <Compile Include="ISettingsProvider.cs" />
-    <Compile Include="ISession.cs" />
-    <Compile Include="ISessionFactory.cs" />
-    <Compile Include="Login.cs" />
-    <Compile Include="MailItemContextMenuEntry.cs" />
-    <Compile Include="OutlookMailExplorer.cs" />
-    <Compile Include="Post.cs" />
+    <Compile Include="Settings\ApplicationSettingsProvider.cs" />
+    <Compile Include="Http\DotNetHttpClient.cs" />
+    <Compile Include="Http\DotNetHttpRequest.cs" />
+    <Compile Include="Http\DotNetHttpResponse.cs" />
+    <Compile Include="Http\IHttpClient.cs" />
+    <Compile Include="Http\IHttpRequest.cs" />
+    <Compile Include="Http\IHttpResponse.cs" />
+    <Compile Include="Mattermost\IMattermost.cs" />
+    <Compile Include="Mail\IMailExplorer.cs" />
+    <Compile Include="Settings\ISettingsProvider.cs" />
+    <Compile Include="Mattermost\ISession.cs" />
+    <Compile Include="Mattermost\ISessionFactory.cs" />
+    <Compile Include="Mattermost\Login.cs" />
+    <Compile Include="ContextMenu\MailItemContextMenuEntry.cs" />
+    <Compile Include="Mail\OutlookMailExplorer.cs" />
+    <Compile Include="Mattermost\Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RestMattermost.cs" />
-    <Compile Include="UserSession.cs" />
-    <Compile Include="UserSessionFactory.cs" />
-    <Compile Include="User.cs" />
-    <Compile Include="View\SettingsWindow.xaml.cs">
+    <Compile Include="Mattermost\RestMattermost.cs" />
+    <Compile Include="Mattermost\UserSession.cs" />
+    <Compile Include="Mattermost\UserSessionFactory.cs" />
+    <Compile Include="Mattermost\User.cs" />
+    <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -214,10 +215,12 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MailItemContextMenuEntry.xml" />
+    <EmbeddedResource Include="ContextMenu\MailItemContextMenuEntry.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="View\SettingsWindow.xaml">
+    <Page Include="Settings\SettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

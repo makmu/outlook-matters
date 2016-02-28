@@ -1,4 +1,4 @@
-﻿namespace OutlookMatters
+﻿namespace OutlookMatters.Http
 {
     public interface IHttpResponse
     {

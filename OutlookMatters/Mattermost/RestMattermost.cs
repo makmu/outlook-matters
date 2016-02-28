@@ -1,9 +1,8 @@
 ﻿using System;
-using System.IO;
-using System.Net;
 using Newtonsoft.Json;
+using OutlookMatters.Http;
 
-namespace OutlookMatters
+namespace OutlookMatters.Mattermost
 {
     public class RestMattermost: IMattermost
     {

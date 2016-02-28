@@ -1,4 +1,9 @@
 ﻿using System;
+using OutlookMatters.ContextMenu;
+using OutlookMatters.Http;
+using OutlookMatters.Mail;
+using OutlookMatters.Mattermost;
+using OutlookMatters.Settings;
 using Office = Microsoft.Office.Core;
 
 namespace OutlookMatters

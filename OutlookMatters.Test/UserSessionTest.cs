@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 using Moq;
 using NUnit.Framework;
+using OutlookMatters.Http;
+using OutlookMatters.Mattermost;
 
 namespace OutlookMatters.Test
 {

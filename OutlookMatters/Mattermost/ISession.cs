@@ -1,4 +1,4 @@
-﻿namespace OutlookMatters
+﻿namespace OutlookMatters.Mattermost
 {
     public interface ISession
     {

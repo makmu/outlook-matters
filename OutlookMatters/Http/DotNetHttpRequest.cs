@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Net;
 
-namespace OutlookMatters
+namespace OutlookMatters.Http
 {
     internal class DotNetHttpRequest : IHttpRequest
     {
@@ -33,29 +33,6 @@ namespace OutlookMatters
                 streamWriter.Close();
             }
             return new DotNetHttpResponse(_httpWebRequest.GetResponse());
-        }
-    }
-
-    internal class DotNetHttpResponse : IHttpResponse
-    {
-        private readonly WebResponse _response;
-
-        public DotNetHttpResponse(WebResponse response)
-        {
-            _response = response;
-        }
-
-        public string GetHeaderValue(string key)
-        {
-            return _response.Headers[key];
-        }
-
-        public string GetPayload()
-        {
-            using (var streamReader = new StreamReader(_response.GetResponseStream()))
-            {
-                return streamReader.ReadToEnd();
-            }
         }
     }
 }

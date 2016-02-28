@@ -1,6 +1,6 @@
 ﻿using Microsoft.Office.Interop.Outlook;
 
-namespace OutlookMatters
+namespace OutlookMatters.Mail
 {
     public class OutlookMailExplorer: IMailExplorer
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace OutlookMatters.View
+namespace OutlookMatters.Settings
 {
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml
