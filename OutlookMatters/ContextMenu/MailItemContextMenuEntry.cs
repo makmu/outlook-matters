@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using OutlookMatters.Mail;
 using OutlookMatters.Mattermost;
+using OutlookMatters.Security;
 using OutlookMatters.Settings;
 using Office = Microsoft.Office.Core;
 
@@ -15,6 +16,7 @@ namespace OutlookMatters.ContextMenu
         private readonly IMailExplorer _explorer;
         private readonly IMattermost _mattermost;
         private readonly ISettingsProvider _settingsProvider;
+        private readonly IPasswordProvider _passwordProvider;
 
         private ISession _session;
         private ISession Session
@@ -23,21 +25,23 @@ namespace OutlookMatters.ContextMenu
             {
                 if (_session == null)
                 {
+                    var password = _passwordProvider.GetPassword(_settingsProvider.Username);
                     _session = _mattermost.LoginByUsername(
-                                _settingsProvider.Url,
-                                _settingsProvider.TeamId,
-                                _settingsProvider.Username,
-                                _settingsProvider.Password);
+                        _settingsProvider.Url,
+                        _settingsProvider.TeamId,
+                        _settingsProvider.Username,
+                        password);
                 }
                 return _session;
             }
         }
 
-        public MailItemContextMenuEntry(IMailExplorer explorer, IMattermost mattermost, ISettingsProvider settingsProvider)
+        public MailItemContextMenuEntry(IMailExplorer explorer, IMattermost mattermost, ISettingsProvider settingsProvider, IPasswordProvider passwordProvider)
         {
             _explorer = explorer;
             _mattermost = mattermost;
             _settingsProvider = settingsProvider;
+            _passwordProvider = passwordProvider;
         }
 
         public string GetCustomUI(string ribbonId)

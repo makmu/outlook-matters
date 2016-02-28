@@ -155,6 +155,10 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="Security\IPasswordProvider.cs" />
+    <Compile Include="Security\PasswordDialog.xaml.cs">
+      <DependentUpon>PasswordDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings\ApplicationSettingsProvider.cs" />
     <Compile Include="Http\DotNetHttpClient.cs" />
     <Compile Include="Http\DotNetHttpRequest.cs" />
@@ -220,6 +224,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Security\PasswordDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Settings\SettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

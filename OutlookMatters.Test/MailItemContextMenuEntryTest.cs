@@ -5,6 +5,7 @@ using NUnit.Framework;
 using OutlookMatters.ContextMenu;
 using OutlookMatters.Mail;
 using OutlookMatters.Mattermost;
+using OutlookMatters.Security;
 using OutlookMatters.Settings;
 
 namespace OutlookMatters.Test
@@ -15,7 +16,7 @@ namespace OutlookMatters.Test
         [Test]
         public void GetCustomUI_ReturnsCustomUiForExplorer()
         {
-            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<IMattermost>(), Mock.Of<ISettingsProvider>());
+            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<IMattermost>(), Mock.Of<ISettingsProvider>(), Mock.Of<IPasswordProvider>());
 
             var result = classUnderTest.GetCustomUI("Microsoft.Outlook.Explorer");
 
@@ -34,10 +35,11 @@ namespace OutlookMatters.Test
             var session = new Mock<ISession>();
             var settings = new Mock<ISettingsProvider>();
             settings.Setup(x => x.ChannelId).Returns(channelId);
-            settings.Setup(x => x.Password).Returns(password);
             settings.Setup(x => x.TeamId).Returns(teamId);
             settings.Setup(x => x.Url).Returns(url);
             settings.Setup(x => x.Username).Returns(username);
+            var passwordProvider = new Mock<IPasswordProvider>();
+            passwordProvider.Setup(x => x.GetPassword(username)).Returns(password);
             var explorer = new Mock<IMailExplorer>();
             explorer.Setup(x => x.GetSelectedMailBody()).Returns(message);
             var mattermost = new Mock<IMattermost>();
@@ -45,7 +47,7 @@ namespace OutlookMatters.Test
             mattermost.Setup(
                 x => x.LoginByUsername(url, teamId, username, password))
                 .Returns(session.Object);
-            var classUnderTest = new MailItemContextMenuEntry(explorer.Object, mattermost.Object, settings.Object);
+            var classUnderTest = new MailItemContextMenuEntry(explorer.Object, mattermost.Object, settings.Object, passwordProvider.Object);
 
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
 

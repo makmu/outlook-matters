@@ -25,11 +25,5 @@
             get { return Properties.Settings.Default.Username; }
             set { Properties.Settings.Default.Username = value; }
         }
-
-        public string Password
-        {
-            get { return Properties.Settings.Default.Password; }
-            set { Properties.Settings.Default.Password = value; }
-        }
     }
 }

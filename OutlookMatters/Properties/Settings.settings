@@ -11,9 +11,6 @@
     <Setting Name="Username" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Password" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="TeamId" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

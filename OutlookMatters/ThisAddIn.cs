@@ -3,6 +3,7 @@ using OutlookMatters.ContextMenu;
 using OutlookMatters.Http;
 using OutlookMatters.Mail;
 using OutlookMatters.Mattermost;
+using OutlookMatters.Security;
 using OutlookMatters.Settings;
 using Office = Microsoft.Office.Core;
 
@@ -26,7 +27,8 @@ namespace OutlookMatters
             return new MailItemContextMenuEntry(
                 new OutlookMailExplorer(),
                 new RestMattermost(new UserSessionFactory(httpClient), httpClient),
-                new ApplicationSettingsProvider());
+                new ApplicationSettingsProvider(),
+                new PasswordDialog());
         }
 
         #region VSTO generated code
