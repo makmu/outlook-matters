@@ -24,7 +24,7 @@ namespace OutlookMatters.Settings
             Close();
         }
 
-        private void SettingsWindow_OnActivated(object sender, EventArgs e)
+        private void OnWindowLoaded(object sender, EventArgs e)
         {
             url.Text = Properties.Settings.Default.MattermostUrl;
             channel.Text = Properties.Settings.Default.ChannelId;

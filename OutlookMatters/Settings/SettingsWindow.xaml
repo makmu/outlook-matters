@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:OutlookMatters"
              mc:Ignorable="d" 
              Title="Settings"
-             d:DesignHeight="300" d:DesignWidth="300" Activated="SettingsWindow_OnActivated">
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="OnWindowLoaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
