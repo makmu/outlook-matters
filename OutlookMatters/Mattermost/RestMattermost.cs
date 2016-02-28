@@ -9,10 +9,10 @@ namespace OutlookMatters.Mattermost
         private readonly ISessionFactory _sessionFactory;
         private readonly IHttpClient _client;
 
-        public RestMattermost(ISessionFactory sessionFactory, IHttpClient _client)
+        public RestMattermost(ISessionFactory sessionFactory, IHttpClient client)
         {
             _sessionFactory = sessionFactory;
-            this._client = _client;
+            _client = client;
         }
 
         public ISession LoginByUsername(string url, string teamId, string username, string password)
