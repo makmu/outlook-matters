@@ -1,8 +1,10 @@
-﻿using FluentAssertions;
+﻿using System.Net;
+using FluentAssertions;
 using Microsoft.Office.Core;
 using Moq;
 using NUnit.Framework;
 using OutlookMatters.ContextMenu;
+using OutlookMatters.Error;
 using OutlookMatters.Mail;
 using OutlookMatters.Mattermost;
 using OutlookMatters.Security;
@@ -16,7 +18,7 @@ namespace OutlookMatters.Test
         [Test]
         public void GetCustomUI_ReturnsCustomUiForExplorer()
         {
-            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<IMattermost>(), Mock.Of<ISettingsProvider>(), Mock.Of<IPasswordProvider>());
+            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<IMattermost>(), Mock.Of<ISettingsProvider>(), Mock.Of<IPasswordProvider>(), Mock.Of<IErrorDisplay>());
 
             var result = classUnderTest.GetCustomUI("Microsoft.Outlook.Explorer");
 
@@ -47,11 +49,68 @@ namespace OutlookMatters.Test
             mattermost.Setup(
                 x => x.LoginByUsername(url, teamId, username, password))
                 .Returns(session.Object);
-            var classUnderTest = new MailItemContextMenuEntry(explorer.Object, mattermost.Object, settings.Object, passwordProvider.Object);
+            var classUnderTest = new MailItemContextMenuEntry(explorer.Object, mattermost.Object, settings.Object, passwordProvider.Object,Mock.Of<IErrorDisplay>());
 
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
 
             session.Verify(x => x.CreatePost(channelId, message));
+        }
+
+        [Test]
+        public void OnPostClick_CanHandleUserPasswordAbort()
+        {
+            var passwordProvider = new Mock<IPasswordProvider>();
+            passwordProvider.Setup(x => x.GetPassword(It.IsAny<string>())).Throws<System.Exception>();
+            var classUnderTest = new MailItemContextMenuEntry(
+                Mock.Of<IMailExplorer>(),
+                Mock.Of<IMattermost>(),
+                Mock.Of<ISettingsProvider>(),
+                passwordProvider.Object,
+                Mock.Of<IErrorDisplay>());
+
+            classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
+        }
+
+        [Test]
+        public void OnPostClick_CanHandleWebExceptionsWhileLogginIn()
+        {
+            var mattermost = new Mock<IMattermost>();
+            mattermost.Setup(
+                x => x.LoginByUsername(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Throws<WebException>();
+            var errorDisplay = new Mock<IErrorDisplay>();
+            var classUnderTest = new MailItemContextMenuEntry(
+                Mock.Of<IMailExplorer>(),
+                mattermost.Object,
+                Mock.Of<ISettingsProvider>(),
+                Mock.Of<IPasswordProvider>(),
+                errorDisplay.Object);
+
+            classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
+
+            errorDisplay.Verify( x => x.Display(It.IsAny<WebException>()));
+        }
+
+        [Test]
+        public void OnPostClick_CanHandleWebExceptionsWhileCreatingPost()
+        {
+            var session = new Mock<ISession>();
+            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>())).Throws<WebException>();
+            var mattermost = new Mock<IMattermost>();
+            mattermost.Setup(
+                x => x.LoginByUsername(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(session.Object);
+            var errorDisplay = new Mock<IErrorDisplay>();
+            var classUnderTest = new MailItemContextMenuEntry(
+                Mock.Of<IMailExplorer>(),
+                mattermost.Object,
+                Mock.Of<ISettingsProvider>(),
+                Mock.Of<IPasswordProvider>(),
+                errorDisplay.Object);
+
+            classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
+
+            errorDisplay.Verify( x => x.Display(It.IsAny<WebException>()));
         }
     }
 }

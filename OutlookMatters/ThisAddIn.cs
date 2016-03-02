@@ -1,5 +1,6 @@
 ﻿using System;
 using OutlookMatters.ContextMenu;
+using OutlookMatters.Error;
 using OutlookMatters.Http;
 using OutlookMatters.Mail;
 using OutlookMatters.Mattermost;
@@ -28,7 +29,8 @@ namespace OutlookMatters
                 new OutlookMailExplorer(),
                 new RestMattermost(new UserSessionFactory(httpClient), httpClient),
                 new ApplicationSettingsProvider(),
-                new PasswordDialog());
+                new PasswordDialog(),
+                new MessageBoxErrorDisplay());
         }
 
         #region VSTO generated code

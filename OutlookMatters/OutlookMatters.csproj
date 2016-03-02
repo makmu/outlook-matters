@@ -155,6 +155,8 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="Error\IErrorDisplay.cs" />
+    <Compile Include="Error\MessageBoxErrorDisplay.cs" />
     <Compile Include="Security\IPasswordProvider.cs" />
     <Compile Include="Security\PasswordDialog.xaml.cs">
       <DependentUpon>PasswordDialog.xaml</DependentUpon>
