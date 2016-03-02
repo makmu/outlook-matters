@@ -15,7 +15,7 @@ namespace OutlookMatters.Security
 
         public string GetPassword(string username)
         {
-            Username.Text = username;
+            Username.Content = username;
             ShowDialog();
             if (DialogResult == true)
             {

@@ -3,31 +3,50 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:OutlookMatters"
              mc:Ignorable="d" 
-             Title="Settings"
-             d:DesignHeight="300" d:DesignWidth="300" Loaded="OnWindowLoaded">
+             Title="Mattermost Settings"
+             Height="250"
+             Width="400"
+             d:DesignHeight="250" d:DesignWidth="400" Loaded="OnWindowLoaded" ResizeMode="NoResize" WindowStyle="ToolWindow">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0">Mattermost URL:</Label>
-        <TextBox Name="url" Grid.Row="0" Grid.Column="1" ></TextBox>
-        <Label Grid.Row="2" Grid.Column="0">Channel Id:</Label>
-        <TextBox Name="teamId" Grid.Column="1" Grid.Row="1"></TextBox>
-        <Label Grid.Row="1" Grid.Column="0">Team Id:</Label>
-        <TextBox Name="channel" Grid.Row="2" Grid.Column="1"></TextBox>
-        <Label Grid.Row="3" Grid.Column="0">Username (email):</Label>
-        <TextBox Name="username" Grid.Row="3" Grid.Column="1"></TextBox>
-        <Button Grid.Row="4" Grid.Column="0" Click="CancelButton_Click">Cancel</Button>
-        <Button Grid.Row="4" Grid.Column="1" Click="Button_Click">Save</Button>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="130"></ColumnDefinition>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Margin="5" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Width="99">Mattermost URL:</Label>
+            <TextBox Margin="5" Name="url" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+            <Label Margin="5" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Width="69">Channel Id:</Label>
+            <TextBox Margin="5" Name="teamId" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"></TextBox>
+            <Label Margin="5" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="55">Team Id:</Label>
+            <TextBox Margin="5" Name="channel" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+            <Label Margin="5" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Width="105">Username (email):</Label>
+            <TextBox Margin="5" Name="username" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Padding="10" Margin="10" Grid.Row="1" Grid.Column="1" Click="CancelButton_Click">Cancel</Button>
+            <Button Padding="10" Margin="10" Grid.Row="1" Grid.Column="2" Click="Button_Click">Save</Button>
+        </Grid>
     </Grid>
 </Window>
