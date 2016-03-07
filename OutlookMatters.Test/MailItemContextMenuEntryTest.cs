@@ -18,7 +18,7 @@ namespace OutlookMatters.Test
         [Test]
         public void GetCustomUI_ReturnsCustomUiForExplorer()
         {
-            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<IMattermost>(), Mock.Of<ISettingsProvider>(), Mock.Of<IPasswordProvider>(), Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>());
+            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<IMattermost>(), Mock.Of<ISettingsLoadService>(), Mock.Of<IPasswordProvider>(), Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>());
 
             var result = classUnderTest.GetCustomUI("Microsoft.Outlook.Explorer");
 
@@ -28,38 +28,29 @@ namespace OutlookMatters.Test
         [Test]
         public void OnPostClick_CreatesPostUsingSession()
         {
-            const string url = "http://localhost";
-            const string teamId = "team";
-            const string username = "username";
+            var settings = new Settings.Settings("http://localhost", "teamId", "channelId", "username");
             const string password = "password";
-            const string channelId = "channelId";
             const string message = "message";
             var session = new Mock<ISession>();
-            var settings = new Mock<ISettingsProvider>();
-            settings.Setup(x => x.ChannelId).Returns(channelId);
-            settings.Setup(x => x.TeamId).Returns(teamId);
-            settings.Setup(x => x.Url).Returns(url);
-            settings.Setup(x => x.Username).Returns(username);
+            var settingsLoadService = new Mock<ISettingsLoadService>();
+            settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var passwordProvider = new Mock<IPasswordProvider>();
-            passwordProvider.Setup(x => x.GetPassword(username)).Returns(password);
+            passwordProvider.Setup(x => x.GetPassword(settings.Username)).Returns(password);
             var explorer = new Mock<IMailExplorer>();
             explorer.Setup(x => x.GetSelectedMailBody()).Returns(message);
             var mattermost = new Mock<IMattermost>();
-            mattermost.Setup(x => x.LoginByUsername(url, teamId, username, password)).Returns(session.Object);
-            mattermost.Setup(
-                x => x.LoginByUsername(url, teamId, username, password))
-                .Returns(session.Object);
+            mattermost.Setup(x => x.LoginByUsername(settings.MattermostUrl, settings.TeamId, settings.Username, password)).Returns(session.Object);
             var classUnderTest = new MailItemContextMenuEntry(
                 explorer.Object,
                 mattermost.Object,
-                settings.Object,
+                settingsLoadService.Object,
                 passwordProvider.Object,
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>());
 
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
 
-            session.Verify(x => x.CreatePost(channelId, message));
+            session.Verify(x => x.CreatePost(settings.ChannelId, message));
         }
 
         [Test]
@@ -70,7 +61,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
                 Mock.Of<IMattermost>(),
-                Mock.Of<ISettingsProvider>(),
+                DefaultSettingsLoadService,
                 passwordProvider.Object,
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>());
@@ -89,7 +80,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
                 mattermost.Object,
-                Mock.Of<ISettingsProvider>(),
+                DefaultSettingsLoadService,
                 Mock.Of<IPasswordProvider>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>());
@@ -97,6 +88,17 @@ namespace OutlookMatters.Test
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
 
             errorDisplay.Verify( x => x.Display(It.IsAny<WebException>()));
+        }
+
+        private static ISettingsLoadService DefaultSettingsLoadService
+        {
+            get
+            {
+                var settings = new Settings.Settings("http://localhost", "teamId", "channelId", "username");
+                var settingsLoadService = new Mock<ISettingsLoadService>();
+                settingsLoadService.Setup(x => x.Load()).Returns(settings);
+                return settingsLoadService.Object;
+            }
         }
 
         [Test]
@@ -112,7 +114,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
                 mattermost.Object,
-                Mock.Of<ISettingsProvider>(),
+                DefaultSettingsLoadService,
                 Mock.Of<IPasswordProvider>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>());
@@ -127,7 +129,7 @@ namespace OutlookMatters.Test
         {
             var settingsUi = new Mock<ISettingsUserInterface>();
             var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<IMattermost>(),
-                Mock.Of<ISettingsProvider>(), Mock.Of<IPasswordProvider>(), Mock.Of<IErrorDisplay>(), settingsUi.Object);
+                Mock.Of<ISettingsLoadService>(), Mock.Of<IPasswordProvider>(), Mock.Of<IErrorDisplay>(), settingsUi.Object);
 
             classUnderTest.OnSettingsClick(Mock.Of<IRibbonControl>());
 

@@ -55,9 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CloseCommandTest.cs" />
     <Compile Include="MailItemContextMenuEntryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestMattermostTest.cs" />
+    <Compile Include="SaveCommandTest.cs" />
+    <Compile Include="SettingsViewModelTest.cs" />
     <Compile Include="UserSessionTest.cs" />
   </ItemGroup>
   <ItemGroup>

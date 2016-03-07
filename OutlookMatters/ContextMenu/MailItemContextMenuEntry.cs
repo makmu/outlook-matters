@@ -17,7 +17,7 @@ namespace OutlookMatters.ContextMenu
     {
         private readonly IMailExplorer _explorer;
         private readonly IMattermost _mattermost;
-        private readonly ISettingsProvider _settingsProvider;
+        private readonly ISettingsLoadService _settingsLoadService;
         private readonly IPasswordProvider _passwordProvider;
         private readonly IErrorDisplay _errorDisplay;
         private readonly ISettingsUserInterface _settingsUi;
@@ -31,11 +31,12 @@ namespace OutlookMatters.ContextMenu
                 {
                     try
                     {
-                        var password = _passwordProvider.GetPassword(_settingsProvider.Username);
+                        var settings = _settingsLoadService.Load();
+                        var password = _passwordProvider.GetPassword(settings.Username);
                         _session = _mattermost.LoginByUsername(
-                            _settingsProvider.Url,
-                            _settingsProvider.TeamId,
-                            _settingsProvider.Username,
+                            settings.MattermostUrl,
+                            settings.TeamId,
+                            settings.Username,
                             password);
                     }
                     catch (WebException exception)
@@ -51,11 +52,11 @@ namespace OutlookMatters.ContextMenu
             }
         }
 
-        public MailItemContextMenuEntry(IMailExplorer explorer, IMattermost mattermost, ISettingsProvider settingsProvider, IPasswordProvider passwordProvider, IErrorDisplay errorDisplay, ISettingsUserInterface settingsUi)
+        public MailItemContextMenuEntry(IMailExplorer explorer, IMattermost mattermost, ISettingsLoadService settingsLoadService, IPasswordProvider passwordProvider, IErrorDisplay errorDisplay, ISettingsUserInterface settingsUi)
         {
             _explorer = explorer;
             _mattermost = mattermost;
-            _settingsProvider = settingsProvider;
+            _settingsLoadService = settingsLoadService;
             _passwordProvider = passwordProvider;
             _errorDisplay = errorDisplay;
             _settingsUi = settingsUi;
@@ -79,7 +80,8 @@ namespace OutlookMatters.ContextMenu
 
         public void OnPostClick(Office.IRibbonControl control)
         {
-            var channelId = _settingsProvider.ChannelId;
+            var settings = _settingsLoadService.Load();
+            var channelId = settings.ChannelId;
             var mailbody = _explorer.GetSelectedMailBody();
 
             try

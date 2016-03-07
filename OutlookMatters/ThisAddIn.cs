@@ -25,13 +25,14 @@ namespace OutlookMatters
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             var httpClient = new DotNetHttpClient();
+            var settingsService = new ApplicationSettingsService();
             return new MailItemContextMenuEntry(
                 new OutlookMailExplorer(),
                 new RestMattermost(new UserSessionFactory(httpClient), httpClient),
-                new ApplicationSettingsProvider(),
+                settingsService,
                 new PasswordDialog(),
                 new MessageBoxErrorDisplay(),
-                new WpfSettingsUserInterface());
+                new WpfSettingsUserInterface(settingsService, settingsService));
         }
 
         #region VSTO generated code

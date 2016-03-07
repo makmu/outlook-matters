@@ -27,14 +27,37 @@
     <NoStandardLibraries>false</NoStandardLibraries>
     <RootNamespace>OutlookMatters</RootNamespace>
     <AssemblyName>OutlookMatters</AssemblyName>
-    <LoadBehavior>3</LoadBehavior>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <BootstrapperComponentsLocation>HomeSite</BootstrapperComponentsLocation>
     <TargetFrameworkProfile />
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <PublishUrl>publish\</PublishUrl>
+    <InstallUrl />
+    <TargetCulture>en</TargetCulture>
+    <ApplicationVersion>1.0.0.0</ApplicationVersion>
+    <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>days</UpdateIntervalUnits>
+    <IsWebBootstrapper>False</IsWebBootstrapper>
+    <ProductName>OutlookMatters</ProductName>
+    <PublisherName />
+    <SupportUrl />
+    <FriendlyName>OutlookMatters</FriendlyName>
+    <OfficeApplicationDescription />
+    <LoadBehavior>3</LoadBehavior>
   </PropertyGroup>
   <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.VSTORuntime.4.0">
       <Visible>False</Visible>
       <ProductName>Microsoft Visual Studio 2010 Tools for Office Runtime %28x86 and x64%29</ProductName>
@@ -161,7 +184,7 @@
     <Compile Include="Security\PasswordDialog.xaml.cs">
       <DependentUpon>PasswordDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\ApplicationSettingsProvider.cs" />
+    <Compile Include="Settings\ApplicationSettingsService.cs" />
     <Compile Include="Http\DotNetHttpClient.cs" />
     <Compile Include="Http\DotNetHttpRequest.cs" />
     <Compile Include="Http\DotNetHttpResponse.cs" />
@@ -170,7 +193,9 @@
     <Compile Include="Http\IHttpResponse.cs" />
     <Compile Include="Mattermost\IMattermost.cs" />
     <Compile Include="Mail\IMailExplorer.cs" />
-    <Compile Include="Settings\ISettingsProvider.cs" />
+    <Compile Include="Settings\CloseCommand.cs" />
+    <Compile Include="Settings\IClosableWindow.cs" />
+    <Compile Include="Settings\ISettingsLoadService.cs" />
     <Compile Include="Mattermost\ISession.cs" />
     <Compile Include="Mattermost\ISessionFactory.cs" />
     <Compile Include="Mattermost\Login.cs" />
@@ -184,7 +209,11 @@
     <Compile Include="Mattermost\UserSession.cs" />
     <Compile Include="Mattermost\UserSessionFactory.cs" />
     <Compile Include="Mattermost\User.cs" />
+    <Compile Include="Settings\ISettingsSaveService.cs" />
     <Compile Include="Settings\ISettingsUserInterface.cs" />
+    <Compile Include="Settings\SaveCommand.cs" />
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Settings\SettingsViewModel.cs" />
     <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>

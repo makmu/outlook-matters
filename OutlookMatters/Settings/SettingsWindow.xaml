@@ -7,7 +7,8 @@
              Title="Mattermost Settings"
              Height="250"
              Width="400"
-             d:DesignHeight="250" d:DesignWidth="400" Loaded="OnWindowLoaded" ResizeMode="NoResize" WindowStyle="ToolWindow">
+             Name="Window"
+             d:DesignHeight="250" d:DesignWidth="400" ResizeMode="NoResize" WindowStyle="ToolWindow">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -26,13 +27,13 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Label Margin="5" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Width="99">Mattermost URL:</Label>
-            <TextBox Margin="5" Name="url" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+            <TextBox Text="{Binding MattermostUrl}" Margin="5" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
             <Label Margin="5" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Width="69">Channel Id:</Label>
-            <TextBox Margin="5" Name="teamId" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"></TextBox>
+            <TextBox Margin="5" Text="{Binding TeamId}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"></TextBox>
             <Label Margin="5" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="55">Team Id:</Label>
-            <TextBox Margin="5" Name="channel" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+            <TextBox Margin="5" Text="{Binding ChannelId}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"></TextBox>
             <Label Margin="5" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Width="105">Username (email):</Label>
-            <TextBox Margin="5" Name="username" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+            <TextBox Margin="5" Text="{Binding Username}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"></TextBox>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -45,8 +46,8 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Padding="10" Margin="10" Grid.Row="1" Grid.Column="1" Click="CancelButton_Click">Cancel</Button>
-            <Button Padding="10" Margin="10" Grid.Row="1" Grid.Column="2" Click="Button_Click">Save</Button>
+            <Button Padding="10" Margin="10" Grid.Row="1" Grid.Column="1" Command="{Binding Cancel}">Cancel</Button>
+            <Button Padding="10" Margin="10" Grid.Row="1" Grid.Column="2" Command="{Binding Save}" CommandParameter="{Binding DataContext, ElementName=Window}">Save</Button>
         </Grid>
     </Grid>
 </Window>
