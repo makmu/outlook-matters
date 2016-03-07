@@ -30,7 +30,8 @@ namespace OutlookMatters
                 new RestMattermost(new UserSessionFactory(httpClient), httpClient),
                 new ApplicationSettingsProvider(),
                 new PasswordDialog(),
-                new MessageBoxErrorDisplay());
+                new MessageBoxErrorDisplay(),
+                new WpfSettingsUserInterface());
         }
 
         #region VSTO generated code

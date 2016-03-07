@@ -184,6 +184,7 @@
     <Compile Include="Mattermost\UserSession.cs" />
     <Compile Include="Mattermost\UserSessionFactory.cs" />
     <Compile Include="Mattermost\User.cs" />
+    <Compile Include="Settings\ISettingsUserInterface.cs" />
     <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -209,6 +210,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Settings\WpfSettingsUserInterface.cs" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>

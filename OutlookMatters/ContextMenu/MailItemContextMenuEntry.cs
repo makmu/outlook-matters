@@ -20,6 +20,7 @@ namespace OutlookMatters.ContextMenu
         private readonly ISettingsProvider _settingsProvider;
         private readonly IPasswordProvider _passwordProvider;
         private readonly IErrorDisplay _errorDisplay;
+        private readonly ISettingsUserInterface _settingsUi;
 
         private ISession _session;
         private ISession Session
@@ -50,13 +51,14 @@ namespace OutlookMatters.ContextMenu
             }
         }
 
-        public MailItemContextMenuEntry(IMailExplorer explorer, IMattermost mattermost, ISettingsProvider settingsProvider, IPasswordProvider passwordProvider, IErrorDisplay errorDisplay)
+        public MailItemContextMenuEntry(IMailExplorer explorer, IMattermost mattermost, ISettingsProvider settingsProvider, IPasswordProvider passwordProvider, IErrorDisplay errorDisplay, ISettingsUserInterface settingsUi)
         {
             _explorer = explorer;
             _mattermost = mattermost;
             _settingsProvider = settingsProvider;
             _passwordProvider = passwordProvider;
             _errorDisplay = errorDisplay;
+            _settingsUi = settingsUi;
         }
 
         public string GetCustomUI(string ribbonId)
@@ -72,8 +74,7 @@ namespace OutlookMatters.ContextMenu
 
         public void OnSettingsClick(Office.IRibbonControl control)
         {
-            var window = new SettingsWindow();
-            window.ShowDialog();
+            _settingsUi.OpenSettings();
         }
 
         public void OnPostClick(Office.IRibbonControl control)
