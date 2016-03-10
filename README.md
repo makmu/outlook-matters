@@ -1,3 +1,4 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/gvddf3tonfjuwaoi?svg=true)](https://ci.appveyor.com/project/makmu/outlook-matters)
 ### Introduction
 An Outlook Add-in to forward mails to [Mattermost](http://www.mattermost.org/)
 
