@@ -14,10 +14,10 @@ class Version
 {
     // refer to http://semver.org for more information
     public const string Major = "1";
-    public const string Minor = "0";
+    public const string Minor = "1";
     public const string Patch = "0";
 
-    public const string Label = ReleaseLabel.Final;
+    public const string Label = ReleaseLabel.Dev;
     public const string AdditionalReleaseInformation = "";
     public const string Current = Major + "." + Minor + "." + Patch;
     public const string FullCurrent = Current + "-" + Label + AdditionalReleaseInformation;
