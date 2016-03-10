@@ -17,7 +17,7 @@ class Version
     public const string Minor = "0";
     public const string Patch = "0";
 
-    public const string Label = ReleaseLabel.Dev;
+    public const string Label = ReleaseLabel.Final;
     public const string AdditionalReleaseInformation = "";
     public const string Current = Major + "." + Minor + "." + Patch;
     public const string FullCurrent = Current + "-" + Label + AdditionalReleaseInformation;
