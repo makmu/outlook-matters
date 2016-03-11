@@ -15,7 +15,7 @@ class Version
     // refer to http://semver.org for more information
     public const string Major = "1";
     public const string Minor = "0";
-    public const string Patch = "0";
+    public const string Patch = "1";
 
     public const string Label = ReleaseLabel.Final;
     public const string AdditionalReleaseInformation = "";
