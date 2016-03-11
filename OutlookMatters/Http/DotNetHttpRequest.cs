@@ -24,7 +24,27 @@ namespace OutlookMatters.Http
             return this;
         }
 
-        public IHttpResponse Send(string payload)
+        public IHttpResponse SendRequest(string payload)
+        {
+            var response = SendPayload(payload);
+            return new DotNetHttpResponse(response);
+        }
+
+        public void Send(string payload)
+        {
+            var response = SendPayload(payload);
+            DiscardResponseAndFreeConnection(response);
+        }
+
+        private static void DiscardResponseAndFreeConnection(WebResponse response)
+        {
+            using (response)
+            {
+                // do nothing
+            }
+        }
+
+        private WebResponse SendPayload(string payload)
         {
             using (var streamWriter = new StreamWriter(_httpWebRequest.GetRequestStream()))
             {
@@ -32,7 +52,7 @@ namespace OutlookMatters.Http
                 streamWriter.Flush();
                 streamWriter.Close();
             }
-            return new DotNetHttpResponse(_httpWebRequest.GetResponse());
+            return _httpWebRequest.GetResponse();
         }
     }
 }
