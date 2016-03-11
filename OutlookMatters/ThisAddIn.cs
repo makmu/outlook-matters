@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Deployment.Application;
+using System.Reflection;
+using System.Windows;
 using OutlookMatters.ContextMenu;
 using OutlookMatters.Error;
 using OutlookMatters.Http;
@@ -14,6 +17,26 @@ namespace OutlookMatters
     {
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
+            CheckVersions();
+        }
+
+        private void CheckVersions()
+        {
+            if (!System.Diagnostics.Debugger.IsAttached)
+            {
+                var assemblyVersion = Assembly.GetAssembly(GetType()).GetName().Version;
+                var applicationVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion;
+
+                if (assemblyVersion.Major == applicationVersion.Major &&
+                    assemblyVersion.Minor == applicationVersion.Minor &&
+                    assemblyVersion.Build == applicationVersion.Build) return;
+
+                MessageBox.Show(
+                    "Addin configuration error: application version (" + applicationVersion + ") and assembly version (" +
+                    assemblyVersion + ") do not match!",
+                    "OutlookMatters", MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
         }
 
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
