@@ -19,9 +19,12 @@ namespace OutlookMatters.Http
 
         public string GetPayload()
         {
-            using (var streamReader = new StreamReader(_response.GetResponseStream()))
+            using (_response)
             {
-                return streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(_response.GetResponseStream()))
+                {
+                    return streamReader.ReadToEnd();
+                }
             }
         }
     }

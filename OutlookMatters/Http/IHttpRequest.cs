@@ -4,6 +4,7 @@
     {
         IHttpRequest WithContentType(string contentType);
         IHttpRequest WithHeader(string key, string value);
-        IHttpResponse Send(string payload);
+        IHttpResponse SendRequest(string payload);
+        void Send(string payload);
     }
 }

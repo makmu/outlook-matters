@@ -32,7 +32,7 @@ namespace OutlookMatters.Test
             httpResponse.Setup(x => x.GetHeaderValue("Token")).Returns(token);
             var httpRequest = new Mock<IHttpRequest>();
             httpRequest.Setup(x => x.WithContentType("text/json")).Returns(httpRequest.Object);
-            httpRequest.Setup(x => x.Send(jsonPost)).Returns(httpResponse.Object);
+            httpRequest.Setup(x => x.SendRequest(jsonPost)).Returns(httpResponse.Object);
             var httpClient = new Mock<IHttpClient>();
             httpClient.Setup(x => x.Post(new Uri(new Uri(url), "api/v1/users/login")))
                 .Returns(httpRequest.Object);

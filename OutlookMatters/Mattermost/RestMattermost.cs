@@ -26,7 +26,7 @@ namespace OutlookMatters.Mattermost
             };
             var response = _client.Post(loginUrl)
                 .WithContentType("text/json")
-                .Send(JsonConvert.SerializeObject(login));
+                .SendRequest(JsonConvert.SerializeObject(login));
 
             var token = response.GetHeaderValue("Token");
             var payload = response.GetPayload();

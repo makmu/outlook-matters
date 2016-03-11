@@ -23,7 +23,7 @@ namespace OutlookMatters.Mattermost
         {
             var post = new Post {channel_id = channelId, message = message, user_id = _userId};
             var postUrl = PostUrl(channelId);
-            var request = _httpClient.Post(postUrl)
+            _httpClient.Post(postUrl)
                 .WithContentType("text/json")
                 .WithHeader("Authorization", "Bearer " + _token)
                 .Send(JsonConvert.SerializeObject(post));
