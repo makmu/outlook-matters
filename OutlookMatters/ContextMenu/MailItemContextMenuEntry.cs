@@ -73,6 +73,16 @@ namespace OutlookMatters.ContextMenu
             }
         }
 
+        public string GetDynamicMenu(Office.IRibbonControl control)
+        {
+            var xmlString = @"<menu xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">";
+            xmlString += @"<button id=""PostButton"" label=""Post"" onAction=""OnPostClick"" />";
+            xmlString += @"<menuSeparator id=""separator""/>";
+            xmlString += @"<button id=""SettingsButton"" imageMso=""ComAddInsDialog"" label=""Settings..."" onAction=""OnSettingsClick"" />";
+            xmlString += "</menu>";
+            return xmlString;
+        }
+
         public void OnSettingsClick(Office.IRibbonControl control)
         {
             _settingsUi.OpenSettings();

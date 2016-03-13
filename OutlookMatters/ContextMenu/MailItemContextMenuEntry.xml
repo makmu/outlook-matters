@@ -1,11 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui" onLoad="Ribbon_Load">
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui">
   <contextMenus>
     <contextMenu idMso="ContextMenuMailItem">
-      <menu id="MattermostContextMenu" label="Mattermost">
-        <button id="Post" label="Post" onAction="OnPostClick"/>
-        <button id="SettingsContextMenuItem" label="Settings..." onAction="OnSettingsClick"/>
-      </menu>
+      <dynamicMenu id="MattermostContextMenu" label="Mattermost" getContent="GetDynamicMenu"/>
     </contextMenu>
   </contextMenus>
 </customUI>

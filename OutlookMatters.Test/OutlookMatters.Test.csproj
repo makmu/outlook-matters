@@ -64,7 +64,9 @@
     <Compile Include="RestMattermostTest.cs" />
     <Compile Include="SaveCommandTest.cs" />
     <Compile Include="SettingsViewModelTest.cs" />
+    <Compile Include="TestUtils\ExtensionMethods.cs" />
     <Compile Include="UserSessionTest.cs" />
+    <Compile Include="TestUtils\XmlAssertions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

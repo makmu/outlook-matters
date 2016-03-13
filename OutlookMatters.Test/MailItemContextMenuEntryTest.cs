@@ -9,6 +9,7 @@ using OutlookMatters.Mail;
 using OutlookMatters.Mattermost;
 using OutlookMatters.Security;
 using OutlookMatters.Settings;
+using OutlookMatters.Test.TestUtils;
 
 namespace OutlookMatters.Test
 {
@@ -22,7 +23,44 @@ namespace OutlookMatters.Test
 
             var result = classUnderTest.GetCustomUI("Microsoft.Outlook.Explorer");
 
-            result.Should().NotBeEmpty("because there should be custom UI xml for the outlook explorer");
+            result.Should()
+                .WithNamespace("ns", "http://schemas.microsoft.com/office/2009/07/customui")
+                .ContainXmlNode(@"//ns:dynamicMenu[contains(@getContent, ""GetDynamicMenu"")]", 
+                "because there should be a dynamic menu which loads its contents using the 'GetDynamicMenu' function");
+        }
+
+        [Test]
+        public void GetDynamicMenu_ReturnsSettingsButton()
+        {
+            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<IMattermost>(), Mock.Of<ISettingsLoadService>(), Mock.Of<IPasswordProvider>(), Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>());
+
+            var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
+
+            result.Should()
+                .WithNamespace("ns", "http://schemas.microsoft.com/office/2009/07/customui")
+                .ContainXmlNode(@"//ns:button[contains(@label, ""Settings..."")]",
+                    "because there should always be a settings button");
+            result.Should()
+                .WithNamespace("ns", "http://schemas.microsoft.com/office/2009/07/customui")
+                .ContainXmlNode(@"//ns:button[contains(@onAction, ""OnSettingsClick"")]",
+                    "because the settings button should be connected to the 'OnSettingsClick'-Method");
+        }
+
+        [Test]
+        public void GetDynamicMenu_ReturnsPostButton()
+        {
+            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<IMattermost>(), Mock.Of<ISettingsLoadService>(), Mock.Of<IPasswordProvider>(), Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>());
+
+            var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
+
+            result.Should()
+                .WithNamespace("ns", "http://schemas.microsoft.com/office/2009/07/customui")
+                .ContainXmlNode(@"//ns:button[contains(@label, ""Post"")]",
+                    "because there should always be a post button");
+            result.Should()
+                .WithNamespace("ns", "http://schemas.microsoft.com/office/2009/07/customui")
+                .ContainXmlNode(@"//ns:button[contains(@onAction, ""OnPostClick"")]",
+                    "because the post button should be connected to the 'OnPostClick'-Method");
         }
 
         [Test]
