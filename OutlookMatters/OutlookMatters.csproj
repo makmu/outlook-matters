@@ -184,6 +184,7 @@
     </Compile>
     <Compile Include="Error\IErrorDisplay.cs" />
     <Compile Include="Error\MessageBoxErrorDisplay.cs" />
+    <Compile Include="Mail\MailData.cs" />
     <Compile Include="Security\IPasswordProvider.cs" />
     <Compile Include="Security\PasswordDialog.xaml.cs">
       <DependentUpon>PasswordDialog.xaml</DependentUpon>

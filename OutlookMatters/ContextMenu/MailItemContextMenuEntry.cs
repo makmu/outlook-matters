@@ -92,11 +92,14 @@ namespace OutlookMatters.ContextMenu
         {
             var settings = _settingsLoadService.Load();
             var channelId = settings.ChannelId;
-            var mailbody = _explorer.GetSelectedMailBody();
+            var mail = _explorer.QuerySelectedMailData();
+            var message = ":email: From: " + mail.SenderName + "\n";
+            message += ":email: Subject: " + mail.Subject + "\n";
+            message += mail.Body;
 
             try
             {
-                Session?.CreatePost(channelId, mailbody);
+                Session?.CreatePost(channelId, message);
             }
             catch (WebException exception)
             {

@@ -2,6 +2,6 @@
 {
     public interface IMailExplorer
     {
-        string GetSelectedMailBody();
+        MailData QuerySelectedMailData();
     }
 }
