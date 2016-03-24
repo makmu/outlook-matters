@@ -36,6 +36,12 @@ namespace OutlookMatters.Http
             DiscardResponseAndFreeConnection(response);
         }
 
+        public IHttpResponse Get()
+        {
+            _httpWebRequest.Method = "GET";
+            return new DotNetHttpResponse(_httpWebRequest.GetResponse());
+        }
+
         private static void DiscardResponseAndFreeConnection(WebResponse response)
         {
             using (response)
