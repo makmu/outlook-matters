@@ -66,11 +66,7 @@ namespace OutlookMatters.ContextMenu
 
             try
             {
-<<<<<<< 236bef88e28565bc7a6aebcceeb7f4dc8b770da0
-                Session?.CreatePost(channelId, message);
-=======
-                _sessionCache.Session?.CreatePost(channelId, mailbody);
->>>>>>> Invalidate Session after Settings have been changed
+                _sessionCache.Session?.CreatePost(channelId, message);
             }
             catch (Exception exception)
             {
