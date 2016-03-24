@@ -190,8 +190,7 @@
       <DependentUpon>PermalinkDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Mattermost\PostIdFromPermalinkFilter.cs" />
-    <Compile Include="Mattermost\Session\ISessionCache.cs" />
-    <Compile Include="Mattermost\Session\UserSessionCache.cs" />
+    <Compile Include="Mattermost\Session\TransientSession.cs" />
     <Compile Include="Security\IPasswordProvider.cs" />
     <Compile Include="Security\PasswordDialog.xaml.cs">
       <DependentUpon>PasswordDialog.xaml</DependentUpon>

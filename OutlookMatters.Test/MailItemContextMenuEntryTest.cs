@@ -20,7 +20,13 @@ namespace OutlookMatters.Test
         [Test]
         public void GetCustomUI_ReturnsCustomUiForExplorer()
         {
-            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<ISettingsLoadService>(), Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>(), Mock.Of<ISessionCache>(), Mock.Of<IStringProvider>());
+            var classUnderTest = new MailItemContextMenuEntry(
+                Mock.Of<IMailExplorer>(),
+                Mock.Of<ISettingsLoadService>(),
+                Mock.Of<IErrorDisplay>(),
+                Mock.Of<ISettingsUserInterface>(),
+                Mock.Of<ISession>(),
+                Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetCustomUI("Microsoft.Outlook.Explorer");
 
@@ -33,7 +39,13 @@ namespace OutlookMatters.Test
         [Test]
         public void GetDynamicMenu_ReturnsSettingsButton()
         {
-            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<ISettingsLoadService>(), Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>(), Mock.Of<ISessionCache>(), Mock.Of<IStringProvider>());
+            var classUnderTest = new MailItemContextMenuEntry(
+                Mock.Of<IMailExplorer>(),
+                Mock.Of<ISettingsLoadService>(),
+                Mock.Of<IErrorDisplay>(),
+                Mock.Of<ISettingsUserInterface>(),
+                Mock.Of<ISession>(),
+                Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
 
@@ -50,7 +62,13 @@ namespace OutlookMatters.Test
         [Test]
         public void GetDynamicMenu_ReturnsPostButton()
         {
-            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<ISettingsLoadService>(), Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>(), Mock.Of<ISessionCache>(), Mock.Of<IStringProvider>());
+            var classUnderTest = new MailItemContextMenuEntry(
+                Mock.Of<IMailExplorer>(),
+                Mock.Of<ISettingsLoadService>(),
+                Mock.Of<IErrorDisplay>(),
+                Mock.Of<ISettingsUserInterface>(),
+                Mock.Of<ISession>(),
+                Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
 
@@ -67,7 +85,13 @@ namespace OutlookMatters.Test
         [Test]
         public void GetDynamicMenu_ReturnsReplyButton()
         {
-            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<ISettingsLoadService>(), Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>(), Mock.Of<ISessionCache>(), Mock.Of<IStringProvider>());
+            var classUnderTest = new MailItemContextMenuEntry(
+                Mock.Of<IMailExplorer>(),
+                Mock.Of<ISettingsLoadService>(),
+                Mock.Of<IErrorDisplay>(),
+                Mock.Of<ISettingsUserInterface>(),
+                Mock.Of<ISession>(),
+                Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
 
@@ -87,13 +111,17 @@ namespace OutlookMatters.Test
             var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username");
             var mailData = new MailData("sender", "subject", "message");
             var session = new Mock<ISession>();
-            var sessionCache = new Mock<ISessionCache>();
             var explorer = new Mock<IMailExplorer>();
             explorer.Setup(x => x.QuerySelectedMailData()).Returns(mailData);
-            sessionCache.SetupGet(x => x.Session).Returns(session.Object);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
-            var classUnderTest = new MailItemContextMenuEntry(explorer.Object, settingsLoadService.Object, Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>(), sessionCache.Object, Mock.Of<IStringProvider>());
+            var classUnderTest = new MailItemContextMenuEntry(
+                explorer.Object,
+                settingsLoadService.Object,
+                Mock.Of<IErrorDisplay>(),
+                Mock.Of<ISettingsUserInterface>(),
+                session.Object,
+                Mock.Of<IStringProvider>());
 
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
 
@@ -107,16 +135,19 @@ namespace OutlookMatters.Test
             var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username");
             var mailData = new MailData("sender", "subject", "message");
             var session = new Mock<ISession>();
-            var sessionCache = new Mock<ISessionCache>();
             var explorer = new Mock<IMailExplorer>();
             explorer.Setup(x => x.QuerySelectedMailData()).Returns(mailData);
-            sessionCache.SetupGet(x => x.Session).Returns(session.Object);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var rootPostIdProvider = new Mock<IStringProvider>();
             rootPostIdProvider.Setup(x => x.Get()).Returns(rootId);
-            var classUnderTest = new MailItemContextMenuEntry(explorer.Object, settingsLoadService.Object,
-                Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>(), sessionCache.Object, rootPostIdProvider.Object);
+            var classUnderTest = new MailItemContextMenuEntry(
+                explorer.Object,
+                settingsLoadService.Object,
+                Mock.Of<IErrorDisplay>(),
+                Mock.Of<ISettingsUserInterface>(),
+                session.Object,
+                rootPostIdProvider.Object);
 
             classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
 
@@ -133,11 +164,14 @@ namespace OutlookMatters.Test
             mattermost.Setup(
                 x => x.LoginByUsername(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(session.Object);
-            var sessionCache = new UserSessionCache(mattermost.Object,
-                DefaultSettingsLoadService,
-                Mock.Of<IPasswordProvider>());
 
-            var classUnderTest = new MailItemContextMenuEntry(MockOfMailExplorer(), DefaultSettingsLoadService, Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>(), sessionCache, postIdProvider.Object);
+            var classUnderTest = new MailItemContextMenuEntry(
+                MockOfMailExplorer(),
+                DefaultSettingsLoadService,
+                Mock.Of<IErrorDisplay>(),
+                Mock.Of<ISettingsUserInterface>(),
+                session.Object,
+                postIdProvider.Object);
 
             classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
 
@@ -149,7 +183,7 @@ namespace OutlookMatters.Test
         {
             var passwordProvider = new Mock<IPasswordProvider>();
             passwordProvider.Setup(x => x.GetPassword(It.IsAny<string>())).Throws<System.Exception>();
-            var sessionCache = new UserSessionCache(Mock.Of<IMattermost>(),
+            var sessionCache = new TransientSession(Mock.Of<IMattermost>(),
                 DefaultSettingsLoadService,
                 passwordProvider.Object);
 
@@ -165,11 +199,11 @@ namespace OutlookMatters.Test
             mattermost.Setup(
                 x => x.LoginByUsername(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<WebException>();
-            var sessionCache = new UserSessionCache(mattermost.Object,
+            var session = new TransientSession(mattermost.Object,
                 DefaultSettingsLoadService,
                 Mock.Of<IPasswordProvider>());
             var errorDisplay = new Mock<IErrorDisplay>();
-            var classUnderTest = new MailItemContextMenuEntry(MockOfMailExplorer(), DefaultSettingsLoadService, errorDisplay.Object, Mock.Of<ISettingsUserInterface>(), sessionCache, Mock.Of<IStringProvider>());
+            var classUnderTest = new MailItemContextMenuEntry(MockOfMailExplorer(), DefaultSettingsLoadService, errorDisplay.Object, Mock.Of<ISettingsUserInterface>(), session, Mock.Of<IStringProvider>());
 
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
 
@@ -181,10 +215,14 @@ namespace OutlookMatters.Test
         {
             var session = new Mock<ISession>();
             session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Throws<WebException>();
-            var sessionCache = new Mock<ISessionCache>();
-            sessionCache.SetupGet(x => x.Session).Returns(session.Object);
             var errorDisplay = new Mock<IErrorDisplay>();
-            var classUnderTest = new MailItemContextMenuEntry(MockOfMailExplorer(), DefaultSettingsLoadService, errorDisplay.Object, Mock.Of<ISettingsUserInterface>(), sessionCache.Object, Mock.Of<IStringProvider>());
+            var classUnderTest = new MailItemContextMenuEntry(
+                MockOfMailExplorer(),
+                DefaultSettingsLoadService,
+                errorDisplay.Object,
+                Mock.Of<ISettingsUserInterface>(),
+                session.Object,
+                Mock.Of<IStringProvider>());
 
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
 
@@ -195,7 +233,13 @@ namespace OutlookMatters.Test
         public void OnSettingsClick_OpensSettingsUserInterface()
         {
             var settingsUi = new Mock<ISettingsUserInterface>();
-            var classUnderTest = new MailItemContextMenuEntry(Mock.Of<IMailExplorer>(), Mock.Of<ISettingsLoadService>(), Mock.Of<IErrorDisplay>(), settingsUi.Object, Mock.Of<ISessionCache>(), Mock.Of<IStringProvider>());
+            var classUnderTest = new MailItemContextMenuEntry(
+                Mock.Of<IMailExplorer>(),
+                Mock.Of<ISettingsLoadService>(),
+                Mock.Of<IErrorDisplay>(),
+                settingsUi.Object,
+                Mock.Of<ISession>(),
+                Mock.Of<IStringProvider>());
 
             classUnderTest.OnSettingsClick(Mock.Of<IRibbonControl>());
 

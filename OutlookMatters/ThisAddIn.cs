@@ -53,8 +53,7 @@ namespace OutlookMatters
             var passwordDialog = new PasswordDialog();
             var settingsService = new ApplicationSettingsService();
 
-            var sessionCache = new UserSessionCache(mattermost, settingsService, passwordDialog);
-
+            var sessionCache = new TransientSession(mattermost, settingsService, passwordDialog);
 
             return new MailItemContextMenuEntry(
                 new OutlookMailExplorer(),
