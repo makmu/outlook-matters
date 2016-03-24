@@ -1,13 +1,11 @@
-﻿using System;
+﻿using OutlookMatters.Error;
+using OutlookMatters.Mail;
+using OutlookMatters.Mattermost.Session;
+using OutlookMatters.Settings;
+using System;
 using System.IO;
-using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using OutlookMatters.Error;
-using OutlookMatters.Mail;
-using OutlookMatters.Mattermost;
-using OutlookMatters.Security;
-using OutlookMatters.Settings;
 using Office = Microsoft.Office.Core;
 
 namespace OutlookMatters.ContextMenu
@@ -16,50 +14,19 @@ namespace OutlookMatters.ContextMenu
     public class MailItemContextMenuEntry : Office.IRibbonExtensibility
     {
         private readonly IMailExplorer _explorer;
-        private readonly IMattermost _mattermost;
         private readonly ISettingsLoadService _settingsLoadService;
-        private readonly IPasswordProvider _passwordProvider;
         private readonly IErrorDisplay _errorDisplay;
         private readonly ISettingsUserInterface _settingsUi;
+        private readonly ISessionCache _sessionCache;
 
-        private ISession _session;
-        private ISession Session
-        {
-            get
-            {
-                if (_session == null)
-                {
-                    try
-                    {
-                        var settings = _settingsLoadService.Load();
-                        var password = _passwordProvider.GetPassword(settings.Username);
-                        _session = _mattermost.LoginByUsername(
-                            settings.MattermostUrl,
-                            settings.TeamId,
-                            settings.Username,
-                            password);
-                    }
-                    catch (WebException exception)
-                    {
-                        _errorDisplay.Display(exception);
-                    }
-                    catch (Exception)
-                    {
-                        // ignored
-                    }
-                }
-                return _session;
-            }
-        }
-
-        public MailItemContextMenuEntry(IMailExplorer explorer, IMattermost mattermost, ISettingsLoadService settingsLoadService, IPasswordProvider passwordProvider, IErrorDisplay errorDisplay, ISettingsUserInterface settingsUi)
+     
+        public MailItemContextMenuEntry(IMailExplorer explorer, ISettingsLoadService settingsLoadService, IErrorDisplay errorDisplay, ISettingsUserInterface settingsUi, ISessionCache sessionCache)
         {
             _explorer = explorer;
-            _mattermost = mattermost;
             _settingsLoadService = settingsLoadService;
-            _passwordProvider = passwordProvider;
             _errorDisplay = errorDisplay;
             _settingsUi = settingsUi;
+            _sessionCache = sessionCache;
         }
 
         public string GetCustomUI(string ribbonId)
@@ -99,9 +66,13 @@ namespace OutlookMatters.ContextMenu
 
             try
             {
+<<<<<<< 236bef88e28565bc7a6aebcceeb7f4dc8b770da0
                 Session?.CreatePost(channelId, message);
+=======
+                _sessionCache.Session?.CreatePost(channelId, mailbody);
+>>>>>>> Invalidate Session after Settings have been changed
             }
-            catch (WebException exception)
+            catch (Exception exception)
             {
                 _errorDisplay.Display(exception);
             }

@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using OutlookMatters.Settings;
 
-namespace OutlookMatters.Test
+namespace OutlookMatters.Test.Settings
 {
     [TestFixture]
     public class SaveCommandTest
@@ -28,7 +28,7 @@ namespace OutlookMatters.Test
             const string channelId = "channelId";
             const string username = "username";
             var viewModel = new SettingsViewModel(
-                new Settings.Settings(string.Empty,string.Empty,string.Empty,string.Empty),
+                new OutlookMatters.Settings.Settings(string.Empty,string.Empty,string.Empty,string.Empty),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>())
             {
@@ -45,7 +45,7 @@ namespace OutlookMatters.Test
             saveService.Verify(
                 x =>
                     x.Save(
-                        It.Is<Settings.Settings>(
+                        It.Is<OutlookMatters.Settings.Settings>(
                             s =>
                                 s.MattermostUrl == mattermostUrl && s.TeamId == teamId && s.ChannelId == channelId &&
                                 s.Username == username)));
@@ -55,7 +55,7 @@ namespace OutlookMatters.Test
         public void Execute_ClosesWindow()
         {
             var viewModel = new SettingsViewModel(
-                new Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty),
+                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>());
             var window = new Mock<IClosableWindow>();

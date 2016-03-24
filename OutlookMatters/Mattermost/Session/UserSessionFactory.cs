@@ -1,7 +1,7 @@
-﻿using System;
-using OutlookMatters.Http;
+﻿using OutlookMatters.Http;
+using System;
 
-namespace OutlookMatters.Mattermost
+namespace OutlookMatters.Mattermost.Session
 {
     public class UserSessionFactory: ISessionFactory
     {

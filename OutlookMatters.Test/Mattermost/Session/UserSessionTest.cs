@@ -2,9 +2,9 @@
 using Moq;
 using NUnit.Framework;
 using OutlookMatters.Http;
-using OutlookMatters.Mattermost;
+using OutlookMatters.Mattermost.Session;
 
-namespace OutlookMatters.Test
+namespace OutlookMatters.Test.Mattermost.Session
 {
     [TestFixture]
     public class UserSessionTest

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OutlookMatters.Settings
+﻿namespace OutlookMatters.Settings
 {
     public class Settings
     {
@@ -19,6 +13,31 @@ namespace OutlookMatters.Settings
             TeamId = teamId;
             ChannelId = channelId;
             Username = username;
+        }
+
+        protected bool Equals(Settings other)
+        {
+            return string.Equals(MattermostUrl, other.MattermostUrl) && string.Equals(TeamId, other.TeamId) && string.Equals(ChannelId, other.ChannelId) && string.Equals(Username, other.Username);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Settings) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (MattermostUrl != null ? MattermostUrl.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (TeamId != null ? TeamId.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (ChannelId != null ? ChannelId.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Username != null ? Username.GetHashCode() : 0);
+                return hashCode;
+            }
         }
     }
 }

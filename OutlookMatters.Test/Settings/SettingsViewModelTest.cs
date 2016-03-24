@@ -1,10 +1,10 @@
-﻿using System.Windows.Input;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using OutlookMatters.Settings;
+using System.Windows.Input;
 
-namespace OutlookMatters.Test
+namespace OutlookMatters.Test.Settings
 {
     [TestFixture]
     public class SettingsViewModelTest
@@ -12,7 +12,7 @@ namespace OutlookMatters.Test
         [Test]
         public void MattermostUrl_ReturnsUrlFromSettingsProvider()
         {
-            var settings = new Settings.Settings("http://localhost", "teamId", "channelId", "username");
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username");
             var classUnderTest = new SettingsViewModel(settings, Mock.Of<ICommand>(), Mock.Of<ICommand>());
 
             var result = classUnderTest.MattermostUrl;
@@ -24,7 +24,7 @@ namespace OutlookMatters.Test
         [Test]
         public void TeamId_ReturnsTeamIdFromSettingsProvider()
         {
-            var settings = new Settings.Settings("http://localhost", "teamId", "channelId", "username");
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username");
             var classUnderTest = new SettingsViewModel(settings, Mock.Of<ICommand>(), Mock.Of<ICommand>());
 
             var result = classUnderTest.TeamId;
@@ -36,7 +36,7 @@ namespace OutlookMatters.Test
         [Test]
         public void ChannelId_ReturnsChannelIdFromSettingsProvider()
         {
-            var settings = new Settings.Settings("http://localhost", "teamId", "channelId", "username");
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username");
             var classUnderTest = new SettingsViewModel(settings, Mock.Of<ICommand>(), Mock.Of<ICommand>());
 
             var result = classUnderTest.ChannelId;
@@ -48,7 +48,7 @@ namespace OutlookMatters.Test
         [Test]
         public void Username_ReturnsUsernameFromSettingsProvider()
         {
-            var settings = new Settings.Settings("http://localhost", "teamId", "channelId", "username");
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username");
             var classUnderTest = new SettingsViewModel(settings, Mock.Of<ICommand>(), Mock.Of<ICommand>());
 
             var result = classUnderTest.Username;
@@ -60,7 +60,7 @@ namespace OutlookMatters.Test
         [Test]
         public void Save_ReturnsSaveCommand()
         {
-            var settings = new Settings.Settings("http://localhost", "teamId", "channelId", "username");
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username");
             var saveCommand = new Mock<ICommand>();
             var classUnderTest = new SettingsViewModel(settings, saveCommand.Object, Mock.Of<ICommand>());
 
@@ -72,7 +72,7 @@ namespace OutlookMatters.Test
         [Test]
         public void Cancel_ReturnsCancelCommand()
         {
-            var settings = new Settings.Settings("http://localhost", "teamId", "channelId", "username");
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username");
             var cancelCommand = new Mock<ICommand>();
             var classUnderTest = new SettingsViewModel(settings, Mock.Of<ICommand>(), cancelCommand.Object);
 
