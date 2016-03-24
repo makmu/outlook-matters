@@ -2,6 +2,6 @@
 {
     public interface ISession
     {
-        void CreatePost(string channelId, string message);
+        void CreatePost(string channelId, string message, string rootId = "");
     }
 }

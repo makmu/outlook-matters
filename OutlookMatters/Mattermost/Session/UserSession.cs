@@ -19,9 +19,9 @@ namespace OutlookMatters.Mattermost.Session
             _httpClient = httpClient;
         }
 
-        public void CreatePost(string channelId, string message)
+        public void CreatePost(string channelId, string message, string rootId = "")
         {
-            var post = new Post {channel_id = channelId, message = message, user_id = _userId};
+            var post = new Post {channel_id = channelId, message = message, user_id = _userId, root_id = rootId};
             var postUrl = PostUrl(channelId);
             _httpClient.Post(postUrl)
                 .WithContentType("text/json")

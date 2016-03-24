@@ -68,7 +68,6 @@ namespace OutlookMatters.Test
         public void OnPostClick_CreatesPostUsingSession()
         {
             var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username");
-            const string password = "password";
             var mailData = new MailData("sender", "subject", "message");
             var session = new Mock<ISession>();
             var sessionCache = new Mock<ISessionCache>();
@@ -81,7 +80,7 @@ namespace OutlookMatters.Test
 
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
 
-            session.Verify(x => x.CreatePost(settings.ChannelId, ":email: From: sender\n:email: Subject: subject\nmessage"));
+            session.Verify(x => x.CreatePost(settings.ChannelId, ":email: From: sender\n:email: Subject: subject\nmessage", string.Empty));
         }
 
         [Test]
@@ -120,7 +119,7 @@ namespace OutlookMatters.Test
         public void OnPostClick_CanHandleWebExceptionsWhileCreatingPost()
         {
             var session = new Mock<ISession>();
-            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>())).Throws<WebException>();
+            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Throws<WebException>();
             var sessionCache = new Mock<ISessionCache>();
             sessionCache.SetupGet(x => x.Session).Returns(session.Object);
             var errorDisplay = new Mock<IErrorDisplay>();

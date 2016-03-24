@@ -9,29 +9,53 @@ namespace OutlookMatters.Test.Mattermost.Session
     [TestFixture]
     public class UserSessionTest
     {
+        private const string Token = "token";
+        private const string UserId = "userId";
+        private const string ChannelId = "channelId";
+        private const string Message = "Hello World!";
+        private const string RootId = "rootId";
+
         [Test]
         public void CreatePost_PostsHttpRequest()
         {
-            const string token = "token";
-            const string userId = "userId";
-            const string channelId = "channelId";
-            const string message = "Hello World!";
             const string jsonPost =
-                "{\"channel_id\":\"" + channelId + "\",\"message\":\"" + message + "\",\"user_id\":\"" + userId + "\"}";
-            var baseUri = new Uri("http://localhost");
+                @"{""channel_id"":""channelId"",""message"":""Hello World!"",""user_id"":""userId"",""root_id"":""""}";
             var httpRequest = new Mock<IHttpRequest>();
+            var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
+
+            classUnderTest.CreatePost(ChannelId, Message);
+
+            httpRequest.Verify(x => x.WithContentType("text/json"));
+            httpRequest.Verify(x => x.WithHeader("Authorization", "Bearer " + Token));
+            httpRequest.Verify(x => x.Send(jsonPost));
+        }
+
+        [Test]
+        public void CreatePost_PostsHttpRequestWithRootId_IfRootIdProvided()
+        {
+            const string jsonPost =
+                @"{""channel_id"":""channelId"",""message"":""Hello World!"",""user_id"":""userId"",""root_id"":""rootId""}";
+            var httpRequest = new Mock<IHttpRequest>();
+            var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
+
+            classUnderTest.CreatePost(ChannelId, Message, RootId);
+
+            httpRequest.Verify(x => x.WithContentType("text/json"));
+            httpRequest.Verify(x => x.WithHeader("Authorization", "Bearer " + Token));
+            httpRequest.Verify(x => x.Send(jsonPost));
+        }
+
+        private static UserSession SetupUserSessionForCreatingPosts(Mock<IHttpRequest> httpRequest)
+        {
+            var baseUri = new Uri("http://localhost");
             httpRequest.Setup(x => x.WithHeader(It.IsAny<string>(), It.IsAny<string>())).Returns(httpRequest.Object);
             httpRequest.Setup(x => x.WithContentType(It.IsAny<string>())).Returns(httpRequest.Object);
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.Post(new Uri(baseUri, "api/v1/channels/" + channelId + "/create")))
+            httpClient.Setup(x => x.Post(new Uri(baseUri, "api/v1/channels/" + ChannelId + "/create")))
                 .Returns(httpRequest.Object);
-            var classUnderTest = new UserSession(baseUri, token, userId, httpClient.Object);
-
-            classUnderTest.CreatePost(channelId, message);
-
-            httpRequest.Verify(x => x.WithContentType("text/json"));
-            httpRequest.Verify(x => x.WithHeader("Authorization", "Bearer " + token));
-            httpRequest.Verify(x => x.Send(jsonPost));
+            var classUnderTest = new UserSession(baseUri, Token, UserId, httpClient.Object);
+            return classUnderTest;
         }
+
     }
 }
