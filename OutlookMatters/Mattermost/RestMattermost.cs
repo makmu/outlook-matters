@@ -25,9 +25,9 @@ namespace OutlookMatters.Mattermost
                 email = username,
                 password = password
             };
-            var response = _client.Post(loginUrl)
+            var response = _client.Request(loginUrl)
                 .WithContentType("text/json")
-                .SendRequest(JsonConvert.SerializeObject(login));
+                .Post(JsonConvert.SerializeObject(login));
 
             var token = response.GetHeaderValue("Token");
             var payload = response.GetPayload();

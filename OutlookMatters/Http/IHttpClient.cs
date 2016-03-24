@@ -4,6 +4,6 @@ namespace OutlookMatters.Http
 {
     public interface IHttpClient
     {
-        IHttpRequest Post(Uri url);
+        IHttpRequest Request(Uri url);
     }
 }

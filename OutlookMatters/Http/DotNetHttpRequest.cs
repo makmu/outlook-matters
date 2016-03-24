@@ -24,15 +24,15 @@ namespace OutlookMatters.Http
             return this;
         }
 
-        public IHttpResponse SendRequest(string payload)
+        public IHttpResponse Post(string payload)
         {
-            var response = SendPayload(payload);
+            var response = PostPayload(payload);
             return new DotNetHttpResponse(response);
         }
 
-        public void Send(string payload)
+        public void PostAndForget(string payload)
         {
-            var response = SendPayload(payload);
+            var response = PostPayload(payload);
             DiscardResponseAndFreeConnection(response);
         }
 
@@ -44,8 +44,9 @@ namespace OutlookMatters.Http
             }
         }
 
-        private WebResponse SendPayload(string payload)
+        private WebResponse PostPayload(string payload)
         {
+            _httpWebRequest.Method = "POST";
             using (var streamWriter = new StreamWriter(_httpWebRequest.GetRequestStream()))
             {
                 streamWriter.Write(payload);

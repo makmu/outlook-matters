@@ -23,10 +23,10 @@ namespace OutlookMatters.Mattermost.Session
         {
             var post = new Post {channel_id = channelId, message = message, user_id = _userId, root_id = rootId};
             var postUrl = PostUrl(channelId);
-            _httpClient.Post(postUrl)
+            _httpClient.Request(postUrl)
                 .WithContentType("text/json")
                 .WithHeader("Authorization", "Bearer " + _token)
-                .Send(JsonConvert.SerializeObject(post));
+                .PostAndForget(JsonConvert.SerializeObject(post));
 
         }
 

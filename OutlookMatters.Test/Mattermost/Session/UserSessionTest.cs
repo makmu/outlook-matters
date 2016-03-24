@@ -27,7 +27,7 @@ namespace OutlookMatters.Test.Mattermost.Session
 
             httpRequest.Verify(x => x.WithContentType("text/json"));
             httpRequest.Verify(x => x.WithHeader("Authorization", "Bearer " + Token));
-            httpRequest.Verify(x => x.Send(jsonPost));
+            httpRequest.Verify(x => x.PostAndForget(jsonPost));
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace OutlookMatters.Test.Mattermost.Session
 
             httpRequest.Verify(x => x.WithContentType("text/json"));
             httpRequest.Verify(x => x.WithHeader("Authorization", "Bearer " + Token));
-            httpRequest.Verify(x => x.Send(jsonPost));
+            httpRequest.Verify(x => x.PostAndForget(jsonPost));
         }
 
         private static UserSession SetupUserSessionForCreatingPosts(Mock<IHttpRequest> httpRequest)
@@ -51,7 +51,7 @@ namespace OutlookMatters.Test.Mattermost.Session
             httpRequest.Setup(x => x.WithHeader(It.IsAny<string>(), It.IsAny<string>())).Returns(httpRequest.Object);
             httpRequest.Setup(x => x.WithContentType(It.IsAny<string>())).Returns(httpRequest.Object);
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.Post(new Uri(baseUri, "api/v1/channels/" + ChannelId + "/create")))
+            httpClient.Setup(x => x.Request(new Uri(baseUri, "api/v1/channels/" + ChannelId + "/create")))
                 .Returns(httpRequest.Object);
             var classUnderTest = new UserSession(baseUri, Token, UserId, httpClient.Object);
             return classUnderTest;
