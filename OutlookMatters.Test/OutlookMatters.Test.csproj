@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="CloseCommandTest.cs" />
     <Compile Include="MailItemContextMenuEntryTest.cs" />
+    <Compile Include="Mattermost\PostIdFromPermalinkFilterTest.cs" />
     <Compile Include="Mattermost\Session\UserSessionCacheTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mattermost\RestMattermostTest.cs" />

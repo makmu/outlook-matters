@@ -185,6 +185,11 @@
     <Compile Include="Error\IErrorDisplay.cs" />
     <Compile Include="Error\MessageBoxErrorDisplay.cs" />
     <Compile Include="Mail\MailData.cs" />
+    <Compile Include="Mattermost\IStringProvider.cs" />
+    <Compile Include="Mattermost\PermalinkDialog.xaml.cs">
+      <DependentUpon>PermalinkDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Mattermost\PostIdFromPermalinkFilter.cs" />
     <Compile Include="Mattermost\Session\ISessionCache.cs" />
     <Compile Include="Mattermost\Session\UserSessionCache.cs" />
     <Compile Include="Security\IPasswordProvider.cs" />
@@ -264,6 +269,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Mattermost\PermalinkDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Security\PasswordDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

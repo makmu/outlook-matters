@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using OutlookMatters.Mattermost;
 using Office = Microsoft.Office.Core;
 
 namespace OutlookMatters.ContextMenu
@@ -18,15 +19,22 @@ namespace OutlookMatters.ContextMenu
         private readonly IErrorDisplay _errorDisplay;
         private readonly ISettingsUserInterface _settingsUi;
         private readonly ISessionCache _sessionCache;
+        private readonly IStringProvider _rootPostIdProvider;
 
-     
-        public MailItemContextMenuEntry(IMailExplorer explorer, ISettingsLoadService settingsLoadService, IErrorDisplay errorDisplay, ISettingsUserInterface settingsUi, ISessionCache sessionCache)
+
+        public MailItemContextMenuEntry(IMailExplorer explorer,
+            ISettingsLoadService settingsLoadService,
+            IErrorDisplay errorDisplay,
+            ISettingsUserInterface settingsUi,
+            ISessionCache sessionCache,
+            IStringProvider rootPostIdProvider)
         {
             _explorer = explorer;
             _settingsLoadService = settingsLoadService;
             _errorDisplay = errorDisplay;
             _settingsUi = settingsUi;
             _sessionCache = sessionCache;
+            _rootPostIdProvider = rootPostIdProvider;
         }
 
         public string GetCustomUI(string ribbonId)
@@ -73,6 +81,33 @@ namespace OutlookMatters.ContextMenu
             try
             {
                 _sessionCache.Session?.CreatePost(channelId, message);
+            }
+            catch (Exception exception)
+            {
+                _errorDisplay.Display(exception);
+            }
+        }
+
+        public void OnReplyClick(Office.IRibbonControl control)
+        {
+            var settings = _settingsLoadService.Load();
+            var channelId = settings.ChannelId;
+            var mail = _explorer.QuerySelectedMailData();
+            var message = ":email: From: " + mail.SenderName + "\n";
+            message += ":email: Subject: " + mail.Subject + "\n";
+            message += mail.Body;
+            string rootId;
+            try
+            {
+                rootId = _rootPostIdProvider.Get();
+            }
+            catch
+            {
+                return;
+            }
+            try
+            {
+                _sessionCache.Session?.CreatePost(channelId, message, rootId);
             }
             catch (Exception exception)
             {

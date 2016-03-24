@@ -54,14 +54,15 @@ namespace OutlookMatters
             var settingsService = new ApplicationSettingsService();
 
             var sessionCache = new UserSessionCache(mattermost, settingsService, passwordDialog);
-           
-           
+
+
             return new MailItemContextMenuEntry(
                 new OutlookMailExplorer(),
                 settingsService,
                 new MessageBoxErrorDisplay(),
                 new WpfSettingsUserInterface(settingsService, settingsService),
-                sessionCache);
+                sessionCache,
+                new PostIdFromPermalinkFilter(new PermalinkDialog()));
         }
 
         #region VSTO generated code
