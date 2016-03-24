@@ -1,14 +1,15 @@
-﻿using System;
-using System.Deployment.Application;
-using System.Reflection;
-using System.Windows;
-using OutlookMatters.ContextMenu;
+﻿using OutlookMatters.ContextMenu;
 using OutlookMatters.Error;
 using OutlookMatters.Http;
 using OutlookMatters.Mail;
 using OutlookMatters.Mattermost;
+using OutlookMatters.Mattermost.Session;
 using OutlookMatters.Security;
 using OutlookMatters.Settings;
+using System;
+using System.Deployment.Application;
+using System.Reflection;
+using System.Windows;
 using Office = Microsoft.Office.Core;
 
 namespace OutlookMatters
@@ -48,14 +49,19 @@ namespace OutlookMatters
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             var httpClient = new DotNetHttpClient();
+            var mattermost = new RestMattermost(new UserSessionFactory(httpClient), httpClient);
+            var passwordDialog = new PasswordDialog();
             var settingsService = new ApplicationSettingsService();
+
+            var sessionCache = new UserSessionCache(mattermost, settingsService, passwordDialog);
+           
+           
             return new MailItemContextMenuEntry(
                 new OutlookMailExplorer(),
-                new RestMattermost(new UserSessionFactory(httpClient), httpClient),
                 settingsService,
-                new PasswordDialog(),
                 new MessageBoxErrorDisplay(),
-                new WpfSettingsUserInterface(settingsService, settingsService));
+                new WpfSettingsUserInterface(settingsService, settingsService),
+                sessionCache);
         }
 
         #region VSTO generated code

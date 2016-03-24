@@ -60,16 +60,20 @@
     </Compile>
     <Compile Include="CloseCommandTest.cs" />
     <Compile Include="MailItemContextMenuEntryTest.cs" />
+    <Compile Include="Mattermost\Session\UserSessionCacheTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RestMattermostTest.cs" />
-    <Compile Include="SaveCommandTest.cs" />
-    <Compile Include="SettingsViewModelTest.cs" />
+    <Compile Include="Mattermost\RestMattermostTest.cs" />
+    <Compile Include="Settings\ApplicationSettingsServiceTest.cs" />
+    <Compile Include="Settings\SaveCommandTest.cs" />
+    <Compile Include="Settings\SettingsViewModelTest.cs" />
     <Compile Include="TestUtils\ExtensionMethods.cs" />
-    <Compile Include="UserSessionTest.cs" />
+    <Compile Include="Mattermost\Session\UserSessionTest.cs" />
     <Compile Include="TestUtils\XmlAssertions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OutlookMatters\OutlookMatters.csproj">

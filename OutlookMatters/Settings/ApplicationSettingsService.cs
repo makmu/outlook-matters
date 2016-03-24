@@ -1,7 +1,11 @@
-﻿namespace OutlookMatters.Settings
+﻿using System;
+
+namespace OutlookMatters.Settings
 {
     public class ApplicationSettingsService: ISettingsLoadService, ISettingsSaveService
     {
+        public DateTime LastChanged { get; private set; } = DateTime.Now;
+
         public Settings Load()
         {
             return new Settings(
@@ -18,6 +22,10 @@
             Properties.Settings.Default.ChannelId = settings.ChannelId;
             Properties.Settings.Default.Username = settings.Username;
             Properties.Settings.Default.Save();
+
+            LastChanged = DateTime.Now;
         }
+
+       
     }
 }

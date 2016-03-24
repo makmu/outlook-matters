@@ -1,12 +1,12 @@
 ﻿using System;
-using System.CodeDom;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using OutlookMatters.Http;
 using OutlookMatters.Mattermost;
+using OutlookMatters.Mattermost.Session;
 
-namespace OutlookMatters.Test
+namespace OutlookMatters.Test.Mattermost
 {
     [TestFixture]
     public class RestMattermostTest

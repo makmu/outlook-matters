@@ -1,8 +1,8 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OutlookMatters.Http;
+using System;
 
-namespace OutlookMatters.Mattermost
+namespace OutlookMatters.Mattermost.Session
 {
     public class UserSession: ISession
     {

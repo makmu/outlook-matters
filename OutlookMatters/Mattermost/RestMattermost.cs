@@ -1,6 +1,7 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OutlookMatters.Http;
+using OutlookMatters.Mattermost.Session;
+using System;
 
 namespace OutlookMatters.Mattermost
 {

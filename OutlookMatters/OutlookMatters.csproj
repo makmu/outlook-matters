@@ -185,6 +185,8 @@
     <Compile Include="Error\IErrorDisplay.cs" />
     <Compile Include="Error\MessageBoxErrorDisplay.cs" />
     <Compile Include="Mail\MailData.cs" />
+    <Compile Include="Mattermost\Session\ISessionCache.cs" />
+    <Compile Include="Mattermost\Session\UserSessionCache.cs" />
     <Compile Include="Security\IPasswordProvider.cs" />
     <Compile Include="Security\PasswordDialog.xaml.cs">
       <DependentUpon>PasswordDialog.xaml</DependentUpon>
@@ -201,8 +203,8 @@
     <Compile Include="Settings\CloseCommand.cs" />
     <Compile Include="Settings\IClosableWindow.cs" />
     <Compile Include="Settings\ISettingsLoadService.cs" />
-    <Compile Include="Mattermost\ISession.cs" />
-    <Compile Include="Mattermost\ISessionFactory.cs" />
+    <Compile Include="Mattermost\Session\ISession.cs" />
+    <Compile Include="Mattermost\Session\ISessionFactory.cs" />
     <Compile Include="Mattermost\Login.cs" />
     <Compile Include="ContextMenu\MailItemContextMenuEntry.cs" />
     <Compile Include="Mail\OutlookMailExplorer.cs" />
@@ -211,8 +213,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Mattermost\RestMattermost.cs" />
-    <Compile Include="Mattermost\UserSession.cs" />
-    <Compile Include="Mattermost\UserSessionFactory.cs" />
+    <Compile Include="Mattermost\Session\UserSession.cs" />
+    <Compile Include="Mattermost\Session\UserSessionFactory.cs" />
     <Compile Include="Mattermost\User.cs" />
     <Compile Include="Settings\ISettingsSaveService.cs" />
     <Compile Include="Settings\ISettingsUserInterface.cs" />
