@@ -11,6 +11,7 @@ namespace OutlookMatters.Test.Mattermost
     [TestFixture]
     public class RestMattermostTest
     {
+
         [Test]
         public void LoginByUsername_ReturnsSessionObject()
         {

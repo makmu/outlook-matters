@@ -184,6 +184,7 @@
     </Compile>
     <Compile Include="Error\IErrorDisplay.cs" />
     <Compile Include="Error\MessageBoxErrorDisplay.cs" />
+    <Compile Include="Http\FailedHttpRequestResponse.cs" />
     <Compile Include="Mail\MailData.cs" />
     <Compile Include="Mattermost\IStringProvider.cs" />
     <Compile Include="Mattermost\PermalinkDialog.xaml.cs">
@@ -197,8 +198,8 @@
     </Compile>
     <Compile Include="Settings\ApplicationSettingsService.cs" />
     <Compile Include="Http\DotNetHttpClient.cs" />
-    <Compile Include="Http\DotNetHttpRequest.cs" />
-    <Compile Include="Http\DotNetHttpResponse.cs" />
+    <Compile Include="Http\HttpWebRequestAdaptor.cs" />
+    <Compile Include="Http\DefaultHttpResponse.cs" />
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Http\IHttpResponse.cs" />

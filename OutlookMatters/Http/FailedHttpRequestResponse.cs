@@ -3,11 +3,11 @@ using System.Net;
 
 namespace OutlookMatters.Http
 {
-    internal class DotNetHttpResponse : IHttpResponse
+    internal class FailedHttpRequestResponse : IHttpResponse
     {
-        private readonly WebResponse _response;
+        private readonly HttpWebResponse _response;
 
-        public DotNetHttpResponse(WebResponse response)
+        public FailedHttpRequestResponse(HttpWebResponse response)
         {
             _response = response;
         }
@@ -19,13 +19,20 @@ namespace OutlookMatters.Http
 
         public string GetPayload()
         {
+            string errorPayload;
             using (_response)
             {
                 using (var streamReader = new StreamReader(_response.GetResponseStream()))
                 {
-                    return streamReader.ReadToEnd();
+                    errorPayload = streamReader.ReadToEnd();
                 }
             }
+            throw new WebException(errorPayload);
+        }
+
+        public void Dispose()
+        {
+            _response.Dispose();
         }
     }
 }

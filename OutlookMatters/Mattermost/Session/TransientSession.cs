@@ -45,5 +45,10 @@ namespace OutlookMatters.Mattermost.Session
         {
             Session.CreatePost(channelId, message, rootId);
         }
+
+        public Post GetPostById(string postId)
+        {
+            return Session.GetPostById(postId);
+        }
     }
 }

@@ -14,6 +14,7 @@ namespace OutlookMatters.Test.Mattermost.Session
         const string ChannelId = "myChannel";
         const string Message = "message";
         const string RootId = "rootId";
+        const string PostId = "postId";
 
         [Test]
         public void CreatePost_CreatesPostUsingCurrentSession()
@@ -77,7 +78,7 @@ namespace OutlookMatters.Test.Mattermost.Session
         }
 
         [Test]
-        public void GetSession_ReturnsNewSession_AfterUpdateTimestampChanged()
+        public void CreatePost_UsesNewSession_AfterUpdateTimestampChanged()
         {
             var mattermost = new Mock<IMattermost>();
             var session1 = new Mock<ISession>();
@@ -102,6 +103,26 @@ namespace OutlookMatters.Test.Mattermost.Session
 
             session1.Verify(x => x.CreatePost(ChannelId, Message, RootId), Times.Once);
             session2.Verify(x => x.CreatePost(ChannelId, Message, RootId), Times.Once);
+        }
+
+        [Test]
+        public void GetPostById_ReturnsPostFromCurrentSession()
+        {
+            var settingsLoadService = new Mock<ISettingsLoadService>();
+            var settings = new OutlookMatters.Settings.Settings("myUrl", "testTeamId", ChannelId, "Donald Duck");
+            settingsLoadService.Setup(x => x.Load()).Returns(settings);
+            var mattermost = new Mock<IMattermost>();
+            var session = new Mock<ISession>();
+            mattermost.Setup(
+                x => x.LoginByUsername(settings.MattermostUrl, settings.TeamId, settings.Username, It.IsAny<string>()))
+                      .Returns(session.Object);
+            var classUnderTest = new TransientSession(mattermost.Object,
+                settingsLoadService.Object,
+                Mock.Of<IPasswordProvider>());
+
+            classUnderTest.GetPostById(PostId);
+
+            session.Verify(x => x.GetPostById(PostId));
         }
 
         private static ISettingsLoadService DefaultSettingsLoadService

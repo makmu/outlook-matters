@@ -3,11 +3,11 @@ using System.Net;
 
 namespace OutlookMatters.Http
 {
-    internal class DotNetHttpRequest : IHttpRequest
+    internal class HttpWebRequestAdaptor : IHttpRequest
     {
         private readonly HttpWebRequest _httpWebRequest;
 
-        public DotNetHttpRequest(HttpWebRequest httpWebRequest)
+        public HttpWebRequestAdaptor(HttpWebRequest httpWebRequest)
         {
             _httpWebRequest = httpWebRequest;
         }
@@ -26,31 +26,26 @@ namespace OutlookMatters.Http
 
         public IHttpResponse Post(string payload)
         {
-            var response = PostPayload(payload);
-            return new DotNetHttpResponse(response);
+            PostPayload(payload);
+            return GetResponse();
         }
 
         public void PostAndForget(string payload)
         {
-            var response = PostPayload(payload);
-            DiscardResponseAndFreeConnection(response);
+            PostPayload(payload);
+            using (var response = GetResponse())
+            {
+                response.GetPayload();
+            }
         }
 
         public IHttpResponse Get()
         {
             _httpWebRequest.Method = "GET";
-            return new DotNetHttpResponse(_httpWebRequest.GetResponse());
+            return new DefaultHttpResponse((HttpWebResponse) _httpWebRequest.GetResponse());
         }
 
-        private static void DiscardResponseAndFreeConnection(WebResponse response)
-        {
-            using (response)
-            {
-                // do nothing
-            }
-        }
-
-        private WebResponse PostPayload(string payload)
+        private void PostPayload(string payload)
         {
             _httpWebRequest.Method = "POST";
             using (var streamWriter = new StreamWriter(_httpWebRequest.GetRequestStream()))
@@ -59,7 +54,16 @@ namespace OutlookMatters.Http
                 streamWriter.Flush();
                 streamWriter.Close();
             }
-            return _httpWebRequest.GetResponse();
+        }
+
+        private IHttpResponse GetResponse()
+        {
+            var httpResponse = (HttpWebResponse) _httpWebRequest.GetResponse();
+            if (httpResponse.StatusCode != HttpStatusCode.OK)
+            {
+                return new FailedHttpRequestResponse(httpResponse);
+            }
+            return new DefaultHttpResponse(httpResponse);
         }
     }
 }

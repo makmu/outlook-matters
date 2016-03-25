@@ -8,7 +8,7 @@ namespace OutlookMatters.Http
         public IHttpRequest Request(Uri url)
         {
             var httpWebRequest = (HttpWebRequest) WebRequest.Create(url);
-            return new DotNetHttpRequest(httpWebRequest);
+            return new HttpWebRequestAdaptor(httpWebRequest);
         }
     }
 }

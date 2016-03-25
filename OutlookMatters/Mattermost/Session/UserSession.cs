@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using OutlookMatters.Http;
 using System;
+using System.Collections.Generic;
+using System.Net;
 
 namespace OutlookMatters.Mattermost.Session
 {
@@ -28,6 +30,23 @@ namespace OutlookMatters.Mattermost.Session
                 .WithHeader("Authorization", "Bearer " + _token)
                 .PostAndForget(JsonConvert.SerializeObject(post));
 
+        }
+
+        struct PostingThread
+        {
+            public string[] order;
+            public Dictionary<string, Post> posts;
+        }
+
+        public Post GetPostById(string postId)
+        {
+            string postUrl = "api/v1/posts/" + postId;
+            var url = new Uri(_baseUri, postUrl);
+            var response = _httpClient.Request(url)
+                .WithHeader("Authorization", "Bearer " + _token)
+                .Get();
+            var thread = JsonConvert.DeserializeObject<PostingThread>(response.GetPayload());
+            return thread.posts[postId];
         }
 
         private Uri PostUrl(string channelId)
