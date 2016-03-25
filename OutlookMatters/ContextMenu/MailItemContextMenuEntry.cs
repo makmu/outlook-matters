@@ -52,14 +52,10 @@ namespace OutlookMatters.ContextMenu
         public string GetDynamicMenu(Office.IRibbonControl control)
         {
             var xmlString = @"<menu xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">";
-            xmlString += @"  <splitButton id=""PostSplitButton"">";
-            xmlString += @"    <button id=""PostButton"" label=""Post"" onAction=""OnPostClick""/>";
-            xmlString += @"    <menu id=""menu"">";
-            xmlString += @"      <button id=""QuickPostButton"" label=""Quick Post"" onAction=""OnPostClick""/>";
-            xmlString += @"      <button id=""ReplyButton"" label=""As Reply..."" onAction=""OnReplyClick""/>";
-            xmlString += @"    </menu>";
-            xmlString += @"  </splitButton>";
-            xmlString += @"  <menuSeparator id=""separator""/>";
+            xmlString += @"  <button id=""PostButton"" label=""Quick Post"" onAction=""OnPostClick""/>";
+            xmlString += @"  <menuSeparator id=""specialSectionSeparator""/>";
+            xmlString += @"  <button id=""ReplyButton"" label=""As Reply..."" onAction=""OnReplyClick""/>";
+            xmlString += @"  <menuSeparator id=""settingsSectionSeparator""/>";
             xmlString +=
                 @"  <button id=""SettingsButton"" imageMso=""ComAddInsDialog"" label=""Settings..."" onAction=""OnSettingsClick"" />";
             xmlString += @"</menu>";
