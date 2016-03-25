@@ -11,6 +11,7 @@ namespace OutlookMatters.Test.Mattermost
     [TestFixture]
     public class RestMattermostTest
     {
+
         [Test]
         public void LoginByUsername_ReturnsSessionObject()
         {
@@ -32,9 +33,9 @@ namespace OutlookMatters.Test.Mattermost
             httpResponse.Setup(x => x.GetHeaderValue("Token")).Returns(token);
             var httpRequest = new Mock<IHttpRequest>();
             httpRequest.Setup(x => x.WithContentType("text/json")).Returns(httpRequest.Object);
-            httpRequest.Setup(x => x.SendRequest(jsonPost)).Returns(httpResponse.Object);
+            httpRequest.Setup(x => x.Post(jsonPost)).Returns(httpResponse.Object);
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.Post(new Uri(new Uri(url), "api/v1/users/login")))
+            httpClient.Setup(x => x.Request(new Uri(new Uri(url), "api/v1/users/login")))
                 .Returns(httpRequest.Object);
             var classUnderTest = new RestMattermost(sessionFactory.Object, httpClient.Object);
 

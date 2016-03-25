@@ -2,11 +2,6 @@
 {
     public class Settings
     {
-        public string MattermostUrl { get; }
-        public string TeamId { get; }
-        public string ChannelId { get; }
-        public string Username { get; }
-
         public Settings(string mattermostUrl, string teamId, string channelId, string username)
         {
             MattermostUrl = mattermostUrl;
@@ -15,16 +10,22 @@
             Username = username;
         }
 
+        public string MattermostUrl { get; }
+        public string TeamId { get; }
+        public string ChannelId { get; }
+        public string Username { get; }
+
         protected bool Equals(Settings other)
         {
-            return string.Equals(MattermostUrl, other.MattermostUrl) && string.Equals(TeamId, other.TeamId) && string.Equals(ChannelId, other.ChannelId) && string.Equals(Username, other.Username);
+            return string.Equals(MattermostUrl, other.MattermostUrl) && string.Equals(TeamId, other.TeamId) &&
+                   string.Equals(ChannelId, other.ChannelId) && string.Equals(Username, other.Username);
         }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((Settings) obj);
         }
 
@@ -32,7 +33,7 @@
         {
             unchecked
             {
-                var hashCode = (MattermostUrl != null ? MattermostUrl.GetHashCode() : 0);
+                var hashCode = MattermostUrl != null ? MattermostUrl.GetHashCode() : 0;
                 hashCode = (hashCode*397) ^ (TeamId != null ? TeamId.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ (ChannelId != null ? ChannelId.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ (Username != null ? Username.GetHashCode() : 0);

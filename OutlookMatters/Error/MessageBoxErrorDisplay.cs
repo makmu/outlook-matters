@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace OutlookMatters.Error
 {
-    public class MessageBoxErrorDisplay: IErrorDisplay
+    public class MessageBoxErrorDisplay : IErrorDisplay
     {
         public void Display(Exception exception)
         {

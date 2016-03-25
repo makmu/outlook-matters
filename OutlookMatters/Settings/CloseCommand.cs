@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace OutlookMatters.Settings
 {
-    public class CloseCommand: ICommand
+    public class CloseCommand : ICommand
     {
         private readonly IClosableWindow _window;
 

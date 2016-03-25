@@ -1,53 +1,56 @@
 ﻿<Window x:Class="OutlookMatters.Settings.SettingsWindow"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             Title="Mattermost Settings"
-             Height="250"
-             Width="400"
-             Name="Window"
-             d:DesignHeight="250" d:DesignWidth="400" ResizeMode="NoResize" WindowStyle="ToolWindow">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="Mattermost Settings"
+        Height="250"
+        Width="400"
+        Name="Window"
+        d:DesignHeight="250" d:DesignWidth="400" ResizeMode="NoResize" WindowStyle="ToolWindow">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="130"></ColumnDefinition>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="130" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Label Margin="5" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Width="99">Mattermost URL:</Label>
-            <TextBox Text="{Binding MattermostUrl}" Margin="5" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ></TextBox>
+            <TextBox Text="{Binding MattermostUrl}" Margin="5" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" />
             <Label Margin="5" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Width="69">Channel Id:</Label>
-            <TextBox Margin="5" Text="{Binding TeamId}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"></TextBox>
+            <TextBox Margin="5" Text="{Binding TeamId}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" />
             <Label Margin="5" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="55">Team Id:</Label>
-            <TextBox Margin="5" Text="{Binding ChannelId}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+            <TextBox Margin="5" Text="{Binding ChannelId}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
             <Label Margin="5" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Width="105">Username (email):</Label>
-            <TextBox Margin="5" Text="{Binding Username}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+            <TextBox Margin="5" Text="{Binding Username}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" />
         </Grid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="10"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button Padding="10" Margin="10" Grid.Row="1" Grid.Column="1" Command="{Binding Cancel}">Cancel</Button>
-            <Button Padding="10" Margin="10" Grid.Row="1" Grid.Column="2" Command="{Binding Save}" CommandParameter="{Binding DataContext, ElementName=Window}">Save</Button>
+            <Button Padding="10" Margin="10" Grid.Row="1" Grid.Column="2" Command="{Binding Save}"
+                    CommandParameter="{Binding DataContext, ElementName=Window}">
+                Save
+            </Button>
         </Grid>
     </Grid>
 </Window>

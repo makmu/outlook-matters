@@ -2,7 +2,7 @@
 
 namespace OutlookMatters.Settings
 {
-    public class ApplicationSettingsService: ISettingsLoadService, ISettingsSaveService
+    public class ApplicationSettingsService : ISettingsLoadService, ISettingsSaveService
     {
         public DateTime LastChanged { get; private set; } = DateTime.Now;
 
@@ -12,7 +12,7 @@ namespace OutlookMatters.Settings
                 Properties.Settings.Default.MattermostUrl,
                 Properties.Settings.Default.TeamId,
                 Properties.Settings.Default.ChannelId,
-                Properties.Settings.Default.Username );
+                Properties.Settings.Default.Username);
         }
 
         public void Save(Settings settings)
@@ -25,7 +25,5 @@ namespace OutlookMatters.Settings
 
             LastChanged = DateTime.Now;
         }
-
-       
     }
 }

@@ -1,4 +1,4 @@
-﻿<Window x:Class="OutlookMatters.Security.PasswordDialog"
+﻿<Window x:Class="OutlookMatters.Mattermost.PermalinkDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,19 +7,16 @@
         mc:Ignorable="d"
         Height="200"
         Width="300"
-        d:DesignHeight="150" d:DesignWidth="300" Title="Mattermost Credentials" WindowStyle="ToolWindow"
-        ResizeMode="NoResize">
-    <Grid FocusManager.FocusedElement="{Binding ElementName=Password}">
+        d:DesignHeight="150" d:DesignWidth="300" Title="Permalink" WindowStyle="ToolWindow" ResizeMode="NoResize">
+    <Grid FocusManager.FocusedElement="{Binding ElementName=Permalink}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Label Margin="5" Grid.Row="0">Please enter password for username:</Label>
-        <Label Margin="5" Name="Username" Grid.Row="1" />
-        <PasswordBox Margin="5" Name="Password" Grid.Row="2" />
+        <Label Margin="5" Grid.Row="0">Permalink of any post in thread:</Label>
+        <TextBox Margin="5" Name="Permalink" Grid.Row="2" />
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />

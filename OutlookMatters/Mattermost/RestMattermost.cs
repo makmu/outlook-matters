@@ -1,14 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using OutlookMatters.Http;
 using OutlookMatters.Mattermost.Session;
-using System;
 
 namespace OutlookMatters.Mattermost
 {
-    public class RestMattermost: IMattermost
+    public class RestMattermost : IMattermost
     {
-        private readonly ISessionFactory _sessionFactory;
         private readonly IHttpClient _client;
+        private readonly ISessionFactory _sessionFactory;
 
         public RestMattermost(ISessionFactory sessionFactory, IHttpClient client)
         {
@@ -25,9 +25,9 @@ namespace OutlookMatters.Mattermost
                 email = username,
                 password = password
             };
-            var response = _client.Post(loginUrl)
+            var response = _client.Request(loginUrl)
                 .WithContentType("text/json")
-                .SendRequest(JsonConvert.SerializeObject(login));
+                .Post(JsonConvert.SerializeObject(login));
 
             var token = response.GetHeaderValue("Token");
             var payload = response.GetPayload();

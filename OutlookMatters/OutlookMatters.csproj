@@ -184,17 +184,24 @@
     </Compile>
     <Compile Include="Error\IErrorDisplay.cs" />
     <Compile Include="Error\MessageBoxErrorDisplay.cs" />
+    <Compile Include="Http\FailedHttpRequestResponse.cs" />
     <Compile Include="Mail\MailData.cs" />
-    <Compile Include="Mattermost\Session\ISessionCache.cs" />
-    <Compile Include="Mattermost\Session\UserSessionCache.cs" />
+    <Compile Include="Mattermost\IStringProvider.cs" />
+    <Compile Include="Mattermost\PermalinkDialog.xaml.cs">
+      <DependentUpon>PermalinkDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Mattermost\PermalinkDialogShell.cs" />
+    <Compile Include="Mattermost\PostIdFromPermalinkFilter.cs" />
+    <Compile Include="Mattermost\RootPostIdResolver.cs" />
+    <Compile Include="Mattermost\Session\TransientSession.cs" />
     <Compile Include="Security\IPasswordProvider.cs" />
     <Compile Include="Security\PasswordDialog.xaml.cs">
       <DependentUpon>PasswordDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\ApplicationSettingsService.cs" />
     <Compile Include="Http\DotNetHttpClient.cs" />
-    <Compile Include="Http\DotNetHttpRequest.cs" />
-    <Compile Include="Http\DotNetHttpResponse.cs" />
+    <Compile Include="Http\HttpWebRequestAdaptor.cs" />
+    <Compile Include="Http\DefaultHttpResponse.cs" />
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Http\IHttpResponse.cs" />
@@ -224,6 +231,7 @@
     <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\UserAbortException.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -264,6 +272,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Mattermost\PermalinkDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Security\PasswordDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

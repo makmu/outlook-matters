@@ -1,11 +1,13 @@
-﻿using OutlookMatters.Error;
-using OutlookMatters.Mail;
-using OutlookMatters.Mattermost.Session;
-using OutlookMatters.Settings;
-using System;
+﻿using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using OutlookMatters.Error;
+using OutlookMatters.Mail;
+using OutlookMatters.Mattermost;
+using OutlookMatters.Mattermost.Session;
+using OutlookMatters.Settings;
+using OutlookMatters.Utils;
 using Office = Microsoft.Office.Core;
 
 namespace OutlookMatters.ContextMenu
@@ -13,20 +15,27 @@ namespace OutlookMatters.ContextMenu
     [ComVisible(true)]
     public class MailItemContextMenuEntry : Office.IRibbonExtensibility
     {
-        private readonly IMailExplorer _explorer;
-        private readonly ISettingsLoadService _settingsLoadService;
         private readonly IErrorDisplay _errorDisplay;
+        private readonly IMailExplorer _explorer;
+        private readonly IStringProvider _rootPostIdProvider;
+        private readonly ISession _session;
+        private readonly ISettingsLoadService _settingsLoadService;
         private readonly ISettingsUserInterface _settingsUi;
-        private readonly ISessionCache _sessionCache;
 
-     
-        public MailItemContextMenuEntry(IMailExplorer explorer, ISettingsLoadService settingsLoadService, IErrorDisplay errorDisplay, ISettingsUserInterface settingsUi, ISessionCache sessionCache)
+
+        public MailItemContextMenuEntry(IMailExplorer explorer,
+            ISettingsLoadService settingsLoadService,
+            IErrorDisplay errorDisplay,
+            ISettingsUserInterface settingsUi,
+            ISession session,
+            IStringProvider rootPostIdProvider)
         {
             _explorer = explorer;
             _settingsLoadService = settingsLoadService;
             _errorDisplay = errorDisplay;
             _settingsUi = settingsUi;
-            _sessionCache = sessionCache;
+            _session = session;
+            _rootPostIdProvider = rootPostIdProvider;
         }
 
         public string GetCustomUI(string ribbonId)
@@ -43,10 +52,13 @@ namespace OutlookMatters.ContextMenu
         public string GetDynamicMenu(Office.IRibbonControl control)
         {
             var xmlString = @"<menu xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">";
-            xmlString += @"<button id=""PostButton"" label=""Post"" onAction=""OnPostClick"" />";
-            xmlString += @"<menuSeparator id=""separator""/>";
-            xmlString += @"<button id=""SettingsButton"" imageMso=""ComAddInsDialog"" label=""Settings..."" onAction=""OnSettingsClick"" />";
-            xmlString += "</menu>";
+            xmlString += @"  <button id=""PostButton"" label=""Quick Post"" onAction=""OnPostClick""/>";
+            xmlString += @"  <menuSeparator id=""specialSectionSeparator""/>";
+            xmlString += @"  <button id=""ReplyButton"" label=""As Reply..."" onAction=""OnReplyClick""/>";
+            xmlString += @"  <menuSeparator id=""settingsSectionSeparator""/>";
+            xmlString +=
+                @"  <button id=""SettingsButton"" imageMso=""ComAddInsDialog"" label=""Settings..."" onAction=""OnSettingsClick"" />";
+            xmlString += @"</menu>";
             return xmlString;
         }
 
@@ -66,27 +78,51 @@ namespace OutlookMatters.ContextMenu
 
             try
             {
-                _sessionCache.Session?.CreatePost(channelId, message);
+                _session.CreatePost(channelId, message);
             }
             catch (Exception exception)
             {
                 _errorDisplay.Display(exception);
             }
         }
-        
-        #region Helpers
+
+        public void OnReplyClick(Office.IRibbonControl control)
+        {
+            var settings = _settingsLoadService.Load();
+            var channelId = settings.ChannelId;
+            var mail = _explorer.QuerySelectedMailData();
+            var message = ":email: From: " + mail.SenderName + "\n";
+            message += ":email: Subject: " + mail.Subject + "\n";
+            message += mail.Body;
+            try
+            {
+                var rootId = _rootPostIdProvider.Get();
+                _session.CreatePost(channelId, message, rootId);
+            }
+            catch (UserAbortException)
+            {
+            }
+            catch (Exception exception)
+            {
+                _errorDisplay.Display(exception);
+            }
+        }
 
         private static string GetResourceText(string resourceName)
         {
-            Assembly asm = Assembly.GetExecutingAssembly();
-            string[] resourceNames = asm.GetManifestResourceNames();
-            for (int i = 0; i < resourceNames.Length; ++i)
+            var asm = Assembly.GetExecutingAssembly();
+            var resourceNames = asm.GetManifestResourceNames();
+            foreach (var name in resourceNames)
             {
-                if (string.Compare(resourceName, resourceNames[i], StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(resourceName, name, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    using (var resourceReader = new StreamReader(asm.GetManifestResourceStream(resourceNames[i])))
+                    using (var manifestStream = asm.GetManifestResourceStream(name))
                     {
-                        if (resourceReader != null)
+                        if (manifestStream == null)
+                        {
+                            return null;
+                        }
+                        using (var resourceReader = new StreamReader(manifestStream))
                         {
                             return resourceReader.ReadToEnd();
                         }
@@ -95,7 +131,5 @@ namespace OutlookMatters.ContextMenu
             }
             return null;
         }
-
-        #endregion
     }
 }

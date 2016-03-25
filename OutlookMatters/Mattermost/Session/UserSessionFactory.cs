@@ -1,9 +1,9 @@
-﻿using OutlookMatters.Http;
-using System;
+﻿using System;
+using OutlookMatters.Http;
 
 namespace OutlookMatters.Mattermost.Session
 {
-    public class UserSessionFactory: ISessionFactory
+    public class UserSessionFactory : ISessionFactory
     {
         private readonly IHttpClient _httpClient;
 

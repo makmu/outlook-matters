@@ -1,12 +1,12 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
+using OutlookMatters.Utils;
 
 namespace OutlookMatters.Security
 {
     /// <summary>
-    /// Interaction logic for PasswordDialog.xaml
+    ///     Interaction logic for PasswordDialog.xaml
     /// </summary>
-    public partial class PasswordDialog: IPasswordProvider
+    public partial class PasswordDialog : IPasswordProvider
     {
         public PasswordDialog()
         {
@@ -21,7 +21,7 @@ namespace OutlookMatters.Security
             {
                 return Password.Password;
             }
-            throw new Exception("cannot provide password for '" + username + "': user abort");
+            throw new UserAbortException("cannot provide password for '" + username + "': user abort");
         }
 
         private void OnOkClick(object sender, RoutedEventArgs e)

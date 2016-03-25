@@ -4,7 +4,7 @@ namespace OutlookMatters.Settings
 {
     public class SettingsViewModel
     {
-        public SettingsViewModel(Settings settings, ICommand saveCommand, ICommand cancelCommand )
+        public SettingsViewModel(Settings settings, ICommand saveCommand, ICommand cancelCommand)
         {
             Save = saveCommand;
             Cancel = cancelCommand;
