@@ -1,29 +1,16 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using OutlookMatters.Mattermost;
+﻿using System.Windows;
+using OutlookMatters.Utils;
 
-namespace OutlookMatters.Security
+namespace OutlookMatters.Mattermost
 {
     /// <summary>
-    /// Interaction logic for PermalinkDialog.xaml
+    ///     Interaction logic for PermalinkDialog.xaml
     /// </summary>
-    public partial class PermalinkDialog: IStringProvider
+    public partial class PermalinkDialog
     {
         public PermalinkDialog()
         {
             InitializeComponent();
-        }
-
-        public string Get()
-        {
-            ShowDialog();
-            if (DialogResult == true)
-            {
-                return Permalink.Text;
-            }
-            throw new Exception("cannot provide post id for: user abort");
         }
 
         private void OnOkClick(object sender, RoutedEventArgs e)

@@ -15,7 +15,8 @@
         {
             var settings = _loadService.Load();
             var window = new SettingsWindow();
-            window.DataContext = new SettingsViewModel(settings, new SaveCommand(_saveService, window), new CloseCommand(window));
+            window.DataContext = new SettingsViewModel(settings, new SaveCommand(_saveService, window),
+                new CloseCommand(window));
             window.ShowDialog();
         }
     }

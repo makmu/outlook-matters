@@ -1,14 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using OutlookMatters.Http;
 using OutlookMatters.Mattermost.Session;
-using System;
 
 namespace OutlookMatters.Mattermost
 {
-    public class RestMattermost: IMattermost
+    public class RestMattermost : IMattermost
     {
-        private readonly ISessionFactory _sessionFactory;
         private readonly IHttpClient _client;
+        private readonly ISessionFactory _sessionFactory;
 
         public RestMattermost(ISessionFactory sessionFactory, IHttpClient client)
         {

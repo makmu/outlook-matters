@@ -10,7 +10,7 @@
 [assembly: AssemblyFileVersion(Version.Current)]
 [assembly: AssemblyInformationalVersion(Version.FullCurrent)]
 
-class Version
+internal class Version
 {
     // refer to http://semver.org for more information
     public const string Major = "1";
@@ -23,7 +23,7 @@ class Version
     public const string FullCurrent = Current + "-" + Label + AdditionalReleaseInformation;
 }
 
-class ReleaseLabel
+internal class ReleaseLabel
 {
     public const string Dev = "dev";
     public const string ReleaseCandidate = "rc";

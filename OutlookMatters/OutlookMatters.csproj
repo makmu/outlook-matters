@@ -190,7 +190,9 @@
     <Compile Include="Mattermost\PermalinkDialog.xaml.cs">
       <DependentUpon>PermalinkDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Mattermost\PermalinkDialogShell.cs" />
     <Compile Include="Mattermost\PostIdFromPermalinkFilter.cs" />
+    <Compile Include="Mattermost\RootPostIdResolver.cs" />
     <Compile Include="Mattermost\Session\TransientSession.cs" />
     <Compile Include="Security\IPasswordProvider.cs" />
     <Compile Include="Security\PasswordDialog.xaml.cs">
@@ -229,6 +231,7 @@
     <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\UserAbortException.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -7,6 +7,7 @@ using OutlookMatters.Mail;
 using OutlookMatters.Mattermost;
 using OutlookMatters.Mattermost.Session;
 using OutlookMatters.Settings;
+using OutlookMatters.Utils;
 using Office = Microsoft.Office.Core;
 
 namespace OutlookMatters.ContextMenu
@@ -97,18 +98,13 @@ namespace OutlookMatters.ContextMenu
             var message = ":email: From: " + mail.SenderName + "\n";
             message += ":email: Subject: " + mail.Subject + "\n";
             message += mail.Body;
-            string rootId;
             try
             {
-                rootId = _rootPostIdProvider.Get();
-            }
-            catch
-            {
-                return;
-            }
-            try
-            {
+                var rootId = _rootPostIdProvider.Get();
                 _session.CreatePost(channelId, message, rootId);
+            }
+            catch (UserAbortException)
+            {
             }
             catch (Exception exception)
             {
@@ -120,7 +116,7 @@ namespace OutlookMatters.ContextMenu
         {
             var asm = Assembly.GetExecutingAssembly();
             var resourceNames = asm.GetManifestResourceNames();
-            foreach (string name in resourceNames)
+            foreach (var name in resourceNames)
             {
                 if (string.Compare(resourceName, name, StringComparison.OrdinalIgnoreCase) == 0)
                 {

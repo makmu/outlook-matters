@@ -1,17 +1,16 @@
-﻿using Newtonsoft.Json;
-using OutlookMatters.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Net;
+using Newtonsoft.Json;
+using OutlookMatters.Http;
 
 namespace OutlookMatters.Mattermost.Session
 {
-    public class UserSession: ISession
+    public class UserSession : ISession
     {
         private readonly Uri _baseUri;
+        private readonly IHttpClient _httpClient;
         private readonly string _token;
         private readonly string _userId;
-        private readonly IHttpClient _httpClient;
 
         public UserSession(Uri baseUri, string token, string userId, IHttpClient httpClient)
         {
@@ -29,18 +28,11 @@ namespace OutlookMatters.Mattermost.Session
                 .WithContentType("text/json")
                 .WithHeader("Authorization", "Bearer " + _token)
                 .PostAndForget(JsonConvert.SerializeObject(post));
-
-        }
-
-        struct PostingThread
-        {
-            public string[] order;
-            public Dictionary<string, Post> posts;
         }
 
         public Post GetPostById(string postId)
         {
-            string postUrl = "api/v1/posts/" + postId;
+            var postUrl = "api/v1/posts/" + postId;
             var url = new Uri(_baseUri, postUrl);
             var response = _httpClient.Request(url)
                 .WithHeader("Authorization", "Bearer " + _token)
@@ -51,10 +43,16 @@ namespace OutlookMatters.Mattermost.Session
 
         private Uri PostUrl(string channelId)
         {
-            string postUrl = "api/v1/channels/" + channelId + "/create";
+            var postUrl = "api/v1/channels/" + channelId + "/create";
 
             var url = new Uri(_baseUri, postUrl);
             return url;
+        }
+
+        private struct PostingThread
+        {
+            public string[] order;
+            public Dictionary<string, Post> posts;
         }
     }
 }

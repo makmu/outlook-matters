@@ -2,7 +2,7 @@
 
 namespace OutlookMatters.Mattermost
 {
-    public class PostIdFromPermalinkFilter: IStringProvider
+    public class PostIdFromPermalinkFilter : IStringProvider
     {
         private readonly IStringProvider _baseProvider;
 

@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace OutlookMatters.Settings
 {
-    public class SaveCommand: ICommand
+    public class SaveCommand : ICommand
     {
         private readonly ISettingsSaveService _saveService;
         private readonly IClosableWindow _window;

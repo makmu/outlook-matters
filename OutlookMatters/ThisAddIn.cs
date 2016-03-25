@@ -1,4 +1,9 @@
-﻿using OutlookMatters.ContextMenu;
+﻿using System;
+using System.Deployment.Application;
+using System.Diagnostics;
+using System.Reflection;
+using System.Windows;
+using OutlookMatters.ContextMenu;
 using OutlookMatters.Error;
 using OutlookMatters.Http;
 using OutlookMatters.Mail;
@@ -6,10 +11,6 @@ using OutlookMatters.Mattermost;
 using OutlookMatters.Mattermost.Session;
 using OutlookMatters.Security;
 using OutlookMatters.Settings;
-using System;
-using System.Deployment.Application;
-using System.Reflection;
-using System.Windows;
 using Office = Microsoft.Office.Core;
 
 namespace OutlookMatters
@@ -23,7 +24,7 @@ namespace OutlookMatters
 
         private void CheckVersions()
         {
-            if (!System.Diagnostics.Debugger.IsAttached)
+            if (!Debugger.IsAttached)
             {
                 var assemblyVersion = Assembly.GetAssembly(GetType()).GetName().Version;
                 var applicationVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion;
@@ -61,21 +62,21 @@ namespace OutlookMatters
                 new MessageBoxErrorDisplay(),
                 new WpfSettingsUserInterface(settingsService, settingsService),
                 sessionCache,
-                new PostIdFromPermalinkFilter(new PermalinkDialog()));
+                new RootPostIdResolver(new PostIdFromPermalinkFilter(new PermalinkDialogShell()), sessionCache));
         }
 
         #region VSTO generated code
 
         /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        ///     Required method for Designer support - do not modify
+        ///     the contents of this method with the code editor.
         /// </summary>
         private void InternalStartup()
         {
-            this.Startup += ThisAddIn_Startup;
-            this.Shutdown += ThisAddIn_Shutdown;
+            Startup += ThisAddIn_Startup;
+            Shutdown += ThisAddIn_Shutdown;
         }
-        
+
         #endregion
     }
 }

@@ -1,28 +1,29 @@
 ﻿using Microsoft.Office.Interop.Outlook;
+using Exception = System.Exception;
 
 namespace OutlookMatters.Mail
 {
-    public class OutlookMailExplorer: IMailExplorer
+    public class OutlookMailExplorer : IMailExplorer
     {
         public MailData QuerySelectedMailData()
         {
-            Explorer explorer = Globals.ThisAddIn.Application.ActiveExplorer();
+            var explorer = Globals.ThisAddIn.Application.ActiveExplorer();
             if (explorer == null)
             {
-                throw new System.Exception("Could not find mail explorer object");
+                throw new Exception("Could not find mail explorer object");
             }
             if (explorer.Selection == null)
             {
-                throw new System.Exception("No selection information available");
+                throw new Exception("No selection information available");
             }
             if (explorer.Selection.Count == 0)
             {
-                throw new System.Exception("No mails selected");
+                throw new Exception("No mails selected");
             }
             var item = explorer.Selection[1] as MailItem;
             if (item == null)
             {
-                throw new System.Exception("Selected item is not a mail item");
+                throw new Exception("Selected item is not a mail item");
             }
             return new MailData(item.SenderName, item.Subject, item.Body);
         }
