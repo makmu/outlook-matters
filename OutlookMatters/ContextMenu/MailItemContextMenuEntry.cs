@@ -66,7 +66,7 @@ namespace OutlookMatters.ContextMenu
         public string GetDynamicSubMenu(Office.IRibbonControl control)
         {
             var xmlString = @"<menu xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">";
-            for (int counter = 0; counter < _session.ChannelList.ChannelList.Count; i++)
+            for (int counter = 0; counter < _session.ChannelList.ChannelList.Count; counter++)
             {
                 xmlString += ButtonBuilder(counter);
             }
