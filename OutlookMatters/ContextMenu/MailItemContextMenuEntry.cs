@@ -80,7 +80,7 @@ namespace OutlookMatters.ContextMenu
             var buttonId = @"""PostButton" + counter + @""" ";
             var channelName = @"""" + _session.ChannelList.ChannelList[counter].ChannelName + @""" ";
             var tag = @"""" + _session.ChannelList.ChannelList[counter].ChannelId + @""" ";
-            var button = @"<button id=" + buttonId + @"label=" + channelName + @" onAction=""OnPostClick"" tag=" + tag + "/>";
+            var button = @"<button id=" + buttonId + @"label=" + channelName + @" onAction=""OnPostIntoChannelClick"" tag=" + tag + "/>";
             return button;
         }
 
@@ -93,6 +93,17 @@ namespace OutlookMatters.ContextMenu
         {
             var settings = _settingsLoadService.Load();
             var channelId = settings.ChannelId;
+            TryToSendPost(channelId);
+        }
+
+        public void OnPostIntoChannelClick(Office.IRibbonControl control)
+        {
+            var channelId = control.Tag;
+            TryToSendPost(channelId);
+        }
+
+        private void TryToSendPost(string channelId)
+        {
             var mail = _explorer.QuerySelectedMailData();
             var message = ":email: From: " + mail.SenderName + "\n";
             message += ":email: Subject: " + mail.Subject + "\n";
@@ -107,6 +118,8 @@ namespace OutlookMatters.ContextMenu
                 _errorDisplay.Display(exception);
             }
         }
+
+
 
         public void OnReplyClick(Office.IRibbonControl control)
         {
