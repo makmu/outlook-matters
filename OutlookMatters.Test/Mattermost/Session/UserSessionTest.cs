@@ -32,13 +32,28 @@ namespace OutlookMatters.Test.Mattermost.Session
         }
 
         [Test]
+        public void FetchChannelList_FetchesChannelList()
+        {
+            const string jsonResponse =
+                "{\"channels\":[{\"id\":\"45362764765\",\"create_at\":1458911668852,\"update_at\":1458911668852,\"delete_at\":0,\"type\":\"O\",\"display_name\":\"FunnyChannelName\"}]}";
+            var httpRequest = new Mock<IHttpRequest>();
+            var classUnderTest = SetupUserSessionForFetchingChannelList(httpRequest, jsonResponse);
+            
+            classUnderTest.FetchChannelList();
+
+            classUnderTest.ChannelList.ChannelList[0].ChannelId.Should().Be("45362764765");
+            classUnderTest.ChannelList.ChannelList[0].ChannelName.Should().Be("FunnyChannelName");
+            classUnderTest.ChannelList.ChannelList[0].Type.Should().Be("O");
+        }
+
+        [Test]
         public void CreatePost_PostsHttpRequestWithRootId_IfRootIdProvided()
         {
             const string jsonPost =
                 @"{""channel_id"":""channelId"",""message"":""Hello World!"",""user_id"":""userId"",""root_id"":""rootId""}";
             var httpRequest = new Mock<IHttpRequest>();
             var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
-
+            
             classUnderTest.CreatePost(ChannelId, Message, RootId);
 
             httpRequest.Verify(x => x.WithContentType("text/json"));
@@ -82,5 +97,21 @@ namespace OutlookMatters.Test.Mattermost.Session
             return classUnderTest;
         }
 
+        private static UserSession SetupUserSessionForFetchingChannelList(Mock<IHttpRequest> httpRequest, string jsonResponse)
+        {
+            var baseUri = new Uri("http://localhost");
+
+            var httpResonse = new Mock<IHttpResponse>();
+            httpResonse.Setup(x => x.GetPayload()).Returns(jsonResponse);
+
+            httpRequest.Setup(x => x.WithHeader(It.IsAny<string>(), It.IsAny<string>())).Returns(httpRequest.Object);
+            httpRequest.Setup(x => x.WithContentType(It.IsAny<string>())).Returns(httpRequest.Object);
+            httpRequest.Setup(x => x.Get()).Returns(httpResonse.Object);
+
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.Setup(x => x.Get(new Uri(baseUri, "api/v1/channels/"))).Returns(httpRequest.Object);
+            var classUnderTest = new UserSession(baseUri, Token, UserId, httpClient.Object);
+            return classUnderTest;
+        }
     }
 }
