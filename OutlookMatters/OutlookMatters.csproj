@@ -186,6 +186,7 @@
     <Compile Include="Error\MessageBoxErrorDisplay.cs" />
     <Compile Include="Http\FailedHttpRequestResponse.cs" />
     <Compile Include="Mail\MailData.cs" />
+    <Compile Include="Mattermost\Channels.cs" />
     <Compile Include="Mattermost\IStringProvider.cs" />
     <Compile Include="Mattermost\PermalinkDialog.xaml.cs">
       <DependentUpon>PermalinkDialog.xaml</DependentUpon>
