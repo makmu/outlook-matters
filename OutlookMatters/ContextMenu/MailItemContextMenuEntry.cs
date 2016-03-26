@@ -53,6 +53,7 @@ namespace OutlookMatters.ContextMenu
         {
             var xmlString = @"<menu xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">";
             xmlString += @"  <button id=""PostButton"" label=""Quick Post"" onAction=""OnPostClick""/>";
+            xmlString += @"  <dynamicMenu id=""MattermostContextMenu2"" label=""Post into Channel"" getContent=""GetDynamicSubMenu"" />";
             xmlString += @"  <menuSeparator id=""specialSectionSeparator""/>";
             xmlString += @"  <button id=""ReplyButton"" label=""As Reply..."" onAction=""OnReplyClick""/>";
             xmlString += @"  <menuSeparator id=""settingsSectionSeparator""/>";
@@ -60,6 +61,27 @@ namespace OutlookMatters.ContextMenu
                 @"  <button id=""SettingsButton"" imageMso=""ComAddInsDialog"" label=""Settings..."" onAction=""OnSettingsClick"" />";
             xmlString += @"</menu>";
             return xmlString;
+        }
+
+        public string GetDynamicSubMenu(Office.IRibbonControl control)
+        {
+            var xmlString = @"<menu xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">";
+            for (int counter = 0; counter < _session.ChannelList.ChannelList.Count; i++)
+            {
+                xmlString += ButtonBuilder(counter);
+            }
+            xmlString += @"<menuSeparator id=""separator""/>";
+            xmlString += "</menu>";
+            return xmlString;
+        }
+
+        private string ButtonBuilder(int counter)
+        {
+            var buttonId = @"""PostButton" + counter + @""" ";
+            var channelName = @"""" + _session.ChannelList.ChannelList[counter].ChannelName + @""" ";
+            var tag = @"""" + _session.ChannelList.ChannelList[counter].ChannelId + @""" ";
+            var button = @"<button id=" + buttonId + @"label=" + channelName + @" onAction=""OnPostClick"" tag=" + tag + "/>";
+            return button;
         }
 
         public void OnSettingsClick(Office.IRibbonControl control)

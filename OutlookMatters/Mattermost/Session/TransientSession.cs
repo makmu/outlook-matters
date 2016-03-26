@@ -6,11 +6,12 @@ namespace OutlookMatters.Mattermost.Session
 {
     public class TransientSession : ISession
     {
+        public Channels ChannelList => Session.ChannelList;
+
         private readonly IMattermost _mattermost;
         private readonly IPasswordProvider _passwordProvider;
         private readonly ISettingsLoadService _settingsLoadService;
         private DateTime? _lastChanged;
-
         private ISession _session;
 
         public TransientSession(IMattermost mattermost, ISettingsLoadService settingsLoadService,
@@ -36,6 +37,7 @@ namespace OutlookMatters.Mattermost.Session
                         settings.TeamId,
                         settings.Username,
                         password);
+                    _session.FetchChannelList();
                 }
                 return _session;
             }
@@ -49,6 +51,11 @@ namespace OutlookMatters.Mattermost.Session
         public Post GetPostById(string postId)
         {
             return Session.GetPostById(postId);
+        }
+
+        public void FetchChannelList()
+        {
+            Session.FetchChannelList();
         }
     }
 }
