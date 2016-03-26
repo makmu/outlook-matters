@@ -25,15 +25,16 @@ namespace OutlookMatters.Mattermost
                 email = username,
                 password = password
             };
-            var response = _client.Request(loginUrl)
+            using (var response = _client.Request(loginUrl)
                 .WithContentType("text/json")
-                .Post(JsonConvert.SerializeObject(login));
+                .Post(JsonConvert.SerializeObject(login)))
+            {
+                var token = response.GetHeaderValue("Token");
+                var payload = response.GetPayload();
+                var user = JsonConvert.DeserializeObject<User>(payload);
 
-            var token = response.GetHeaderValue("Token");
-            var payload = response.GetPayload();
-            var user = JsonConvert.DeserializeObject<User>(payload);
-
-            return _sessionFactory.CreateSession(new Uri(url), token, user.id);
+                return _sessionFactory.CreateSession(new Uri(url), token, user.id);
+            }
         }
     }
 }
