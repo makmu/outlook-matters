@@ -34,16 +34,19 @@ namespace OutlookMatters.Test.Mattermost.Session
         [Test]
         public void FetchChannelList_FetchesChannelList()
         {
+            const string channelName = "FunnyChannelName";
+            const string channelId = "1234";
+            const string channelType = "O";
             const string jsonResponse =
-                "{\"channels\":[{\"id\":\"45362764765\",\"create_at\":1458911668852,\"update_at\":1458911668852,\"delete_at\":0,\"type\":\"O\",\"display_name\":\"FunnyChannelName\"}]}";
+                "{\"channels\":[{\"id\":\""+ channelId +"\",\"create_at\":1458911668852,\"update_at\":1458911668852,\"delete_at\":0,\"type\":\""+channelType+"\",\"display_name\":\""+channelName+"\"}]}";
             var httpRequest = new Mock<IHttpRequest>();
             var classUnderTest = SetupUserSessionForFetchingChannelList(httpRequest, jsonResponse);
             
             classUnderTest.FetchChannelList();
 
-            classUnderTest.ChannelList.ChannelList[0].ChannelId.Should().Be("45362764765");
-            classUnderTest.ChannelList.ChannelList[0].ChannelName.Should().Be("FunnyChannelName");
-            classUnderTest.ChannelList.ChannelList[0].Type.Should().Be("O");
+            classUnderTest.ChannelList.ChannelList[0].ChannelId.Should().Be(channelId);
+            classUnderTest.ChannelList.ChannelList[0].ChannelName.Should().Be(channelName);
+            classUnderTest.ChannelList.ChannelList[0].Type.Should().Be(channelType);
         }
 
         [Test]
