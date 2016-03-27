@@ -24,10 +24,12 @@ namespace OutlookMatters.Mattermost.Session
         {
             var post = new Post {channel_id = channelId, message = message, user_id = _userId, root_id = rootId};
             var postUrl = PostUrl(channelId);
-            _httpClient.Request(postUrl)
+            using (_httpClient.Request(postUrl)
                 .WithContentType("text/json")
                 .WithHeader("Authorization", "Bearer " + _token)
-                .PostAndForget(JsonConvert.SerializeObject(post));
+                .Post(JsonConvert.SerializeObject(post)))
+            {
+            }
         }
 
         public Post GetPostById(string postId)

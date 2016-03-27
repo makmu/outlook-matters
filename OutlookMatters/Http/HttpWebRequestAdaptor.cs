@@ -30,15 +30,6 @@ namespace OutlookMatters.Http
             return GetResponse();
         }
 
-        public void PostAndForget(string payload)
-        {
-            PostPayload(payload);
-            using (var response = GetResponse())
-            {
-                response.GetPayload();
-            }
-        }
-
         public IHttpResponse Get()
         {
             _httpWebRequest.Method = "GET";

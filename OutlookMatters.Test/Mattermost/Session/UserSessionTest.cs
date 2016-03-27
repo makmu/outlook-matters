@@ -28,7 +28,7 @@ namespace OutlookMatters.Test.Mattermost.Session
 
             httpRequest.Verify(x => x.WithContentType("text/json"));
             httpRequest.Verify(x => x.WithHeader("Authorization", "Bearer " + Token));
-            httpRequest.Verify(x => x.PostAndForget(jsonPost));
+            httpRequest.Verify(x => x.Post(jsonPost));
         }
 
         [Test]
@@ -43,7 +43,20 @@ namespace OutlookMatters.Test.Mattermost.Session
 
             httpRequest.Verify(x => x.WithContentType("text/json"));
             httpRequest.Verify(x => x.WithHeader("Authorization", "Bearer " + Token));
-            httpRequest.Verify(x => x.PostAndForget(jsonPost));
+            httpRequest.Verify(x => x.Post(jsonPost));
+        }
+
+        [Test]
+        public void CreatePost_DisposesResponse()
+        {
+            var httpRequest = new Mock<IHttpRequest>();
+            var httpResponse = new Mock<IHttpResponse>();
+            httpRequest.Setup(x => x.Post(It.IsAny<string>())).Returns(httpResponse.Object);
+            var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
+
+            classUnderTest.CreatePost(ChannelId, Message);
+
+            httpResponse.Verify(x => x.Dispose());
         }
 
         [Test]
