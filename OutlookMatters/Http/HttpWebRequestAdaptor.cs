@@ -33,7 +33,7 @@ namespace OutlookMatters.Http
         public IHttpResponse Get()
         {
             _httpWebRequest.Method = "GET";
-            return new DefaultHttpResponse((HttpWebResponse) _httpWebRequest.GetResponse());
+            return GetResponse();
         }
 
         private void PostPayload(string payload)

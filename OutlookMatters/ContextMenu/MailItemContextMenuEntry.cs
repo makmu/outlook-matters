@@ -80,6 +80,10 @@ namespace OutlookMatters.ContextMenu
             {
                 _session.CreatePost(channelId, message);
             }
+            catch (MattermostException mex)
+            {
+                _errorDisplay.Display(mex);
+            }
             catch (Exception exception)
             {
                 _errorDisplay.Display(exception);
@@ -101,6 +105,10 @@ namespace OutlookMatters.ContextMenu
             }
             catch (UserAbortException)
             {
+            }
+            catch (MattermostException mex)
+            {
+                _errorDisplay.Display(mex);
             }
             catch (Exception exception)
             {

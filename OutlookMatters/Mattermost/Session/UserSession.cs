@@ -22,26 +22,47 @@ namespace OutlookMatters.Mattermost.Session
 
         public void CreatePost(string channelId, string message, string rootId = "")
         {
-            var post = new Post {channel_id = channelId, message = message, user_id = _userId, root_id = rootId};
-            var postUrl = PostUrl(channelId);
-            using (_httpClient.Request(postUrl)
-                .WithContentType("text/json")
-                .WithHeader("Authorization", "Bearer " + _token)
-                .Post(JsonConvert.SerializeObject(post)))
+            try
             {
+                var post = new Post {channel_id = channelId, message = message, user_id = _userId, root_id = rootId};
+                var postUrl = PostUrl(channelId);
+                using (_httpClient.Request(postUrl)
+                    .WithContentType("text/json")
+                    .WithHeader("Authorization", "Bearer " + _token)
+                    .Post(JsonConvert.SerializeObject(post)))
+                {
+                }
             }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
+            }
+        }
+
+        private static MattermostException TranslateException(HttpException hex)
+        {
+            var error = JsonConvert.DeserializeObject<DataObjects.Error>(hex.Response.GetPayload());
+            var exception = new MattermostException(error);
+            return exception;
         }
 
         public Post GetPostById(string postId)
         {
-            var postUrl = "api/v1/posts/" + postId;
-            var url = new Uri(_baseUri, postUrl);
-            using (var response = _httpClient.Request(url)
-                .WithHeader("Authorization", "Bearer " + _token)
-                .Get())
+            try
             {
-                var thread = JsonConvert.DeserializeObject<Thread>(response.GetPayload());
-                return thread.posts[postId];
+                var postUrl = "api/v1/posts/" + postId;
+                var url = new Uri(_baseUri, postUrl);
+                using (var response = _httpClient.Request(url)
+                    .WithHeader("Authorization", "Bearer " + _token)
+                    .Get())
+                {
+                    var thread = JsonConvert.DeserializeObject<Thread>(response.GetPayload());
+                    return thread.posts[postId];
+                }
+            }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
             }
         }
 
