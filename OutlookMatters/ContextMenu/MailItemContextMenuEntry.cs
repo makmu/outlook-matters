@@ -52,26 +52,16 @@ namespace OutlookMatters.ContextMenu
         public string GetDynamicMenu(Office.IRibbonControl control)
         {
             var xmlString = @"<menu xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">";
-            xmlString += @"  <button id=""PostButton"" label=""Quick Post"" onAction=""OnPostClick""/>";
-            xmlString += @"  <dynamicMenu id=""MattermostContextMenu2"" label=""Post into Channel"" getContent=""GetDynamicSubMenu"" />";
-            xmlString += @"  <menuSeparator id=""specialSectionSeparator""/>";
-            xmlString += @"  <button id=""ReplyButton"" label=""As Reply..."" onAction=""OnReplyClick""/>";
-            xmlString += @"  <menuSeparator id=""settingsSectionSeparator""/>";
-            xmlString +=
-                @"  <button id=""SettingsButton"" imageMso=""ComAddInsDialog"" label=""Settings..."" onAction=""OnSettingsClick"" />";
-            xmlString += @"</menu>";
-            return xmlString;
-        }
-
-        public string GetDynamicSubMenu(Office.IRibbonControl control)
-        {
-            var xmlString = @"<menu xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">";
             for (int counter = 0; counter < _session.ChannelList.ChannelList.Count; counter++)
             {
                 xmlString += ButtonBuilder(counter);
             }
-            xmlString += @"<menuSeparator id=""separator""/>";
-            xmlString += "</menu>";
+            xmlString += @"  <menuSeparator id=""specialSectionSeparator""/>";
+            xmlString += @"  <button id=""ReplyButton"" label=""As Reply..."" onAction=""OnReplyClick"" imageMso=""Reply"" />";
+            xmlString += @"  <menuSeparator id=""settingsSectionSeparator""/>";
+            xmlString +=
+                @"  <button id=""SettingsButton"" imageMso=""ComAddInsDialog"" label=""Settings..."" onAction=""OnSettingsClick"" />";
+            xmlString += @"</menu>";
             return xmlString;
         }
 
@@ -80,7 +70,7 @@ namespace OutlookMatters.ContextMenu
             var buttonId = @"""PostButton" + counter + @""" ";
             var channelName = @"""" + _session.ChannelList.ChannelList[counter].ChannelName + @""" ";
             var tag = @"""" + _session.ChannelList.ChannelList[counter].ChannelId + @""" ";
-            var button = @"<button id=" + buttonId + @"label=" + channelName + @" onAction=""OnPostIntoChannelClick"" tag=" + tag + "/>";
+            var button = @"<button id=" + buttonId + @"label=" + channelName + @" onAction=""OnPostIntoChannelClick"" tag=" + tag + @" imageMso=""Forward"" />";
             return button;
         }
 
