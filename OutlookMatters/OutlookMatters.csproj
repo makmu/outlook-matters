@@ -204,6 +204,7 @@
     <Compile Include="Security\PasswordDialog.xaml.cs">
       <DependentUpon>PasswordDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Security\PasswordDialogShell.cs" />
     <Compile Include="Settings\ApplicationSettingsService.cs" />
     <Compile Include="Http\DotNetHttpClient.cs" />
     <Compile Include="Http\HttpWebRequestAdaptor.cs" />
