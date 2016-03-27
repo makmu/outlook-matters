@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="CloseCommandTest.cs" />
     <Compile Include="MailItemContextMenuEntryTest.cs" />
+    <Compile Include="Mattermost\MattermostExceptionTest.cs" />
     <Compile Include="Mattermost\PostIdFromPermalinkFilterTest.cs" />
     <Compile Include="Mattermost\RootPostIdResolverTest.cs" />
     <Compile Include="Mattermost\Session\TransientSessionTest.cs" />

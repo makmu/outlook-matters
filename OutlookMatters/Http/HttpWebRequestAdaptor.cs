@@ -58,12 +58,15 @@ namespace OutlookMatters.Http
 
         private IHttpResponse GetResponse()
         {
-            var httpResponse = (HttpWebResponse) _httpWebRequest.GetResponse();
-            if (httpResponse.StatusCode != HttpStatusCode.OK)
+            try
             {
-                return new FailedHttpRequestResponse(httpResponse);
+                var httpResponse = (HttpWebResponse) _httpWebRequest.GetResponse();
+                return new DefaultHttpResponse(httpResponse);
             }
-            return new DefaultHttpResponse(httpResponse);
+            catch (WebException wex)
+            {
+                throw new HttpException(new DefaultHttpResponse((HttpWebResponse) wex.Response));
+            }
         }
     }
 }
