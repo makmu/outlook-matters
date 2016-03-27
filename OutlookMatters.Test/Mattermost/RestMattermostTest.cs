@@ -11,7 +11,6 @@ namespace OutlookMatters.Test.Mattermost
     [TestFixture]
     public class RestMattermostTest
     {
-
         [Test]
         public void LoginByUsername_ReturnsSessionObject()
         {
@@ -42,6 +41,33 @@ namespace OutlookMatters.Test.Mattermost
             var result = classUnderTest.LoginByUsername(url, teamId, username, password);
 
             result.ShouldBeEquivalentTo(session.Object, "because the correct session should be returned");
+        }
+
+        [Test]
+        public void LoginByUsername_DisposesHttpResponse()
+        {
+            const string url = "http://localhost";
+            const string teamId = "teamId";
+            const string username = "username";
+            const string password = "password";
+            const string jsonResponse = "{\"id\":\"userid\"}";
+            var session = new Mock<ISession>();
+            var sessionFactory = new Mock<ISessionFactory>();
+            sessionFactory.Setup(x => x.CreateSession(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(session.Object);
+            var httpResponse = new Mock<IHttpResponse>();
+            httpResponse.Setup(x => x.GetPayload()).Returns(jsonResponse);
+            var httpRequest = new Mock<IHttpRequest>();
+            httpRequest.Setup(x => x.WithContentType(It.IsAny<string>())).Returns(httpRequest.Object);
+            httpRequest.Setup(x => x.Post(It.IsAny<string>())).Returns(httpResponse.Object);
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.Setup(x => x.Request(It.IsAny<Uri>()))
+                .Returns(httpRequest.Object);
+            var classUnderTest = new RestMattermost(sessionFactory.Object, httpClient.Object);
+
+            classUnderTest.LoginByUsername(url, teamId, username, password);
+
+            httpResponse.Verify(x => x.Dispose());
         }
     }
 }
