@@ -1,4 +1,6 @@
-﻿namespace OutlookMatters.Mattermost.Session
+﻿using OutlookMatters.Mattermost.DataObjects;
+
+namespace OutlookMatters.Mattermost.Session
 {
     public interface ISession
     {

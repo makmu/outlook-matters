@@ -10,7 +10,7 @@ namespace OutlookMatters.Test.Mattermost
         [Test]
         public void Message_ReturnsErrorMessage()
         {
-            var error = new OutlookMatters.Mattermost.Error();
+            var error = new OutlookMatters.Mattermost.DataObjects.Error();
             error.message = "error message";
             var classUnderTest = new MattermostException(error);
 
@@ -22,7 +22,7 @@ namespace OutlookMatters.Test.Mattermost
         [Test]
         public void Details_ReturnsDetailedError()
         {
-            var error = new OutlookMatters.Mattermost.Error();
+            var error = new OutlookMatters.Mattermost.DataObjects.Error();
             error.detailed_error = "detailed error";
             var classUnderTest = new MattermostException(error);
 

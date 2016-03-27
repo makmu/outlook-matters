@@ -6,7 +6,7 @@ namespace OutlookMatters.Mattermost
     {
         public string Details { get; private set; }
 
-        public MattermostException(Error error) : base(error.message)
+        public MattermostException(DataObjects.Error error) : base(error.message)
         {
             Details = error.detailed_error;
         }

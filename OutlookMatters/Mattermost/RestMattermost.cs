@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using OutlookMatters.Http;
+using OutlookMatters.Mattermost.DataObjects;
 using OutlookMatters.Mattermost.Session;
 
 namespace OutlookMatters.Mattermost
@@ -41,7 +42,7 @@ namespace OutlookMatters.Mattermost
             catch (HttpException hex)
             {
                 var errorJson = hex.Response.GetPayload();
-                var error = JsonConvert.DeserializeObject<Error>(errorJson);
+                var error = JsonConvert.DeserializeObject<DataObjects.Error>(errorJson);
                 throw new MattermostException(error);
             }
         }

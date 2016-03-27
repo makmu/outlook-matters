@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using OutlookMatters.Http;
+using OutlookMatters.Mattermost.DataObjects;
 
 namespace OutlookMatters.Mattermost.Session
 {
@@ -38,7 +38,7 @@ namespace OutlookMatters.Mattermost.Session
                 .WithHeader("Authorization", "Bearer " + _token)
                 .Get())
             {
-                var thread = JsonConvert.DeserializeObject<PostingThread>(response.GetPayload());
+                var thread = JsonConvert.DeserializeObject<Thread>(response.GetPayload());
                 return thread.posts[postId];
             }
         }
@@ -49,12 +49,6 @@ namespace OutlookMatters.Mattermost.Session
 
             var url = new Uri(_baseUri, postUrl);
             return url;
-        }
-
-        private struct PostingThread
-        {
-            public string[] order;
-            public Dictionary<string, Post> posts;
         }
     }
 }

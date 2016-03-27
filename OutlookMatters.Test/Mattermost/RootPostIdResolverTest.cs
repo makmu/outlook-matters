@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using OutlookMatters.Mattermost;
+using OutlookMatters.Mattermost.DataObjects;
 using OutlookMatters.Mattermost.Session;
 
 namespace OutlookMatters.Test.Mattermost
@@ -39,7 +40,9 @@ namespace OutlookMatters.Test.Mattermost
 
             var result = classUnderTest.Get();
 
-            result.Should().Be(postId, "because the resolved id should be the one returned from the base provider if base post id is already root");
+            result.Should()
+                .Be(postId,
+                    "because the resolved id should be the one returned from the base provider if base post id is already root");
         }
     }
 }

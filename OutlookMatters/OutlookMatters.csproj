@@ -186,7 +186,11 @@
     <Compile Include="Error\MessageBoxErrorDisplay.cs" />
     <Compile Include="Http\HttpException.cs" />
     <Compile Include="Mail\MailData.cs" />
-    <Compile Include="Mattermost\Error.cs" />
+    <Compile Include="Mattermost\DataObjects\Error.cs" />
+    <Compile Include="Mattermost\DataObjects\Login.cs" />
+    <Compile Include="Mattermost\DataObjects\Post.cs" />
+    <Compile Include="Mattermost\DataObjects\Thread.cs" />
+    <Compile Include="Mattermost\DataObjects\User.cs" />
     <Compile Include="Mattermost\IStringProvider.cs" />
     <Compile Include="Mattermost\MattermostException.cs" />
     <Compile Include="Mattermost\PermalinkDialog.xaml.cs">
@@ -214,17 +218,14 @@
     <Compile Include="Settings\ISettingsLoadService.cs" />
     <Compile Include="Mattermost\Session\ISession.cs" />
     <Compile Include="Mattermost\Session\ISessionFactory.cs" />
-    <Compile Include="Mattermost\Login.cs" />
     <Compile Include="ContextMenu\MailItemContextMenuEntry.cs" />
     <Compile Include="Mail\OutlookMailExplorer.cs" />
-    <Compile Include="Mattermost\Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Mattermost\RestMattermost.cs" />
     <Compile Include="Mattermost\Session\UserSession.cs" />
     <Compile Include="Mattermost\Session\UserSessionFactory.cs" />
-    <Compile Include="Mattermost\User.cs" />
     <Compile Include="Settings\ISettingsSaveService.cs" />
     <Compile Include="Settings\ISettingsUserInterface.cs" />
     <Compile Include="Settings\SaveCommand.cs" />

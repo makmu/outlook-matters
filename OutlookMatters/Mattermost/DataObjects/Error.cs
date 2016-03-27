@@ -1,4 +1,4 @@
-﻿namespace OutlookMatters.Mattermost
+﻿namespace OutlookMatters.Mattermost.DataObjects
 {
     public class Error
     {
