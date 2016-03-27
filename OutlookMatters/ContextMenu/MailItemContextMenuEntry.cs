@@ -71,11 +71,7 @@ namespace OutlookMatters.ContextMenu
         {
             var settings = _settingsLoadService.Load();
             var channelId = settings.ChannelId;
-            var mail = _explorer.QuerySelectedMailData();
-            var message = ":email: From: " + mail.SenderName + "\n";
-            message += ":email: Subject: " + mail.Subject + "\n";
-            message += mail.Body;
-
+            var message = FormatMessage();
             try
             {
                 _session.CreatePost(channelId, message);
@@ -94,10 +90,7 @@ namespace OutlookMatters.ContextMenu
         {
             var settings = _settingsLoadService.Load();
             var channelId = settings.ChannelId;
-            var mail = _explorer.QuerySelectedMailData();
-            var message = ":email: From: " + mail.SenderName + "\n";
-            message += ":email: Subject: " + mail.Subject + "\n";
-            message += mail.Body;
+            var message = FormatMessage();
             try
             {
                 var rootId = _rootPostIdProvider.Get();
@@ -114,6 +107,15 @@ namespace OutlookMatters.ContextMenu
             {
                 _errorDisplay.Display(exception);
             }
+        }
+
+        private string FormatMessage()
+        {
+            var mail = _explorer.QuerySelectedMailData();
+            var message = ":email: From: " + mail.SenderName + "\n";
+            message += ":email: Subject: " + mail.Subject + "\n";
+            message += mail.Body;
+            return message;
         }
 
         private static string GetResourceText(string resourceName)
