@@ -1,5 +1,5 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/gvddf3tonfjuwaoi?svg=true)](https://ci.appveyor.com/project/makmu/outlook-matters)
-[![codecov.io](https://codecov.io/github/makmu/outlook-matters/coverage.svg?branch=codecov)](https://codecov.io/github/makmu/outlook-matters?branch=codecov)
+[![codecov.io](https://codecov.io/github/makmu/outlook-matters/coverage.svg?branch=master)](https://codecov.io/github/makmu/outlook-matters?branch=master)
 ### Introduction
 An Outlook Add-in to forward mails to [Mattermost](http://www.mattermost.org/)
 
