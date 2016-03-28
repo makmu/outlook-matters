@@ -52,14 +52,29 @@ namespace OutlookMatters.ContextMenu
         public string GetDynamicMenu(Office.IRibbonControl control)
         {
             var xmlString = @"<menu xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">";
-            xmlString += @"  <button id=""PostButton"" label=""Quick Post"" onAction=""OnPostClick""/>";
+            if(_session.ChannelList != null)
+            {
+                for (int counter = 0; counter < _session.ChannelList.ChannelList.Count; counter++)
+                {
+                    xmlString += ButtonBuilder(counter);
+                }
+            }
             xmlString += @"  <menuSeparator id=""specialSectionSeparator""/>";
-            xmlString += @"  <button id=""ReplyButton"" label=""As Reply..."" onAction=""OnReplyClick""/>";
+            xmlString += @"  <button id=""ReplyButton"" label=""As Reply..."" onAction=""OnReplyClick"" imageMso=""Reply"" />";
             xmlString += @"  <menuSeparator id=""settingsSectionSeparator""/>";
             xmlString +=
                 @"  <button id=""SettingsButton"" imageMso=""ComAddInsDialog"" label=""Settings..."" onAction=""OnSettingsClick"" />";
             xmlString += @"</menu>";
             return xmlString;
+        }
+
+        private string ButtonBuilder(int counter)
+        {
+            var buttonId = @"""PostButton" + counter + @""" ";
+            var channelName = @"""" + _session.ChannelList.ChannelList[counter].ChannelName + @""" ";
+            var tag = @"""" + _session.ChannelList.ChannelList[counter].ChannelId + @""" ";
+            var button = @"<button id=" + buttonId + @"label=" + channelName + @" onAction=""OnPostIntoChannelClick"" tag=" + tag + @" imageMso=""Forward"" />";
+            return button;
         }
 
         public void OnSettingsClick(Office.IRibbonControl control)
@@ -71,6 +86,17 @@ namespace OutlookMatters.ContextMenu
         {
             var settings = _settingsLoadService.Load();
             var channelId = settings.ChannelId;
+            Post(channelId);
+        }
+
+        public void OnPostIntoChannelClick(Office.IRibbonControl control)
+        {
+            var channelId = control.Tag;
+            Post(channelId);
+        }
+
+        public void Post(string channelId)
+        {
             var message = FormatMessage();
             try
             {
@@ -85,6 +111,8 @@ namespace OutlookMatters.ContextMenu
                 _errorDisplay.Display(exception);
             }
         }
+
+
 
         public void OnReplyClick(Office.IRibbonControl control)
         {
