@@ -125,5 +125,22 @@ namespace OutlookMatters.Test.Mattermost.Session
             return classUnderTest;
         }
 
+        private static UserSession SetupUserSessionForFetchingChannelList(Mock<IHttpRequest> httpRequest, string jsonResponse)
+        {
+            var baseUri = new Uri("http://localhost");
+
+            var httpResonse = new Mock<IHttpResponse>();
+            httpResonse.Setup(x => x.GetPayload()).Returns(jsonResponse);
+
+            httpRequest.Setup(x => x.WithHeader(It.IsAny<string>(), It.IsAny<string>())).Returns(httpRequest.Object);
+            httpRequest.Setup(x => x.WithContentType(It.IsAny<string>())).Returns(httpRequest.Object);
+            httpRequest.Setup(x => x.Get()).Returns(httpResonse.Object);
+
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.Setup(x => x.Get(new Uri(baseUri, "api/v1/channels/"))).Returns(httpRequest.Object);
+            var classUnderTest = new UserSession(baseUri, Token, UserId, httpClient.Object);
+            return classUnderTest;
+        }
+
     }
 }

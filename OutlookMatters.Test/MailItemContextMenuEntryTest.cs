@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using FluentAssertions;
 using Microsoft.Office.Core;
@@ -58,26 +59,31 @@ namespace OutlookMatters.Test
         }
 
         [Test]
-        public void GetDynamicMenu_ReturnsPostButton()
+        public void GetDynamicMenu_ReturnsPostButton_ForEachChannel()
         {
+            const string channelName = "FunnyChannelName";
+            const string channelId = "1234";
+            var channelList = new Channels {ChannelList = new List<Channel> {new Channel {ChannelName = channelName, ChannelId = channelId}}};
+            var session = new Mock<ISession>();
+            session.Setup(x => x.ChannelList).Returns(channelList);
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
                 Mock.Of<ISettingsLoadService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
-                Mock.Of<ISession>(),
+                session.Object,
                 Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
 
             result.Should()
                 .WithNamespace("ns", "http://schemas.microsoft.com/office/2009/07/customui")
-                .ContainXmlNode(@"//ns:button[contains(@label, ""Post"")]",
-                    "because there should always be a post button");
+                .ContainXmlNode(@"//ns:button[contains(@label, ""FunnyChannelName"")]",
+                    "because there should be one button for each channel");
             result.Should()
                 .WithNamespace("ns", "http://schemas.microsoft.com/office/2009/07/customui")
-                .ContainXmlNode(@"//ns:button[contains(@onAction, ""OnPostClick"")]",
-                    "because the post button should be connected to the 'OnPostClick'-Method");
+                .ContainXmlNode(@"//ns:button[contains(@tag, ""1234"")]",
+                    "because the tag of the button should match the channelId");
         }
 
         [Test]

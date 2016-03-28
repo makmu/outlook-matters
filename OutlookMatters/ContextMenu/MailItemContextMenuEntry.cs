@@ -52,9 +52,12 @@ namespace OutlookMatters.ContextMenu
         public string GetDynamicMenu(Office.IRibbonControl control)
         {
             var xmlString = @"<menu xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">";
-            for (int counter = 0; counter < _session.ChannelList.ChannelList.Count; counter++)
+            if(_session.ChannelList != null)
             {
-                xmlString += ButtonBuilder(counter);
+                for (int counter = 0; counter < _session.ChannelList.ChannelList.Count; counter++)
+                {
+                    xmlString += ButtonBuilder(counter);
+                }
             }
             xmlString += @"  <menuSeparator id=""specialSectionSeparator""/>";
             xmlString += @"  <button id=""ReplyButton"" label=""As Reply..."" onAction=""OnReplyClick"" imageMso=""Reply"" />";
