@@ -3,6 +3,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using OutlookMatters.Http;
+using OutlookMatters.Mattermost;
 using OutlookMatters.Mattermost.Session;
 
 namespace OutlookMatters.Test.Mattermost.Session
@@ -28,7 +29,7 @@ namespace OutlookMatters.Test.Mattermost.Session
 
             httpRequest.Verify(x => x.WithContentType("text/json"));
             httpRequest.Verify(x => x.WithHeader("Authorization", "Bearer " + Token));
-            httpRequest.Verify(x => x.PostAndForget(jsonPost));
+            httpRequest.Verify(x => x.Post(jsonPost));
         }
 
         [Test]
@@ -43,7 +44,46 @@ namespace OutlookMatters.Test.Mattermost.Session
 
             httpRequest.Verify(x => x.WithContentType("text/json"));
             httpRequest.Verify(x => x.WithHeader("Authorization", "Bearer " + Token));
-            httpRequest.Verify(x => x.PostAndForget(jsonPost));
+            httpRequest.Verify(x => x.Post(jsonPost));
+        }
+
+        [Test]
+        public void CreatePost_ThrowsMattermostException_IfHttpExceptionIsThrown()
+        {
+            const string errorMessage = "error message";
+            const string detailedError = "detailed error";
+            const string jsonResponse =
+                "{\"message\":\"" + errorMessage + "\",\"detailed_error\":\"" + detailedError + "\"}";
+            var httpRequest = new Mock<IHttpRequest>();
+            var httpResponse = new Mock<IHttpResponse>();
+            httpResponse.Setup(x => x.GetPayload()).Returns(jsonResponse);
+            HttpException httpException = new HttpException(httpResponse.Object);
+            httpRequest.Setup(x => x.Post(It.IsAny<string>())).Throws(httpException);
+            var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
+
+            try
+            {
+                classUnderTest.CreatePost(ChannelId, Message, RootId);
+                Assert.Fail();
+            }
+            catch (MattermostException mex)
+            {
+                mex.Message.Should().Be(errorMessage);
+                mex.Details.Should().Be(detailedError);
+            }
+        }
+
+        [Test]
+        public void CreatePost_DisposesResponse()
+        {
+            var httpRequest = new Mock<IHttpRequest>();
+            var httpResponse = new Mock<IHttpResponse>();
+            httpRequest.Setup(x => x.Post(It.IsAny<string>())).Returns(httpResponse.Object);
+            var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
+
+            classUnderTest.CreatePost(ChannelId, Message);
+
+            httpResponse.Verify(x => x.Dispose());
         }
 
         [Test]
@@ -68,6 +108,38 @@ namespace OutlookMatters.Test.Mattermost.Session
             var post = classUnderTest.GetPostById(postId);
 
             post.root_id.Should().Be("pts7w4o6rignmm5jkwntk6st1a");
+        }
+
+        [Test]
+        public void GetPostById_ThrowsMattermostException_IfHttpExceptionIsThrown()
+        {
+            const string errorMessage = "error message";
+            const string detailedError = "detailed error";
+            const string jsonResponse =
+                "{\"message\":\"" + errorMessage + "\",\"detailed_error\":\"" + detailedError + "\"}";
+            const string postId = "948swb8oxjf1ifc464ddz8h1ph";
+            var baseUri = new Uri("http://localhost");
+            var httpRequest = new Mock<IHttpRequest>();
+            httpRequest.Setup(x => x.WithHeader(It.IsAny<string>(), It.IsAny<string>())).Returns(httpRequest.Object);
+            httpRequest.Setup(x => x.WithContentType(It.IsAny<string>())).Returns(httpRequest.Object);
+            var httpResponse = new Mock<IHttpResponse>();
+            httpResponse.Setup(x => x.GetPayload()).Returns(jsonResponse);
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.Setup(x => x.Request(new Uri(baseUri, "api/v1/posts/" + postId)))
+                .Returns(httpRequest.Object);
+            httpRequest.Setup(x => x.Get()).Throws(new HttpException(httpResponse.Object));
+            var classUnderTest = new UserSession(baseUri, Token, UserId, httpClient.Object);
+
+            try
+            {
+                classUnderTest.GetPostById(postId);
+                Assert.Fail();
+            }
+            catch (MattermostException mex)
+            {
+                mex.Message.Should().Be(errorMessage);
+                mex.Details.Should().Be(detailedError);
+            }
         }
 
         [Test]

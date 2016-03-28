@@ -69,5 +69,40 @@ namespace OutlookMatters.Test.Mattermost
 
             httpResponse.Verify(x => x.Dispose());
         }
+
+        [Test]
+        public void LoginByUsername_ThrowsMattermostException_IfHttpExceptionIsThrown()
+        {
+            const string url = "http://localhost";
+            const string teamId = "teamId";
+            const string username = "username";
+            const string password = "password";
+            const string errorMessage = "error message";
+            const string detailedError = "detailed error";
+            const string jsonResponse =
+                "{\"message\":\"" + errorMessage + "\",\"detailed_error\":\"" + detailedError + "\"}";
+            var sessionFactory = new Mock<ISessionFactory>();
+            var httpResponse = new Mock<IHttpResponse>();
+            httpResponse.Setup(x => x.GetPayload()).Returns(jsonResponse);
+            var httpRequest = new Mock<IHttpRequest>();
+            httpRequest.Setup(x => x.WithContentType(It.IsAny<string>())).Returns(httpRequest.Object);
+            var httpException = new HttpException(httpResponse.Object);
+            httpRequest.Setup(x => x.Post(It.IsAny<string>())).Throws(httpException);
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.Setup(x => x.Request(It.IsAny<Uri>()))
+                .Returns(httpRequest.Object);
+            var classUnderTest = new RestMattermost(sessionFactory.Object, httpClient.Object);
+
+            try
+            {
+                classUnderTest.LoginByUsername(url, teamId, username, password);
+                Assert.Fail();
+            }
+            catch (MattermostException mex)
+            {
+                mex.Message.Should().Be(errorMessage);
+                mex.Details.Should().Be(detailedError);
+            }
+        }
     }
 }

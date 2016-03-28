@@ -30,19 +30,10 @@ namespace OutlookMatters.Http
             return GetResponse();
         }
 
-        public void PostAndForget(string payload)
-        {
-            PostPayload(payload);
-            using (var response = GetResponse())
-            {
-                response.GetPayload();
-            }
-        }
-
         public IHttpResponse Get()
         {
             _httpWebRequest.Method = "GET";
-            return new DefaultHttpResponse((HttpWebResponse) _httpWebRequest.GetResponse());
+            return GetResponse();
         }
 
         private void PostPayload(string payload)
@@ -58,12 +49,15 @@ namespace OutlookMatters.Http
 
         private IHttpResponse GetResponse()
         {
-            var httpResponse = (HttpWebResponse) _httpWebRequest.GetResponse();
-            if (httpResponse.StatusCode != HttpStatusCode.OK)
+            try
             {
-                return new FailedHttpRequestResponse(httpResponse);
+                var httpResponse = (HttpWebResponse) _httpWebRequest.GetResponse();
+                return new DefaultHttpResponse(httpResponse);
             }
-            return new DefaultHttpResponse(httpResponse);
+            catch (WebException wex)
+            {
+                throw new HttpException(new DefaultHttpResponse((HttpWebResponse) wex.Response));
+            }
         }
     }
 }

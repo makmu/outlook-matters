@@ -51,7 +51,7 @@ namespace OutlookMatters
         {
             var httpClient = new DotNetHttpClient();
             var mattermost = new RestMattermost(new UserSessionFactory(httpClient), httpClient);
-            var passwordDialog = new PasswordDialog();
+            var passwordDialog = new PasswordDialogShell();
             var settingsService = new ApplicationSettingsService();
 
             var sessionCache = new TransientSession(mattermost, settingsService, passwordDialog);
