@@ -39,7 +39,7 @@ namespace OutlookMatters.Mattermost.Session
             var postUrl = "api/v1/posts/" + postId;
             var url = new Uri(_baseUri, postUrl);
             var response = _httpClient.Request(url)
-                .WithHeader("Authorization", "Bearer " + _token)
+                .WithHeader("Autorization", "Bearer " + _token)
                 .Get();
             var thread = JsonConvert.DeserializeObject<PostingThread>(response.GetPayload());
             return thread.posts[postId];
