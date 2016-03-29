@@ -1,4 +1,5 @@
 ﻿using System;
+using OutlookMatters.Mattermost.DataObjects;
 using OutlookMatters.Security;
 using OutlookMatters.Settings;
 

@@ -4,3 +4,5 @@
 *.user
 /packages
 *.suo
+TestResult.xml
+results.xml

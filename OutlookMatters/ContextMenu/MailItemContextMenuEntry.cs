@@ -97,14 +97,14 @@ namespace OutlookMatters.ContextMenu
 
         private void TryToSendPost(string channelId)
         {
-            var mail = _explorer.QuerySelectedMailData();
-            var message = ":email: From: " + mail.SenderName + "\n";
-            message += ":email: Subject: " + mail.Subject + "\n";
-            message += mail.Body;
-
+            var message = FormatMessage();
             try
             {
                 _session.CreatePost(channelId, message);
+            }
+            catch (MattermostException mex)
+            {
+                _errorDisplay.Display(mex);
             }
             catch (Exception exception)
             {
@@ -112,16 +112,11 @@ namespace OutlookMatters.ContextMenu
             }
         }
 
-
-
         public void OnReplyClick(Office.IRibbonControl control)
         {
             var settings = _settingsLoadService.Load();
             var channelId = settings.ChannelId;
-            var mail = _explorer.QuerySelectedMailData();
-            var message = ":email: From: " + mail.SenderName + "\n";
-            message += ":email: Subject: " + mail.Subject + "\n";
-            message += mail.Body;
+            var message = FormatMessage();
             try
             {
                 var rootId = _rootPostIdProvider.Get();
@@ -130,10 +125,23 @@ namespace OutlookMatters.ContextMenu
             catch (UserAbortException)
             {
             }
+            catch (MattermostException mex)
+            {
+                _errorDisplay.Display(mex);
+            }
             catch (Exception exception)
             {
                 _errorDisplay.Display(exception);
             }
+        }
+
+        private string FormatMessage()
+        {
+            var mail = _explorer.QuerySelectedMailData();
+            var message = ":email: From: " + mail.SenderName + "\n";
+            message += ":email: Subject: " + mail.Subject + "\n";
+            message += mail.Body;
+            return message;
         }
 
         private static string GetResourceText(string resourceName)

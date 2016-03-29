@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using FluentAssertions;
 using Microsoft.Office.Core;
 using Moq;
@@ -148,11 +147,11 @@ namespace OutlookMatters.Test
         }
 
         [Test]
-        public void OnPostClick_CanHandleWebExceptionsWhileCreatingPost()
+        public void OnPostClick_HandlesMattermostExceptionsWhileCreatingPost()
         {
             var session = new Mock<ISession>();
             session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Throws<WebException>();
+                .Throws(new MattermostException(new OutlookMatters.Mattermost.DataObjects.Error()));
             var errorDisplay = new Mock<IErrorDisplay>();
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
@@ -164,26 +163,27 @@ namespace OutlookMatters.Test
 
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
 
-            errorDisplay.Verify(x => x.Display(It.IsAny<WebException>()));
+            errorDisplay.Verify(x => x.Display(It.IsAny<MattermostException>()));
         }
 
         [Test]
-        public void OnPostClick_CanHandleWebExceptionsWhileLogginIn()
+        public void OnPostClick_HandlesAnyExceptionsWhileCreatingPost()
         {
-            var mattermost = new Mock<IMattermost>();
-            mattermost.Setup(
-                x => x.LoginByUsername(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Throws<WebException>();
-            var session = new TransientSession(mattermost.Object,
-                DefaultSettingsLoadService,
-                Mock.Of<IPasswordProvider>());
+            var session = new Mock<ISession>();
+            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Throws<Exception>();
             var errorDisplay = new Mock<IErrorDisplay>();
-            var classUnderTest = new MailItemContextMenuEntry(MockOfMailExplorer(), DefaultSettingsLoadService,
-                errorDisplay.Object, Mock.Of<ISettingsUserInterface>(), session, Mock.Of<IStringProvider>());
+            var classUnderTest = new MailItemContextMenuEntry(
+                MockOfMailExplorer(),
+                DefaultSettingsLoadService,
+                errorDisplay.Object,
+                Mock.Of<ISettingsUserInterface>(),
+                session.Object,
+                Mock.Of<IStringProvider>());
 
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
 
-            errorDisplay.Verify(x => x.Display(It.IsAny<WebException>()));
+            errorDisplay.Verify(x => x.Display(It.IsAny<Exception>()));
         }
 
         [Test]
@@ -263,6 +263,46 @@ namespace OutlookMatters.Test
 
             session.Verify(
                 x => x.CreatePost(settings.ChannelId, ":email: From: sender\n:email: Subject: subject\nmessage", rootId));
+        }
+
+        [Test]
+        public void OnReplyClick_HandlesMattermostExceptionsWhileCreatingPost()
+        {
+            var session = new Mock<ISession>();
+            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new MattermostException(new OutlookMatters.Mattermost.DataObjects.Error()));
+            var errorDisplay = new Mock<IErrorDisplay>();
+            var classUnderTest = new MailItemContextMenuEntry(
+                MockOfMailExplorer(),
+                DefaultSettingsLoadService,
+                errorDisplay.Object,
+                Mock.Of<ISettingsUserInterface>(),
+                session.Object,
+                Mock.Of<IStringProvider>());
+
+            classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
+
+            errorDisplay.Verify(x => x.Display(It.IsAny<MattermostException>()));
+        }
+
+        [Test]
+        public void OnReplyClick_HandlesAnyExceptionsWhileCreatingPost()
+        {
+            var session = new Mock<ISession>();
+            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Throws<Exception>();
+            var errorDisplay = new Mock<IErrorDisplay>();
+            var classUnderTest = new MailItemContextMenuEntry(
+                MockOfMailExplorer(),
+                DefaultSettingsLoadService,
+                errorDisplay.Object,
+                Mock.Of<ISettingsUserInterface>(),
+                session.Object,
+                Mock.Of<IStringProvider>());
+
+            classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
+
+            errorDisplay.Verify(x => x.Display(It.IsAny<Exception>()));
         }
 
         [Test]
