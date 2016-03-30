@@ -1,16 +1,14 @@
-﻿using System;
-using OutlookMatters.Mattermost.DataObjects;
+﻿using OutlookMatters.Mattermost.DataObjects;
 using OutlookMatters.Security;
 using OutlookMatters.Settings;
 
 namespace OutlookMatters.Mattermost.Session
 {
-    public class TransientSession : ISession
+    public class TransientSession : ISession, ICache
     {
         private readonly IMattermost _mattermost;
         private readonly IPasswordProvider _passwordProvider;
         private readonly ISettingsLoadService _settingsLoadService;
-        private DateTime? _lastChanged;
 
         private ISession _session;
 
@@ -26,10 +24,8 @@ namespace OutlookMatters.Mattermost.Session
         {
             get
             {
-                if (_session == null || _lastChanged == null || _lastChanged < _settingsLoadService.LastChanged)
+                if (_session == null)
                 {
-                    _lastChanged = _settingsLoadService.LastChanged;
-
                     var settings = _settingsLoadService.Load();
                     var password = _passwordProvider.GetPassword(settings.Username);
                     _session = _mattermost.LoginByUsername(
@@ -50,6 +46,11 @@ namespace OutlookMatters.Mattermost.Session
         public Post GetPostById(string postId)
         {
             return Session.GetPostById(postId);
+        }
+
+        public void Invalidate()
+        {
+            _session = null;
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
+using Moq;
 using NUnit.Framework;
+using OutlookMatters.Mattermost.Session;
 using OutlookMatters.Settings;
 
 namespace OutlookMatters.Test.Settings
@@ -8,35 +10,25 @@ namespace OutlookMatters.Test.Settings
     public class ApplicationSettingsServiceTest
     {
         [Test]
-        public void Save_UpdatesChangedTimestamp()
+        public void Save_InvalidatesCache()
         {
-            var service = new ApplicationSettingsService();
-            var initialLastChanged = service.LastChanged;  
+            var cache = new Mock<ICache>();
+            var settings = new OutlookMatters.Settings.Settings("url42", "teamId42", "channelId42", "username42");
+            var classUnderTest = new ApplicationSettingsService(cache.Object);
 
-            service.Save(new OutlookMatters.Settings.Settings("url", "teamId", "channelId", "username"));
+            classUnderTest.Save(settings);
 
-            service.LastChanged.Should().BeAfter(initialLastChanged);
-        }
-
-        [Test]
-        public void Load_DoesntUpdateChangedTimestamp()
-        {
-            var service = new ApplicationSettingsService();
-            var initialLastChanged = service.LastChanged;
-
-            service.Load();
-
-            service.LastChanged.Should().BeSameDateAs(initialLastChanged);
+            cache.Verify(c => c.Invalidate());
         }
 
         [Test]
         public void Load_ReturnsSavedSettings()
         {
-            var service = new ApplicationSettingsService();
+            var classUnderTest = new ApplicationSettingsService(Mock.Of<ICache>());
             var settings = new OutlookMatters.Settings.Settings("url42", "teamId42", "channelId42", "username42");
-            service.Save(settings);
+            classUnderTest.Save(settings);
 
-            var loaded = service.Load();
+            var loaded = classUnderTest.Load();
 
             loaded.Should().Be(settings);
         }
