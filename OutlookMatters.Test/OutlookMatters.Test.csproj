@@ -63,6 +63,7 @@
     <Compile Include="Mattermost\MattermostExceptionTest.cs" />
     <Compile Include="Mattermost\PostIdFromPermalinkFilterTest.cs" />
     <Compile Include="Mattermost\RootPostIdResolverTest.cs" />
+    <Compile Include="Mattermost\Session\CompositeCacheTest.cs" />
     <Compile Include="Mattermost\Session\TransientSessionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mattermost\RestMattermostTest.cs" />
