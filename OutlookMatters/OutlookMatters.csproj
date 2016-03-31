@@ -200,6 +200,8 @@
     <Compile Include="Mattermost\PermalinkDialogShell.cs" />
     <Compile Include="Mattermost\PostIdFromPermalinkFilter.cs" />
     <Compile Include="Mattermost\RootPostIdResolver.cs" />
+    <Compile Include="Mattermost\Session\CompositeCache.cs" />
+    <Compile Include="Mattermost\Session\ICache.cs" />
     <Compile Include="Mattermost\Session\TransientSession.cs" />
     <Compile Include="Security\IPasswordProvider.cs" />
     <Compile Include="Security\PasswordDialog.xaml.cs">

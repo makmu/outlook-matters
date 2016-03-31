@@ -26,7 +26,7 @@ namespace OutlookMatters.Test.Mattermost.Session
             var session = new Mock<ISession>();
             mattermost.Setup(
                 x => x.LoginByUsername(settings.MattermostUrl, settings.TeamId, settings.Username, It.IsAny<string>()))
-                      .Returns(session.Object);
+                .Returns(session.Object);
             var classUnderTest = new TransientSession(mattermost.Object,
                 settingsLoadService.Object,
                 Mock.Of<IPasswordProvider>());
@@ -46,7 +46,7 @@ namespace OutlookMatters.Test.Mattermost.Session
             var session = new Mock<ISession>();
             mattermost.Setup(
                 x => x.LoginByUsername(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), password))
-                      .Returns(session.Object);
+                .Returns(session.Object);
             var classUnderTest = new TransientSession(mattermost.Object,
                 DefaultSettingsLoadService,
                 passwordProvider.Object);
@@ -84,9 +84,6 @@ namespace OutlookMatters.Test.Mattermost.Session
             var session1 = new Mock<ISession>();
             var session2 = new Mock<ISession>();
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            settingsLoadService.SetupSequence(x => x.LastChanged)
-                               .Returns(DateTime.Now)
-                               .Returns(DateTime.Now.AddSeconds(1));
             var settings = new OutlookMatters.Settings.Settings("myUrl", "testTeamId", "myChannel", "Donald Duck");
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
 
@@ -99,6 +96,7 @@ namespace OutlookMatters.Test.Mattermost.Session
                 Mock.Of<IPasswordProvider>());
 
             classUnderTest.CreatePost(ChannelId, Message, RootId);
+            classUnderTest.Invalidate();
             classUnderTest.CreatePost(ChannelId, Message, RootId);
 
             session1.Verify(x => x.CreatePost(ChannelId, Message, RootId), Times.Once);
@@ -115,7 +113,7 @@ namespace OutlookMatters.Test.Mattermost.Session
             var session = new Mock<ISession>();
             mattermost.Setup(
                 x => x.LoginByUsername(settings.MattermostUrl, settings.TeamId, settings.Username, It.IsAny<string>()))
-                      .Returns(session.Object);
+                .Returns(session.Object);
             var classUnderTest = new TransientSession(mattermost.Object,
                 settingsLoadService.Object,
                 Mock.Of<IPasswordProvider>());
@@ -129,7 +127,8 @@ namespace OutlookMatters.Test.Mattermost.Session
         {
             get
             {
-                var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username");
+                var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId",
+                    "username");
                 var settingsLoadService = new Mock<ISettingsLoadService>();
                 settingsLoadService.Setup(x => x.Load()).Returns(settings);
                 return settingsLoadService.Object;

@@ -52,9 +52,10 @@ namespace OutlookMatters
             var httpClient = new DotNetHttpClient();
             var mattermost = new RestMattermost(new UserSessionFactory(httpClient), httpClient);
             var passwordDialog = new PasswordDialogShell();
-            var settingsService = new ApplicationSettingsService();
-
+            var caches = new CompositeCache();
+            var settingsService = new ApplicationSettingsService(caches);
             var sessionCache = new TransientSession(mattermost, settingsService, passwordDialog);
+            caches.Add(sessionCache);
 
             return new MailItemContextMenuEntry(
                 new OutlookMailExplorer(),

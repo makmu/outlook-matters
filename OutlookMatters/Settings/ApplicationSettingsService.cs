@@ -1,10 +1,15 @@
-﻿using System;
+﻿using OutlookMatters.Mattermost.Session;
 
 namespace OutlookMatters.Settings
 {
     public class ApplicationSettingsService : ISettingsLoadService, ISettingsSaveService
     {
-        public DateTime LastChanged { get; private set; } = DateTime.Now;
+        private readonly ICache _cache;
+
+        public ApplicationSettingsService(ICache cache)
+        {
+            _cache = cache;
+        }
 
         public Settings Load()
         {
@@ -22,8 +27,7 @@ namespace OutlookMatters.Settings
             Properties.Settings.Default.ChannelId = settings.ChannelId;
             Properties.Settings.Default.Username = settings.Username;
             Properties.Settings.Default.Save();
-
-            LastChanged = DateTime.Now;
+            _cache.Invalidate();
         }
     }
 }
