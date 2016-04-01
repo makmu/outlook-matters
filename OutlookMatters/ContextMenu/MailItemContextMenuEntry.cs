@@ -17,6 +17,7 @@ namespace OutlookMatters.ContextMenu
     public class MailItemContextMenuEntry : Office.IRibbonExtensibility
     {
         private const string CHANNEL_BUTTON_ID_PREFIX = "channel_id-";
+        private const string SUBSCRIBED_CHANNEL_TYPE = "O";
 
         private readonly IErrorDisplay _errorDisplay;
         private readonly IMailExplorer _explorer;
@@ -64,7 +65,7 @@ namespace OutlookMatters.ContextMenu
             {
                 for (int index = 0; index < channelList.Channels.Count; index++)
                 {
-                    if (channelList.Channels[index].Type == "O")
+                    if (channelList.Channels[index].Type == SUBSCRIBED_CHANNEL_TYPE)
                     {
                         xmlString += CreateChannelButton(channelList.Channels[index].ChannelId,
                             channelList.Channels[index].ChannelName);

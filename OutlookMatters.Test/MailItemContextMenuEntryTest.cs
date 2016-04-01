@@ -60,18 +60,83 @@ namespace OutlookMatters.Test
         }
 
         [Test]
-        public void GetDynamicMenu_ReturnsPostButton_ForEachChannel()
+        public void GetDynamicMenu_ReturnZeroChannelButtons_IfSettingsHasNoChannelsSaved()
         {
-            const string channelButtonIdPrefix = "channel_id-";
+            const string subscribedChannelAttribut = "OnPostIntoChannelClick";
+            var channels = string.Empty;
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId",
+                "username", channels);
+            var settingsLoadService = new Mock<ISettingsLoadService>();
+            settingsLoadService.Setup(x => x.Load()).Returns(settings);
+
+            var classUnderTest = new MailItemContextMenuEntry(
+                Mock.Of<IMailExplorer>(),
+                settingsLoadService.Object,
+                Mock.Of<ISettingsSaveService>(),
+                Mock.Of<IErrorDisplay>(),
+                Mock.Of<ISettingsUserInterface>(),
+                Mock.Of<ISession>(),
+                Mock.Of<IStringProvider>());
+
+            var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
+
+            result.Should()
+                .WithNamespace("ns", "http://schemas.microsoft.com/office/2009/07/customui")
+                .DoNotContainXmlNode(@"//ns:button[contains(@onAction, """ + subscribedChannelAttribut + @""")]",
+                    "because there should be one button for each channel");
+        }
+
+        [Test]
+        public void GetDynamicMenu_ReturnsNoChannelButtons_IfUserIsNotSubscribedToAnyChannel()
+        {
             const string channelName = "FunnyChannelName";
             const string channelId = "1234";
-            const string channelType = "O";
+            const string notSubscribedChannelType = "User is not subscribed to this channel";
+            const string subscribedChannelAttribut = "OnPostIntoChannelClick";
             var channelList = new ChannelList
             {
                 Channels =
                     new List<Channel>
                     {
-                        new Channel {ChannelName = channelName, ChannelId = channelId, Type = channelType}
+                        new Channel {ChannelName = channelName, ChannelId = channelId, Type = notSubscribedChannelType}
+                    }
+            };
+            var channels = JsonConvert.SerializeObject(channelList);
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId",
+                "username", channels);
+            var settingsLoadService = new Mock<ISettingsLoadService>();
+            settingsLoadService.Setup(x => x.Load()).Returns(settings);
+
+            var classUnderTest = new MailItemContextMenuEntry(
+                Mock.Of<IMailExplorer>(),
+                settingsLoadService.Object,
+                Mock.Of<ISettingsSaveService>(),
+                Mock.Of<IErrorDisplay>(),
+                Mock.Of<ISettingsUserInterface>(),
+                Mock.Of<ISession>(),
+                Mock.Of<IStringProvider>());
+
+            var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
+
+            result.Should()
+                .WithNamespace("ns", "http://schemas.microsoft.com/office/2009/07/customui")
+                .DoNotContainXmlNode(@"//ns:button[contains(@onAction, """ + subscribedChannelAttribut + @""")]",
+                    "because there should be one button for each channel");
+        }
+
+        [Test]
+        public void GetDynamicMenu_ReturnsPostButton_ForSubscribedChannel()
+        {
+            const string channelButtonIdPrefix = "channel_id-";
+            const string channelName = "FunnyChannelName";
+            const string channelId = "1234";
+            const string subscribedChannelType = "O";
+            var channelList = new ChannelList
+            {
+                Channels =
+                    new List<Channel>
+                    {
+                        new Channel {ChannelName = channelName, ChannelId = channelId, Type = subscribedChannelType}
                     }
             };
             var channels = JsonConvert.SerializeObject(channelList);
