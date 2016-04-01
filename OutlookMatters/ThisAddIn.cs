@@ -60,6 +60,7 @@ namespace OutlookMatters
             return new MailItemContextMenuEntry(
                 new OutlookMailExplorer(),
                 settingsService,
+                settingsService,
                 new MessageBoxErrorDisplay(),
                 new WpfSettingsUserInterface(settingsService, settingsService),
                 sessionCache,

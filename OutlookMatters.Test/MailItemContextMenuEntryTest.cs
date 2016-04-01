@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Office.Core;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using OutlookMatters.ContextMenu;
 using OutlookMatters.Error;
@@ -61,18 +62,31 @@ namespace OutlookMatters.Test
         [Test]
         public void GetDynamicMenu_ReturnsPostButton_ForEachChannel()
         {
+            const string channelButtonIdPrefix = "channel_id-";
             const string channelName = "FunnyChannelName";
             const string channelId = "1234";
-            var channelList = new ChannelList{Channels = new List<Channel> {new Channel {ChannelName = channelName, ChannelId = channelId}}};
-            var session = new Mock<ISession>();
-            session.Setup(x => x.ChannelList).Returns(channelList);
+            const string channelType = "O";
+            var channelList = new ChannelList
+            {
+                Channels =
+                    new List<Channel>
+                    {
+                        new Channel {ChannelName = channelName, ChannelId = channelId, Type = channelType}
+                    }
+            };
+            var channels = JsonConvert.SerializeObject(channelList);
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId",
+                "username", channels);
+            var settingsLoadService = new Mock<ISettingsLoadService>();
+            settingsLoadService.Setup(x => x.Load()).Returns(settings);
+
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
-                Mock.Of<ISettingsLoadService>(),
+                settingsLoadService.Object,
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
-                session.Object,
+                Mock.Of<ISession>(),
                 Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
@@ -83,16 +97,20 @@ namespace OutlookMatters.Test
                     "because there should be one button for each channel");
             result.Should()
                 .WithNamespace("ns", "http://schemas.microsoft.com/office/2009/07/customui")
-                .ContainXmlNode(@"//ns:button[contains(@tag, ""1234"")]",
+                .ContainXmlNode(@"//ns:button[contains(@id, """ + channelButtonIdPrefix + channelId + @""")]",
                     "because the tag of the button should match the channelId");
         }
 
         [Test]
         public void GetDynamicMenu_ReturnsReplyButton()
         {
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId",
+                "username", string.Empty);
+            var settingsLoadService = new Mock<ISettingsLoadService>();
+            settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
-                Mock.Of<ISettingsLoadService>(),
+                settingsLoadService.Object,
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
@@ -114,9 +132,13 @@ namespace OutlookMatters.Test
         [Test]
         public void GetDynamicMenu_ReturnsSettingsButton()
         {
+            var settings = new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty,
+                string.Empty, string.Empty);
+            var settingsLoadService = new Mock<ISettingsLoadService>();
+            settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
-                Mock.Of<ISettingsLoadService>(),
+                settingsLoadService.Object,
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
@@ -144,8 +166,14 @@ namespace OutlookMatters.Test
                 DefaultSettingsLoadService,
                 passwordProvider.Object);
 
-            var classUnderTest = new MailItemContextMenuEntry(MockOfMailExplorer(), DefaultSettingsLoadService, Mock.Of<ISettingsSaveService>(),
-                Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>(), sessionCache, Mock.Of<IStringProvider>());
+            var classUnderTest = new MailItemContextMenuEntry(
+                MockOfMailExplorer(),
+                DefaultSettingsLoadService,
+                Mock.Of<ISettingsSaveService>(),
+                Mock.Of<IErrorDisplay>(),
+                Mock.Of<ISettingsUserInterface>(),
+                sessionCache,
+                Mock.Of<IStringProvider>());
 
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
         }
@@ -195,7 +223,8 @@ namespace OutlookMatters.Test
         [Test]
         public void OnPostClick_CreatesPostUsingSession()
         {
-            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username", "channels");
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username",
+                "channels");
             var mailData = new MailData("sender", "subject", "message");
             var session = new Mock<ISession>();
             var explorer = new Mock<IMailExplorer>();
@@ -250,7 +279,8 @@ namespace OutlookMatters.Test
         public void OnReplyClick_CreatesPostWithRootIdUsingSession()
         {
             const string rootId = "rootId";
-            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username", "channels");
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username",
+                "channels");
             var mailData = new MailData("sender", "subject", "message");
             var session = new Mock<ISession>();
             var explorer = new Mock<IMailExplorer>();
