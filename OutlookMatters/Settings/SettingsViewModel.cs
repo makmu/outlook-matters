@@ -18,7 +18,7 @@ namespace OutlookMatters.Settings
         public string TeamId { get; set; }
         public string ChannelId { get; set; }
         public string Username { get; set; }
-        public ICommand Save { get; }
-        public ICommand Cancel { get; }
+        public ICommand Save { get; private set; }
+        public ICommand Cancel { get; private set; }
     }
 }
