@@ -2,10 +2,10 @@
 using Newtonsoft.Json;
 namespace OutlookMatters.Mattermost
 {
-    public class Channels
+    public class ChannelList
     {
         [JsonProperty("channels")]
-        public List<Channel> ChannelList { get; set; }
+        public List<Channel> Channels { get; set; }
     }
 
     public class Channel
