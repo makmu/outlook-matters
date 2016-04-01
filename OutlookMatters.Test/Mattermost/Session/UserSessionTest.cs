@@ -45,9 +45,9 @@ namespace OutlookMatters.Test.Mattermost.Session
 
             classUnderTest.FetchChannelList();
 
-            classUnderTest.ChannelList.ChannelList[0].ChannelId.Should().Be(channelId);
-            classUnderTest.ChannelList.ChannelList[0].ChannelName.Should().Be(channelName);
-            classUnderTest.ChannelList.ChannelList[0].Type.Should().Be(channelType);
+            classUnderTest.ChannelList.Channels[0].ChannelId.Should().Be(channelId);
+            classUnderTest.ChannelList.Channels[0].ChannelName.Should().Be(channelName);
+            classUnderTest.ChannelList.Channels[0].Type.Should().Be(channelType);
         }
 
         [Test]
@@ -209,7 +209,7 @@ namespace OutlookMatters.Test.Mattermost.Session
             httpRequest.Setup(x => x.Get()).Returns(httpResonse.Object);
 
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.Get(new Uri(baseUri, "api/v1/channels/"))).Returns(httpRequest.Object);
+            httpClient.Setup(x => x.Request(new Uri(baseUri, "api/v1/channels/"))).Returns(httpRequest.Object);
             var classUnderTest = new UserSession(baseUri, Token, UserId, httpClient.Object);
             return classUnderTest;
         }

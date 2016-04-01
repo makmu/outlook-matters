@@ -24,7 +24,7 @@ namespace OutlookMatters.Test
             get
             {
                 var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId",
-                    "username");
+                    "username", "channels");
                 var settingsLoadService = new Mock<ISettingsLoadService>();
                 settingsLoadService.Setup(x => x.Load()).Returns(settings);
                 return settingsLoadService.Object;
@@ -44,6 +44,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
                 Mock.Of<ISettingsLoadService>(),
+                Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
                 Mock.Of<ISession>(),
@@ -62,12 +63,13 @@ namespace OutlookMatters.Test
         {
             const string channelName = "FunnyChannelName";
             const string channelId = "1234";
-            var channelList = new Channels {ChannelList = new List<Channel> {new Channel {ChannelName = channelName, ChannelId = channelId}}};
+            var channelList = new ChannelList{Channels = new List<Channel> {new Channel {ChannelName = channelName, ChannelId = channelId}}};
             var session = new Mock<ISession>();
             session.Setup(x => x.ChannelList).Returns(channelList);
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
                 Mock.Of<ISettingsLoadService>(),
+                Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
                 session.Object,
@@ -91,6 +93,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
                 Mock.Of<ISettingsLoadService>(),
+                Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
                 Mock.Of<ISession>(),
@@ -114,6 +117,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
                 Mock.Of<ISettingsLoadService>(),
+                Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
                 Mock.Of<ISession>(),
@@ -140,7 +144,7 @@ namespace OutlookMatters.Test
                 DefaultSettingsLoadService,
                 passwordProvider.Object);
 
-            var classUnderTest = new MailItemContextMenuEntry(MockOfMailExplorer(), DefaultSettingsLoadService,
+            var classUnderTest = new MailItemContextMenuEntry(MockOfMailExplorer(), DefaultSettingsLoadService, Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(), Mock.Of<ISettingsUserInterface>(), sessionCache, Mock.Of<IStringProvider>());
 
             classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
@@ -156,6 +160,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
                 DefaultSettingsLoadService,
+                Mock.Of<ISettingsSaveService>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>(),
                 session.Object,
@@ -176,6 +181,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
                 DefaultSettingsLoadService,
+                Mock.Of<ISettingsSaveService>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>(),
                 session.Object,
@@ -189,7 +195,7 @@ namespace OutlookMatters.Test
         [Test]
         public void OnPostClick_CreatesPostUsingSession()
         {
-            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username");
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username", "channels");
             var mailData = new MailData("sender", "subject", "message");
             var session = new Mock<ISession>();
             var explorer = new Mock<IMailExplorer>();
@@ -199,6 +205,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 explorer.Object,
                 settingsLoadService.Object,
+                Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
                 session.Object,
@@ -227,6 +234,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
                 DefaultSettingsLoadService,
+                Mock.Of<ISettingsSaveService>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>(),
                 session.Object,
@@ -242,7 +250,7 @@ namespace OutlookMatters.Test
         public void OnReplyClick_CreatesPostWithRootIdUsingSession()
         {
             const string rootId = "rootId";
-            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username");
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username", "channels");
             var mailData = new MailData("sender", "subject", "message");
             var session = new Mock<ISession>();
             var explorer = new Mock<IMailExplorer>();
@@ -254,6 +262,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 explorer.Object,
                 settingsLoadService.Object,
+                Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
                 session.Object,
@@ -275,6 +284,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
                 DefaultSettingsLoadService,
+                Mock.Of<ISettingsSaveService>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>(),
                 session.Object,
@@ -295,6 +305,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
                 DefaultSettingsLoadService,
+                Mock.Of<ISettingsSaveService>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>(),
                 session.Object,
@@ -312,6 +323,7 @@ namespace OutlookMatters.Test
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
                 Mock.Of<ISettingsLoadService>(),
+                Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 settingsUi.Object,
                 Mock.Of<ISession>(),
