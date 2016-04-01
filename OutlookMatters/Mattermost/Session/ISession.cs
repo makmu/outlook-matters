@@ -4,9 +4,9 @@ namespace OutlookMatters.Mattermost.Session
 {
     public interface ISession
     {
-        Channels ChannelList { get; }
+        ChannelList ChannelList { get; }
         void CreatePost(string channelId, string message, string rootId = "");
         Post GetPostById(string postId);
-        void FetchChannelList();
+        ChannelList FetchChannelList();
     }
 }

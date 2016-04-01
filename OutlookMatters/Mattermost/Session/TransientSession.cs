@@ -6,7 +6,7 @@ namespace OutlookMatters.Mattermost.Session
 {
     public class TransientSession : ISession, ICache
     {
-        public Channels ChannelList
+        public ChannelList ChannelList
         {
             get { return Session.ChannelList; }
         } 
@@ -54,9 +54,9 @@ namespace OutlookMatters.Mattermost.Session
             return Session.GetPostById(postId);
         }
 
-        public void FetchChannelList()
+        public ChannelList FetchChannelList()
         {
-            Session.FetchChannelList();
+            return Session.FetchChannelList();
         }
 
         public void Invalidate()
