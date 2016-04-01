@@ -27,7 +27,9 @@ namespace OutlookMatters.Settings
                 viewModel.MattermostUrl,
                 viewModel.TeamId,
                 viewModel.ChannelId,
-                viewModel.Username);
+                viewModel.Username,
+                Properties.Settings.Default.ChannelsMap
+                );
             _saveService.Save(settings);
             _window.Close();
         }
