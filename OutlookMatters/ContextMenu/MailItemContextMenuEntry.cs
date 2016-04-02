@@ -40,13 +40,11 @@ namespace OutlookMatters.ContextMenu
 
         public string GetCustomUI(string ribbonId)
         {
-            switch (ribbonId)
+            if (ribbonId != "Microsoft.Outlook.Explorer")
             {
-                case "Microsoft.Outlook.Explorer":
-                    return GetResourceText("OutlookMatters.ContextMenu.MailItemContextMenuEntry.xml");
-                default:
-                    return string.Empty;
+                return null;
             }
+            return GetResourceText("OutlookMatters.ContextMenu.MailItemContextMenuEntry.xml");
         }
 
         public string GetDynamicMenu(Office.IRibbonControl control)

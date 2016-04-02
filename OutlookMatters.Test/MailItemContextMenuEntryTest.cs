@@ -57,6 +57,22 @@ namespace OutlookMatters.Test
         }
 
         [Test]
+        public void GetCustomUI_ReturnsNull_IfRibbonIdIvalid()
+        {
+            var classUnderTest = new MailItemContextMenuEntry(
+                Mock.Of<IMailExplorer>(),
+                Mock.Of<ISettingsLoadService>(),
+                Mock.Of<IErrorDisplay>(),
+                Mock.Of<ISettingsUserInterface>(),
+                Mock.Of<ISession>(),
+                Mock.Of<IStringProvider>());
+
+            var result = classUnderTest.GetCustomUI("unknown");
+
+            result.Should().BeNull();
+        }
+
+        [Test]
         public void GetDynamicMenu_ReturnsPostButton()
         {
             var classUnderTest = new MailItemContextMenuEntry(
