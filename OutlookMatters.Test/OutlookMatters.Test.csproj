@@ -69,10 +69,12 @@
     <Compile Include="Mattermost\RestMattermostTest.cs" />
     <Compile Include="Settings\ApplicationSettingsServiceTest.cs" />
     <Compile Include="Settings\SaveCommandTest.cs" />
+    <Compile Include="Settings\SettingsTest.cs" />
     <Compile Include="Settings\SettingsViewModelTest.cs" />
     <Compile Include="TestUtils\ExtensionMethods.cs" />
     <Compile Include="Mattermost\Session\UserSessionTest.cs" />
     <Compile Include="TestUtils\XmlAssertions.cs" />
+    <Compile Include="Utils\UserAbortExceptionTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
