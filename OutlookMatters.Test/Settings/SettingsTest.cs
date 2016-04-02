@@ -58,7 +58,8 @@ namespace OutlookMatters.Test.Settings
         [TestCase("", "x", "", "", false)]
         [TestCase("", "", "x", "", false)]
         [TestCase("", "", "", "x", false)]
-        public void GetHashCode_(string urlModifier, string teamIdModifier, string channelIdModifier,
+        public void GetHashCode_CalculatesHashBasedOnMembers(string urlModifier, string teamIdModifier,
+            string channelIdModifier,
             string usernameModifier, bool expected)
         {
             const string url = "http://tempuri.org";
@@ -72,6 +73,17 @@ namespace OutlookMatters.Test.Settings
             var result = classUnderTest.GetHashCode() == otherSettings.GetHashCode();
 
             result.Should().Be(expected);
+        }
+
+        [Test]
+        public void GetHashCode_ReturnsSameHashCodeIfAllMembersAreNull()
+        {
+            var otherSettings = new OutlookMatters.Settings.Settings(null, null, null, null);
+            var classUnderTest = new OutlookMatters.Settings.Settings(null, null, null, null);
+
+            var result = classUnderTest.GetHashCode();
+
+            result.Should().Be(otherSettings.GetHashCode());
         }
     }
 }
