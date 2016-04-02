@@ -51,5 +51,27 @@ namespace OutlookMatters.Test.Settings
 
             result.Should().BeTrue();
         }
+
+        [Test]
+        [TestCase("", "", "", "", true)]
+        [TestCase("x", "", "", "", false)]
+        [TestCase("", "x", "", "", false)]
+        [TestCase("", "", "x", "", false)]
+        [TestCase("", "", "", "x", false)]
+        public void GetHashCode_(string urlModifier, string teamIdModifier, string channelIdModifier,
+            string usernameModifier, bool expected)
+        {
+            const string url = "http://tempuri.org";
+            const string teamId = "team id";
+            const string channelId = "channel id";
+            const string username = "user name";
+            var otherSettings = new OutlookMatters.Settings.Settings(url + urlModifier, teamId + teamIdModifier,
+                channelId + channelIdModifier, username + usernameModifier);
+            var classUnderTest = new OutlookMatters.Settings.Settings(url, teamId, channelId, username);
+
+            var result = classUnderTest.GetHashCode() == otherSettings.GetHashCode();
+
+            result.Should().Be(expected);
+        }
     }
 }
