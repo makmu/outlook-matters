@@ -109,7 +109,7 @@ namespace OutlookMatters.ContextMenu
 
         private string FormatMessage()
         {
-            var mail = _explorer.QuerySelectedMailData();
+            var mail = _explorer.QuerySelectedMailItem();
             var message = ":email: From: " + mail.SenderName + "\n";
             message += ":email: Subject: " + mail.Subject + "\n";
             message += mail.Body;

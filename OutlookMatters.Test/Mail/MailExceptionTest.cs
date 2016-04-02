@@ -1,17 +1,17 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using OutlookMatters.Utils;
+using OutlookMatters.Mail;
 
-namespace OutlookMatters.Test.Utils
+namespace OutlookMatters.Test.Mail
 {
     [TestFixture]
-    public class UserAbortExceptionTest
+    public class MailExceptionTest
     {
         [Test]
         public void Message_ReturnsConstructorInjectedMessage()
         {
             const string message = "message";
-            var classUnderTest = new UserAbortException(message);
+            var classUnderTest = new MailException(message);
 
             var result = classUnderTest.Message;
 

@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Outlook, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <Private>False</Private>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </Reference>
     <Reference Include="FluentAssertions, Version=4.2.2.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.4.2.2\lib\net45\FluentAssertions.dll</HintPath>
       <Private>True</Private>
@@ -60,6 +64,8 @@
     </Compile>
     <Compile Include="CloseCommandTest.cs" />
     <Compile Include="MailItemContextMenuEntryTest.cs" />
+    <Compile Include="Mail\MailExceptionTest.cs" />
+    <Compile Include="Mail\OutlookMailExplorerTest.cs" />
     <Compile Include="Mattermost\MattermostExceptionTest.cs" />
     <Compile Include="Mattermost\PostIdFromPermalinkFilterTest.cs" />
     <Compile Include="Mattermost\RootPostIdResolverTest.cs" />
