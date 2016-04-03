@@ -70,9 +70,6 @@ namespace OutlookMatters.Mattermost.Session
             {
                 throw TranslateException(hex);
             }
-            /*imageMso="AccessRefreshAllLists"
-                imageMso="Repeat"
-             * */
         }
 
         public ChannelList FetchChannelList()
@@ -87,7 +84,6 @@ namespace OutlookMatters.Mattermost.Session
                 var response = request.Get();
                 var payload = response.GetPayload();
                 _channelList = JsonConvert.DeserializeObject<ChannelList>(payload);
-                //Properties.Settings.Default.ChannelsMap = payload;
                 return _channelList;
             }
             catch (HttpException hex)
