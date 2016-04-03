@@ -98,21 +98,9 @@ namespace OutlookMatters.ContextMenu
             _settingsUi.OpenSettings();
         }
 
-        public void OnPostClick(Office.IRibbonControl control)
-        {
-            var settings = _settingsLoadService.Load();
-            var channelId = settings.ChannelId;
-            TryToSendPost(channelId);
-        }
-
         public void OnPostIntoChannelClick(Office.IRibbonControl control)
         {
             var channelId = control.Id.Substring(CHANNEL_BUTTON_ID_PREFIX.Length);
-            TryToSendPost(channelId);
-        }
-
-        private void TryToSendPost(string channelId)
-        {
             var message = FormatMessage();
             try
             {
@@ -127,7 +115,7 @@ namespace OutlookMatters.ContextMenu
                 _errorDisplay.Display(exception);
             }
         }
-
+        
         public void OnRefreshChannelListClick(Office.IRibbonControl control)
         {
             var channelList = _session.FetchChannelList();

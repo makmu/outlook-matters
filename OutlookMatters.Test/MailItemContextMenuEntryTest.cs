@@ -32,6 +32,14 @@ namespace OutlookMatters.Test
             }
         }
 
+        private static IRibbonControl MockOfRibbonControl()
+        {
+            const string arbitraryChannelId = "123412341234134";
+            var mock = new Mock<IRibbonControl>();
+            mock.Setup(x => x.Id).Returns(arbitraryChannelId);
+            return mock.Object;
+        }
+
         private static IMailExplorer MockOfMailExplorer()
         {
             var mock = new Mock<IMailExplorer>();
@@ -223,8 +231,9 @@ namespace OutlookMatters.Test
         }
 
         [Test]
-        public void OnPostClick_CanHandleUserPasswordAbort()
+        public void OnPostIntoChannelClick_CanHandleUserPasswordAbort()
         {
+            var control = MockOfRibbonControl();
             var passwordProvider = new Mock<IPasswordProvider>();
             passwordProvider.Setup(x => x.GetPassword(It.IsAny<string>())).Throws<Exception>();
             var sessionCache = new TransientSession(Mock.Of<IMattermost>(),
@@ -240,12 +249,13 @@ namespace OutlookMatters.Test
                 sessionCache,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
+            classUnderTest.OnPostIntoChannelClick(control);
         }
 
         [Test]
-        public void OnPostClick_HandlesMattermostExceptionsWhileCreatingPost()
+        public void OnPostIntoChannelClick_HandlesMattermostExceptionsWhileCreatingPost()
         {
+            var control = MockOfRibbonControl();
             var session = new Mock<ISession>();
             session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new MattermostException(new OutlookMatters.Mattermost.DataObjects.Error()));
@@ -259,14 +269,15 @@ namespace OutlookMatters.Test
                 session.Object,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
+            classUnderTest.OnPostIntoChannelClick(control);
 
             errorDisplay.Verify(x => x.Display(It.IsAny<MattermostException>()));
         }
 
         [Test]
-        public void OnPostClick_HandlesAnyExceptionsWhileCreatingPost()
+        public void OnPostIntoChannelClick_HandlesAnyExceptionsWhileCreatingPost()
         {
+            var control = MockOfRibbonControl();
             var session = new Mock<ISession>();
             session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<Exception>();
@@ -280,36 +291,36 @@ namespace OutlookMatters.Test
                 session.Object,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
+            classUnderTest.OnPostIntoChannelClick(control);
 
             errorDisplay.Verify(x => x.Display(It.IsAny<Exception>()));
         }
 
         [Test]
-        public void OnPostClick_CreatesPostUsingSession()
+        public void OnPostIntoChannelClick_CreatesPostUsingSession()
         {
-            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId", "username",
-                "channels");
+            const string channelId = "funny ChannelId";
+            const string channelIdWithPrefix = "channel_id-funny ChannelId";
+            var control = new Mock<IRibbonControl>();
+            control.Setup(x => x.Id).Returns(channelIdWithPrefix);
             var mailData = new MailData("sender", "subject", "message");
             var session = new Mock<ISession>();
             var explorer = new Mock<IMailExplorer>();
             explorer.Setup(x => x.QuerySelectedMailData()).Returns(mailData);
-            var settingsLoadService = new Mock<ISettingsLoadService>();
-            settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var classUnderTest = new MailItemContextMenuEntry(
                 explorer.Object,
-                settingsLoadService.Object,
+                Mock.Of<ISettingsLoadService>(),
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
                 session.Object,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnPostClick(Mock.Of<IRibbonControl>());
+            classUnderTest.OnPostIntoChannelClick(control.Object);
 
             session.Verify(
                 x =>
-                    x.CreatePost(settings.ChannelId, ":email: From: sender\n:email: Subject: subject\nmessage",
+                    x.CreatePost(channelId, ":email: From: sender\n:email: Subject: subject\nmessage",
                         string.Empty));
         }
 
