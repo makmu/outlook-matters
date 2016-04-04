@@ -2,8 +2,8 @@
 
 namespace OutlookMatters.Mail
 {
-    public interface IMailExplorer
+    public interface IExplorerService
     {
-        MailItem QuerySelectedMailItem();
+        Explorer GetActiveExplorer();
     }
 }

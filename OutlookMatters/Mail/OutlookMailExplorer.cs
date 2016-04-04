@@ -5,27 +5,34 @@ namespace OutlookMatters.Mail
 {
     public class OutlookMailExplorer : IMailExplorer
     {
-        public MailData QuerySelectedMailData()
+        private readonly IExplorerService _explorerService;
+
+        public OutlookMailExplorer(IExplorerService explorerService)
         {
-            var explorer = Globals.ThisAddIn.Application.ActiveExplorer();
+            _explorerService = explorerService;
+        }
+
+        public MailItem QuerySelectedMailItem()
+        {
+            var explorer = _explorerService.GetActiveExplorer();
             if (explorer == null)
             {
-                throw new Exception("Could not find mail explorer object");
+                throw new MailException("Could not find mail explorer object");
             }
             if (explorer.Selection == null)
             {
-                throw new Exception("No selection information available");
+                throw new MailException("No selection information available");
             }
             if (explorer.Selection.Count == 0)
             {
-                throw new Exception("No mails selected");
+                throw new MailException("No mails selected");
             }
             var item = explorer.Selection[1] as MailItem;
             if (item == null)
             {
-                throw new Exception("Selected item is not a mail item");
+                throw new MailException("Selected item is not a mail item");
             }
-            return new MailData(item.SenderName, item.Subject, item.Body);
+            return item;
         }
     }
 }
