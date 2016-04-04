@@ -20,7 +20,8 @@
         protected bool Equals(Settings other)
         {
             return string.Equals(MattermostUrl, other.MattermostUrl) && string.Equals(TeamId, other.TeamId) &&
-                   string.Equals(ChannelId, other.ChannelId) && string.Equals(Username, other.Username);
+                   string.Equals(ChannelId, other.ChannelId) && string.Equals(Username, other.Username) &&
+                   string.Equals(ChannelsMap, other.ChannelsMap);
         }
 
         public override bool Equals(object obj)
@@ -39,6 +40,7 @@
                 hashCode = (hashCode*397) ^ (TeamId != null ? TeamId.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ (ChannelId != null ? ChannelId.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ (Username != null ? Username.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (ChannelsMap != null ? ChannelsMap.GetHashCode() : 0);
                 return hashCode;
             }
         }

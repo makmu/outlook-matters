@@ -56,15 +56,22 @@ namespace OutlookMatters
             var settingsService = new ApplicationSettingsService(caches);
             var sessionCache = new TransientSession(mattermost, settingsService, passwordDialog);
             caches.Add(sessionCache);
+            var explorerService = new OutlookExplorerService();
+            var mailExplorer = new OutlookMailExplorer(explorerService);
+            var errorDisplay = new MessageBoxErrorDisplay();
+            var settingsUi = new WpfSettingsUserInterface(settingsService, settingsService);
+            var permalinkUi = new PermalinkDialogShell();
+            var postIdFilter = new PostIdFromPermalinkFilter(permalinkUi);
+            var rootPostIdResolver = new RootPostIdResolver(postIdFilter, sessionCache);
 
             return new MailItemContextMenuEntry(
-                new OutlookMailExplorer(),
+                mailExplorer,
                 settingsService,
                 settingsService,
-                new MessageBoxErrorDisplay(),
-                new WpfSettingsUserInterface(settingsService, settingsService),
+                errorDisplay,
+                settingsUi,
                 sessionCache,
-                new RootPostIdResolver(new PostIdFromPermalinkFilter(new PermalinkDialogShell()), sessionCache));
+                rootPostIdResolver);
         }
 
         #region VSTO generated code

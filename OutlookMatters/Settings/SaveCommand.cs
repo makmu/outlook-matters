@@ -22,7 +22,10 @@ namespace OutlookMatters.Settings
         public void Execute(object parameter)
         {
             var viewModel = parameter as SettingsViewModel;
-            if (viewModel == null) return;
+            if (viewModel == null)
+            {
+                throw new ArgumentException(@"Invalid ViewModel", nameof(parameter));
+            }
             var settings = new Settings(
                 viewModel.MattermostUrl,
                 viewModel.TeamId,

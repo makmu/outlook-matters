@@ -185,8 +185,11 @@
     <Compile Include="Error\IErrorDisplay.cs" />
     <Compile Include="Error\MessageBoxErrorDisplay.cs" />
     <Compile Include="Http\HttpException.cs" />
+    <Compile Include="Mail\IExplorerService.cs" />
     <Compile Include="Mail\MailData.cs" />
     <Compile Include="Mattermost\ChannelList.cs" />
+    <Compile Include="Mail\MailException.cs" />
+    <Compile Include="Mail\OutlookExplorerService.cs" />
     <Compile Include="Mattermost\DataObjects\Error.cs" />
     <Compile Include="Mattermost\DataObjects\Login.cs" />
     <Compile Include="Mattermost\DataObjects\Post.cs" />

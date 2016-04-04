@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -28,7 +29,8 @@ namespace OutlookMatters.Test.Settings
             const string channelId = "channelId";
             const string username = "username";
             var viewModel = new SettingsViewModel(
-                new OutlookMatters.Settings.Settings(string.Empty,string.Empty,string.Empty,string.Empty, string.Empty),
+                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty,
+                    string.Empty),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>())
             {
@@ -55,7 +57,8 @@ namespace OutlookMatters.Test.Settings
         public void Execute_ClosesWindow()
         {
             var viewModel = new SettingsViewModel(
-                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty),
+                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty,
+                    string.Empty),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>());
             var window = new Mock<IClosableWindow>();
@@ -63,7 +66,15 @@ namespace OutlookMatters.Test.Settings
 
             classUnderTest.Execute(viewModel);
 
-            window.Verify( x => x.Close() );
+            window.Verify(x => x.Close());
+        }
+
+        [Test]
+        public void Execute_Throws_IfArgumentIsNotViewModel()
+        {
+            var classUnderTest = new SaveCommand(Mock.Of<ISettingsSaveService>(), Mock.Of<IClosableWindow>());
+
+            Assert.Throws<ArgumentException>(() => classUnderTest.Execute(new object()));
         }
     }
 }
