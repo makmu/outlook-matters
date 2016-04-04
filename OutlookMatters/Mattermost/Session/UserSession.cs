@@ -7,16 +7,10 @@ namespace OutlookMatters.Mattermost.Session
 {
     public class UserSession : ISession
     {
-        public ChannelList ChannelList
-        {
-            get { return _channelList; }
-        }
-
         private readonly Uri _baseUri;
         private readonly IHttpClient _httpClient;
         private readonly string _token;
         private readonly string _userId;
-        private ChannelList _channelList;
 
         public UserSession(Uri baseUri, string token, string userId, IHttpClient httpClient)
         {
@@ -83,8 +77,7 @@ namespace OutlookMatters.Mattermost.Session
                     .WithHeader("Authorization", "Bearer " + _token);
                 var response = request.Get();
                 var payload = response.GetPayload();
-                _channelList = JsonConvert.DeserializeObject<ChannelList>(payload);
-                return _channelList;
+                return JsonConvert.DeserializeObject<ChannelList>(payload);
             }
             catch (HttpException hex)
             {

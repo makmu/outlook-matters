@@ -6,11 +6,6 @@ namespace OutlookMatters.Mattermost.Session
 {
     public class TransientSession : ISession, ICache
     {
-        public ChannelList ChannelList
-        {
-            get { return Session.ChannelList; }
-        } 
-
         private readonly IMattermost _mattermost;
         private readonly IPasswordProvider _passwordProvider;
         private readonly ISettingsLoadService _settingsLoadService;
@@ -62,7 +57,6 @@ namespace OutlookMatters.Mattermost.Session
         public void Invalidate()
         {
             _session = null;
-
         }
     }
 }
