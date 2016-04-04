@@ -78,7 +78,7 @@ namespace OutlookMatters.Mattermost.Session
             {
                 const string channelsUrl = "api/v1/channels/";
                 var getUrl = new Uri(_baseUri, channelsUrl);
-                var request = _httpClient.Get(getUrl)
+                var request = _httpClient.Request(getUrl)
                     .WithContentType("text/json")
                     .WithHeader("Authorization", "Bearer " + _token);
                 var response = request.Get();
@@ -90,7 +90,6 @@ namespace OutlookMatters.Mattermost.Session
             {
                 throw TranslateException(hex);
             }
-
         }
 
         private Uri PostUrl(string channelId)

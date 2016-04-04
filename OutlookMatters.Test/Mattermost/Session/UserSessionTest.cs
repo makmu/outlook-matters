@@ -39,7 +39,9 @@ namespace OutlookMatters.Test.Mattermost.Session
             const string channelId = "1234";
             const string channelType = "O";
             const string jsonResponse =
-                "{\"channels\":[{\"id\":\""+ channelId +"\",\"create_at\":1458911668852,\"update_at\":1458911668852,\"delete_at\":0,\"type\":\""+channelType+"\",\"display_name\":\""+channelName+"\"}]}";
+                "{\"channels\":[{\"id\":\"" + channelId +
+                "\",\"create_at\":1458911668852,\"update_at\":1458911668852,\"delete_at\":0,\"type\":\"" + channelType +
+                "\",\"display_name\":\"" + channelName + "\"}]}";
             var httpRequest = new Mock<IHttpRequest>();
             var classUnderTest = SetupUserSessionForFetchingChannelList(httpRequest, jsonResponse);
 
@@ -197,7 +199,8 @@ namespace OutlookMatters.Test.Mattermost.Session
             return classUnderTest;
         }
 
-        private static UserSession SetupUserSessionForFetchingChannelList(Mock<IHttpRequest> httpRequest, string jsonResponse)
+        private static UserSession SetupUserSessionForFetchingChannelList(Mock<IHttpRequest> httpRequest,
+            string jsonResponse)
         {
             var baseUri = new Uri("http://localhost");
 
@@ -209,7 +212,7 @@ namespace OutlookMatters.Test.Mattermost.Session
             httpRequest.Setup(x => x.Get()).Returns(httpResonse.Object);
 
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.Get(new Uri(baseUri, "api/v1/channels/"))).Returns(httpRequest.Object);
+            httpClient.Setup(x => x.Request(new Uri(baseUri, "api/v1/channels/"))).Returns(httpRequest.Object);
             var classUnderTest = new UserSession(baseUri, Token, UserId, httpClient.Object);
             return classUnderTest;
         }
