@@ -28,10 +28,8 @@
             </Grid.ColumnDefinitions>
             <Label Margin="5" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Width="99">Mattermost URL:</Label>
             <TextBox Text="{Binding MattermostUrl}" Margin="5" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" />
-            <Label Margin="5" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Width="69">Channel Id:</Label>
             <TextBox Margin="5" Text="{Binding TeamId}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" />
             <Label Margin="5" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="55">Team Id:</Label>
-            <TextBox Margin="5" Text="{Binding ChannelId}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
             <Label Margin="5" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Width="105">Username (email):</Label>
             <TextBox Margin="5" Text="{Binding Username}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" />
         </Grid>

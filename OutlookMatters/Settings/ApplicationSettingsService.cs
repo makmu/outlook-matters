@@ -16,7 +16,6 @@ namespace OutlookMatters.Settings
             return new Settings(
                 Properties.Settings.Default.MattermostUrl,
                 Properties.Settings.Default.TeamId,
-                Properties.Settings.Default.ChannelId,
                 Properties.Settings.Default.Username,
                 Properties.Settings.Default.ChannelsMap);
         }
@@ -25,7 +24,6 @@ namespace OutlookMatters.Settings
         {
             Properties.Settings.Default.MattermostUrl = settings.MattermostUrl;
             Properties.Settings.Default.TeamId = settings.TeamId;
-            Properties.Settings.Default.ChannelId = settings.ChannelId;
             Properties.Settings.Default.Username = settings.Username;
             Properties.Settings.Default.ChannelsMap = settings.ChannelsMap;
             Properties.Settings.Default.Save();

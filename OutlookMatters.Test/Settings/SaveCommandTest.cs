@@ -26,17 +26,15 @@ namespace OutlookMatters.Test.Settings
         {
             const string mattermostUrl = "http://localhost";
             const string teamId = "teamId";
-            const string channelId = "channelId";
             const string username = "username";
             var viewModel = new SettingsViewModel(
-                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty,
+                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty,
                     string.Empty),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>())
             {
                 MattermostUrl = mattermostUrl,
                 TeamId = teamId,
-                ChannelId = channelId,
                 Username = username
             };
             var saveService = new Mock<ISettingsSaveService>();
@@ -49,7 +47,7 @@ namespace OutlookMatters.Test.Settings
                     x.Save(
                         It.Is<OutlookMatters.Settings.Settings>(
                             s =>
-                                s.MattermostUrl == mattermostUrl && s.TeamId == teamId && s.ChannelId == channelId &&
+                                s.MattermostUrl == mattermostUrl && s.TeamId == teamId &&
                                 s.Username == username)));
         }
 
@@ -57,7 +55,7 @@ namespace OutlookMatters.Test.Settings
         public void Execute_ClosesWindow()
         {
             var viewModel = new SettingsViewModel(
-                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty,
+                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty,
                     string.Empty),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>());

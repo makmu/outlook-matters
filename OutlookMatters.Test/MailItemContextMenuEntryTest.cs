@@ -26,7 +26,7 @@ namespace OutlookMatters.Test
         {
             get
             {
-                var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId",
+                var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId",
                     "username", "channels");
                 var settingsLoadService = new Mock<ISettingsLoadService>();
                 settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -113,7 +113,7 @@ namespace OutlookMatters.Test
                     }
             };
             var channels = JsonConvert.SerializeObject(channelList);
-            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId",
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", 
                 "username", channels);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -151,7 +151,7 @@ namespace OutlookMatters.Test
                     }
             };
             var channels = JsonConvert.SerializeObject(channelList);
-            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId",
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", 
                 "username", channels);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -180,7 +180,7 @@ namespace OutlookMatters.Test
         [Test]
         public void GetDynamicMenu_ReturnsReplyButton()
         {
-            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId",
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", 
                 "username", string.Empty);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -208,7 +208,7 @@ namespace OutlookMatters.Test
         [Test]
         public void GetDynamicMenu_ReturnsSettingsButton()
         {
-            var settings = new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty,
+            var settings = new OutlookMatters.Settings.Settings(string.Empty, string.Empty,
                 string.Empty, string.Empty);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -238,7 +238,7 @@ namespace OutlookMatters.Test
         {
             const string subscribedChannelAttribut = "OnPostIntoChannelClick";
             var channels = string.Empty;
-            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId",
+            var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId",
                 "username", channels);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -369,7 +369,7 @@ namespace OutlookMatters.Test
             };
             var session = new Mock<ISession>();
             session.Setup(x => x.FetchChannelList()).Returns(channelList);
-            var settings = new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty,
+            var settings = new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty,
                 "{\"channels\":[{\"id\":\"channel id\",\"display_name\":\"channel name\",\"type\":\"channel type\"}]}");
             var loadService = new Mock<ISettingsLoadService>();
             loadService.Setup(x => x.Load()).Returns(settings);

@@ -20,7 +20,7 @@ namespace OutlookMatters.Test.Mattermost.Session
         public void CreatePost_CreatesPostUsingCurrentSession()
         {
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new OutlookMatters.Settings.Settings("myUrl", "testTeamId", ChannelId, "Donald Duck", "channels");
+            var settings = new OutlookMatters.Settings.Settings("myUrl", "testTeamId", "Donald Duck", "channels");
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var mattermost = new Mock<IMattermost>();
             var session = new Mock<ISession>();
@@ -84,7 +84,7 @@ namespace OutlookMatters.Test.Mattermost.Session
             var session1 = new Mock<ISession>();
             var session2 = new Mock<ISession>();
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new OutlookMatters.Settings.Settings("myUrl", "testTeamId", "myChannel", "Donald Duck", "channels");
+            var settings = new OutlookMatters.Settings.Settings("myUrl", "testTeamId", "Donald Duck", "channels");
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
 
             mattermost.SetupSequence(
@@ -107,7 +107,7 @@ namespace OutlookMatters.Test.Mattermost.Session
         public void GetPostById_ReturnsPostFromCurrentSession()
         {
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new OutlookMatters.Settings.Settings("myUrl", "testTeamId", ChannelId, "Donald Duck", "channels");
+            var settings = new OutlookMatters.Settings.Settings("myUrl", "testTeamId", "Donald Duck", "channels");
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var mattermost = new Mock<IMattermost>();
             var session = new Mock<ISession>();
@@ -127,7 +127,7 @@ namespace OutlookMatters.Test.Mattermost.Session
         {
             get
             {
-                var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId", "channelId",
+                var settings = new OutlookMatters.Settings.Settings("http://localhost", "teamId",
                     "username", "channels");
                 var settingsLoadService = new Mock<ISettingsLoadService>();
                 settingsLoadService.Setup(x => x.Load()).Returns(settings);

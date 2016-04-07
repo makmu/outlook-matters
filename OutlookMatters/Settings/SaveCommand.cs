@@ -29,7 +29,6 @@ namespace OutlookMatters.Settings
             var settings = new Settings(
                 viewModel.MattermostUrl,
                 viewModel.TeamId,
-                viewModel.ChannelId,
                 viewModel.Username,
                 Properties.Settings.Default.ChannelsMap
                 );
