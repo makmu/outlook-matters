@@ -24,7 +24,7 @@ namespace OutlookMatters.Settings
             var viewModel = parameter as SettingsViewModel;
             if (viewModel == null)
             {
-                throw new ArgumentException(@"Invalid ViewModel", nameof(parameter));
+                throw new ArgumentException(@"Invalid ViewModel ", "parameter");
             }
             var settings = new Settings(
                 viewModel.MattermostUrl,
