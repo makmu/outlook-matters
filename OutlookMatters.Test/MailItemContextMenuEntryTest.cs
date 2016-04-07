@@ -359,6 +359,8 @@ namespace OutlookMatters.Test
             const string channelId = "channel id";
             const string channelName = "channel name";
             const string channelType = "channel type";
+            const string expectedChannelMapResult =
+                "{\"channels\":[{\"id\":\"channel id\",\"display_name\":\"channel name\",\"type\":\"channel type\"}]}";
             var channelList = new ChannelList
             {
                 Channels =
@@ -367,16 +369,13 @@ namespace OutlookMatters.Test
                         new Channel {ChannelId = channelId, ChannelName = channelName, Type = channelType}
                     }
             };
+
             var session = new Mock<ISession>();
             session.Setup(x => x.FetchChannelList()).Returns(channelList);
-            var settings = new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty,
-                "{\"channels\":[{\"id\":\"channel id\",\"display_name\":\"channel name\",\"type\":\"channel type\"}]}");
-            var loadService = new Mock<ISettingsLoadService>();
-            loadService.Setup(x => x.Load()).Returns(settings);
             var saveService = new Mock<ISettingsSaveService>();
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
-                loadService.Object,
+                Mock.Of<ISettingsLoadService>(),
                 saveService.Object,
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
@@ -385,7 +384,7 @@ namespace OutlookMatters.Test
 
             classUnderTest.OnRefreshChannelListClick(Mock.Of<IRibbonControl>());
 
-            saveService.Verify(x => x.Save(settings));
+            saveService.Verify(x => x.SaveChannels(expectedChannelMapResult));
         }
 
         [Test]

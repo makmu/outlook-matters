@@ -119,10 +119,7 @@ namespace OutlookMatters.ContextMenu
         {
             var channelList = _session.FetchChannelList();
             var channelMap = JsonConvert.SerializeObject(channelList);
-            var oldSettings = _settingsLoadService.Load();
-            var settings = new Settings.Settings(oldSettings.MattermostUrl, oldSettings.TeamId,
-                oldSettings.Username, channelMap);
-            _settingsSaveService.Save(settings);
+            _settingsSaveService.SaveChannels(channelMap);
         }
 
         public void OnReplyClick(Office.IRibbonControl control)

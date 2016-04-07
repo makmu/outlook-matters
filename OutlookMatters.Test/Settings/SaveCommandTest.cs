@@ -3,6 +3,7 @@ using System.Windows.Input;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using OutlookMatters.Mattermost.DataObjects;
 using OutlookMatters.Settings;
 
 namespace OutlookMatters.Test.Settings
@@ -42,13 +43,7 @@ namespace OutlookMatters.Test.Settings
 
             classUnderTest.Execute(viewModel);
 
-            saveService.Verify(
-                x =>
-                    x.Save(
-                        It.Is<OutlookMatters.Settings.Settings>(
-                            s =>
-                                s.MattermostUrl == mattermostUrl && s.TeamId == teamId &&
-                                s.Username == username)));
+            saveService.Verify(x => x.SaveCredentials(mattermostUrl, teamId, username));
         }
 
         [Test]

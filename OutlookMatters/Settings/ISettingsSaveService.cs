@@ -2,6 +2,7 @@
 {
     public interface ISettingsSaveService
     {
-        void Save(Settings settings);
+        void SaveCredentials(string mattermostUrl, string teamId, string username);
+        void SaveChannels(string channelsMap);
     }
 }
