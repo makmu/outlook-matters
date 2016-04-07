@@ -117,9 +117,21 @@ namespace OutlookMatters.ContextMenu
 
         public void OnRefreshChannelListClick(Office.IRibbonControl control)
         {
-            var channelList = _session.FetchChannelList();
-            var channelMap = JsonConvert.SerializeObject(channelList);
-            _settingsSaveService.SaveChannels(channelMap);
+            try
+            {
+                var channelList = _session.FetchChannelList();
+                var channelMap = JsonConvert.SerializeObject(channelList);
+                _settingsSaveService.SaveChannels(channelMap);
+            }
+            catch (MattermostException mex)
+            {
+                _errorDisplay.Display(mex);
+            }
+            catch (Exception exception)
+            {
+                _errorDisplay.Display(exception);
+            }
+            
         }
 
         public void OnReplyClick(Office.IRibbonControl control)
