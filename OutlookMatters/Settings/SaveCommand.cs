@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using Microsoft.Office.Interop.Outlook;
 
 namespace OutlookMatters.Settings
 {
@@ -24,16 +25,9 @@ namespace OutlookMatters.Settings
             var viewModel = parameter as SettingsViewModel;
             if (viewModel == null)
             {
-                throw new ArgumentException(@"Invalid ViewModel", nameof(parameter));
+                throw new ArgumentException(@"Invalid ViewModel ", "parameter");
             }
-            var settings = new Settings(
-                viewModel.MattermostUrl,
-                viewModel.TeamId,
-                viewModel.ChannelId,
-                viewModel.Username,
-                Properties.Settings.Default.ChannelsMap
-                );
-            _saveService.Save(settings);
+            _saveService.SaveCredentials(viewModel.MattermostUrl, viewModel.TeamId, viewModel.Username);
             _window.Close();
         }
 

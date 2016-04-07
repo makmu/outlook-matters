@@ -16,20 +16,23 @@ namespace OutlookMatters.Settings
             return new Settings(
                 Properties.Settings.Default.MattermostUrl,
                 Properties.Settings.Default.TeamId,
-                Properties.Settings.Default.ChannelId,
                 Properties.Settings.Default.Username,
                 Properties.Settings.Default.ChannelsMap);
         }
 
-        public void Save(Settings settings)
+        public void SaveCredentials(string mattermostUrl, string teamId, string username)
         {
-            Properties.Settings.Default.MattermostUrl = settings.MattermostUrl;
-            Properties.Settings.Default.TeamId = settings.TeamId;
-            Properties.Settings.Default.ChannelId = settings.ChannelId;
-            Properties.Settings.Default.Username = settings.Username;
-            Properties.Settings.Default.ChannelsMap = settings.ChannelsMap;
+            Properties.Settings.Default.MattermostUrl = mattermostUrl;
+            Properties.Settings.Default.TeamId = teamId;
+            Properties.Settings.Default.Username = username;
             Properties.Settings.Default.Save();
             _cache.Invalidate();
+        }
+
+        public void SaveChannels(string channelsMap)
+        {
+            Properties.Settings.Default.ChannelsMap = channelsMap;
+            Properties.Settings.Default.Save();
         }
     }
 }

@@ -13,10 +13,9 @@ namespace OutlookMatters.Test.Settings
         public void Save_InvalidatesCache()
         {
             var cache = new Mock<ICache>();
-            var settings = new OutlookMatters.Settings.Settings("url42", "teamId42", "channelId42", "username42", "channels");
             var classUnderTest = new ApplicationSettingsService(cache.Object);
 
-            classUnderTest.Save(settings);
+            classUnderTest.SaveCredentials("url42", "teamId42", "username42");
 
             cache.Verify(c => c.Invalidate());
         }
@@ -25,8 +24,9 @@ namespace OutlookMatters.Test.Settings
         public void Load_ReturnsSavedSettings()
         {
             var classUnderTest = new ApplicationSettingsService(Mock.Of<ICache>());
-            var settings = new OutlookMatters.Settings.Settings("url42", "teamId42", "channelId42", "username42", "channels");
-            classUnderTest.Save(settings);
+            var settings = new OutlookMatters.Settings.Settings("url42", "teamId42", "username42", "channelMap");
+            classUnderTest.SaveCredentials("url42", "teamId42", "username42");
+            classUnderTest.SaveChannels("channelMap");
 
             var loaded = classUnderTest.Load();
 

@@ -186,7 +186,7 @@
     <Compile Include="Error\MessageBoxErrorDisplay.cs" />
     <Compile Include="Http\HttpException.cs" />
     <Compile Include="Mail\IExplorerService.cs" />
-    <Compile Include="Mail\MailData.cs" />
+    <Compile Include="Mattermost\Channel.cs" />
     <Compile Include="Mattermost\ChannelList.cs" />
     <Compile Include="Mail\MailException.cs" />
     <Compile Include="Mail\OutlookExplorerService.cs" />
@@ -202,7 +202,6 @@
     </Compile>
     <Compile Include="Mattermost\PermalinkDialogShell.cs" />
     <Compile Include="Mattermost\PostIdFromPermalinkFilter.cs" />
-    <Compile Include="Mattermost\RootPostIdResolver.cs" />
     <Compile Include="Mattermost\Session\CompositeCache.cs" />
     <Compile Include="Mattermost\Session\ICache.cs" />
     <Compile Include="Mattermost\Session\TransientSession.cs" />

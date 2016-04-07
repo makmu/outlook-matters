@@ -3,6 +3,7 @@ using System.Windows.Input;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using OutlookMatters.Mattermost.DataObjects;
 using OutlookMatters.Settings;
 
 namespace OutlookMatters.Test.Settings
@@ -26,17 +27,15 @@ namespace OutlookMatters.Test.Settings
         {
             const string mattermostUrl = "http://localhost";
             const string teamId = "teamId";
-            const string channelId = "channelId";
             const string username = "username";
             var viewModel = new SettingsViewModel(
-                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty,
+                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty,
                     string.Empty),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>())
             {
                 MattermostUrl = mattermostUrl,
                 TeamId = teamId,
-                ChannelId = channelId,
                 Username = username
             };
             var saveService = new Mock<ISettingsSaveService>();
@@ -44,20 +43,14 @@ namespace OutlookMatters.Test.Settings
 
             classUnderTest.Execute(viewModel);
 
-            saveService.Verify(
-                x =>
-                    x.Save(
-                        It.Is<OutlookMatters.Settings.Settings>(
-                            s =>
-                                s.MattermostUrl == mattermostUrl && s.TeamId == teamId && s.ChannelId == channelId &&
-                                s.Username == username)));
+            saveService.Verify(x => x.SaveCredentials(mattermostUrl, teamId, username));
         }
 
         [Test]
         public void Execute_ClosesWindow()
         {
             var viewModel = new SettingsViewModel(
-                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty,
+                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty,
                     string.Empty),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>());

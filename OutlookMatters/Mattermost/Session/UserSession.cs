@@ -56,7 +56,8 @@ namespace OutlookMatters.Mattermost.Session
                     .WithHeader("Authorization", "Bearer " + _token)
                     .Get())
                 {
-                    var thread = JsonConvert.DeserializeObject<Thread>(response.GetPayload());
+                    var payload = response.GetPayload();
+                    var thread = JsonConvert.DeserializeObject<Thread>(payload);
                     return thread.posts[postId];
                 }
             }
