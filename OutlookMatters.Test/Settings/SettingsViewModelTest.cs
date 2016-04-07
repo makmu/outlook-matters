@@ -52,7 +52,7 @@ namespace OutlookMatters.Test.Settings
             var saveCommand = new Mock<ICommand>();
             var classUnderTest = new SettingsViewModel(settings, saveCommand.Object, Mock.Of<ICommand>());
 
-            var result = classUnderTest.SaveCredentials;
+            var result = classUnderTest.Save;
 
             result.Should().Be(saveCommand.Object, "because the view model should return the save command for binding");
         }
