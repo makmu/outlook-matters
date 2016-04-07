@@ -6,5 +6,6 @@ namespace OutlookMatters.Mattermost.Session
     {
         void CreatePost(string channelId, string message, string rootId = "");
         Post GetPostById(string postId);
+        ChannelList FetchChannelList();
     }
 }

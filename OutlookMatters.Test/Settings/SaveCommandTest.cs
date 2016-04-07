@@ -29,7 +29,8 @@ namespace OutlookMatters.Test.Settings
             const string channelId = "channelId";
             const string username = "username";
             var viewModel = new SettingsViewModel(
-                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty),
+                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty,
+                    string.Empty),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>())
             {
@@ -56,7 +57,8 @@ namespace OutlookMatters.Test.Settings
         public void Execute_ClosesWindow()
         {
             var viewModel = new SettingsViewModel(
-                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty),
+                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty, string.Empty,
+                    string.Empty),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>());
             var window = new Mock<IClosableWindow>();

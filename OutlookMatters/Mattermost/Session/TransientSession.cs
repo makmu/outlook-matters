@@ -33,6 +33,7 @@ namespace OutlookMatters.Mattermost.Session
                         settings.TeamId,
                         settings.Username,
                         password);
+                    _session.FetchChannelList();
                 }
                 return _session;
             }
@@ -46,6 +47,11 @@ namespace OutlookMatters.Mattermost.Session
         public Post GetPostById(string postId)
         {
             return Session.GetPostById(postId);
+        }
+
+        public ChannelList FetchChannelList()
+        {
+            return Session.FetchChannelList();
         }
 
         public void Invalidate()

@@ -67,6 +67,7 @@ namespace OutlookMatters
             return new MailItemContextMenuEntry(
                 mailExplorer,
                 settingsService,
+                settingsService,
                 errorDisplay,
                 settingsUi,
                 sessionCache,

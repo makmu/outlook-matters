@@ -187,6 +187,7 @@
     <Compile Include="Http\HttpException.cs" />
     <Compile Include="Mail\IExplorerService.cs" />
     <Compile Include="Mail\MailData.cs" />
+    <Compile Include="Mattermost\ChannelList.cs" />
     <Compile Include="Mail\MailException.cs" />
     <Compile Include="Mail\OutlookExplorerService.cs" />
     <Compile Include="Mattermost\DataObjects\Error.cs" />

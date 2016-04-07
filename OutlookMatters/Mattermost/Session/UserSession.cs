@@ -66,6 +66,25 @@ namespace OutlookMatters.Mattermost.Session
             }
         }
 
+        public ChannelList FetchChannelList()
+        {
+            try
+            {
+                const string channelsUrl = "api/v1/channels/";
+                var getUrl = new Uri(_baseUri, channelsUrl);
+                var request = _httpClient.Request(getUrl)
+                    .WithContentType("text/json")
+                    .WithHeader("Authorization", "Bearer " + _token);
+                var response = request.Get();
+                var payload = response.GetPayload();
+                return JsonConvert.DeserializeObject<ChannelList>(payload);
+            }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
+            }
+        }
+
         private Uri PostUrl(string channelId)
         {
             var postUrl = "api/v1/channels/" + channelId + "/create";
