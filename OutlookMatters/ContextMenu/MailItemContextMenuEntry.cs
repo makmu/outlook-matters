@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using OutlookMatters.Error;
 using OutlookMatters.Mail;
 using OutlookMatters.Mattermost;
+using OutlookMatters.Mattermost.DataObjects;
 using OutlookMatters.Mattermost.Session;
 using OutlookMatters.Settings;
 using OutlookMatters.Utils;
@@ -126,13 +127,22 @@ namespace OutlookMatters.ContextMenu
 
         public void OnReplyClick(Office.IRibbonControl control)
         {
-            var settings = _settingsLoadService.Load();
-            var channelId = settings.ChannelId;
             var message = FormatMessage();
             try
             {
-                var rootId = _rootPostIdProvider.Get();
-                _session.CreatePost(channelId, message, rootId);
+                var postId = _rootPostIdProvider.Get();
+                var rootPost = _session.GetPostById(postId);
+
+                string rootId;
+                if (rootPost.root_id == "")
+                {
+                    rootId = postId;
+                }
+                else
+                {
+                    rootId = rootPost.root_id;
+                }
+                _session.CreatePost(rootPost.channel_id, message, rootId);
             }
             catch (UserAbortException)
             {

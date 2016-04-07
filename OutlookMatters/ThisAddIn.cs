@@ -62,7 +62,6 @@ namespace OutlookMatters
             var settingsUi = new WpfSettingsUserInterface(settingsService, settingsService);
             var permalinkUi = new PermalinkDialogShell();
             var postIdFilter = new PostIdFromPermalinkFilter(permalinkUi);
-            var rootPostIdResolver = new RootPostIdResolver(postIdFilter, sessionCache);
 
             return new MailItemContextMenuEntry(
                 mailExplorer,
@@ -71,7 +70,7 @@ namespace OutlookMatters
                 errorDisplay,
                 settingsUi,
                 sessionCache,
-                rootPostIdResolver);
+                postIdFilter);
         }
 
         #region VSTO generated code
