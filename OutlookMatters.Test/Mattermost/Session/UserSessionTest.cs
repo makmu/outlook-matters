@@ -53,6 +53,37 @@ namespace OutlookMatters.Test.Mattermost.Session
         }
 
         [Test]
+        public void FetchChannelList_ThrowsMattermostException_IfHttpExceptionIsThrown()
+        {
+            const string errorMessage = "error message";
+            const string detailedError = "detailed error";
+            const string jsonResponse =
+                "{\"message\":\"" + errorMessage + "\",\"detailed_error\":\"" + detailedError + "\"}";
+            var baseUri = new Uri("http://localhost");
+            var httpRequest = new Mock<IHttpRequest>();
+            httpRequest.Setup(x => x.WithHeader(It.IsAny<string>(), It.IsAny<string>())).Returns(httpRequest.Object);
+            httpRequest.Setup(x => x.WithContentType(It.IsAny<string>())).Returns(httpRequest.Object);
+            var httpResponse = new Mock<IHttpResponse>();
+            httpResponse.Setup(x => x.GetPayload()).Returns(jsonResponse);
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.Setup(x => x.Request(new Uri(baseUri, "api/v1/channels/")))
+                .Returns(httpRequest.Object);
+            httpRequest.Setup(x => x.Get()).Throws(new HttpException(httpResponse.Object));
+            var classUnderTest = new UserSession(baseUri, Token, UserId, httpClient.Object);
+
+            try
+            {
+                classUnderTest.FetchChannelList();
+                Assert.Fail();
+            }
+            catch (MattermostException mex)
+            {
+                mex.Message.Should().Be(errorMessage);
+                mex.Details.Should().Be(detailedError);
+            }   
+        }
+
+        [Test]
         public void CreatePost_PostsHttpRequestWithRootId_IfRootIdProvided()
         {
             const string jsonPost =
