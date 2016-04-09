@@ -354,6 +354,49 @@ namespace OutlookMatters.Test
         }
 
         [Test]
+        public void OnRefreshChannelListClick_HandlesAnyExceptionsWhileCreatingPost()
+        {
+            var control = MockOfRibbonControl();
+            var session = new Mock<ISession>();
+            session.Setup(x => x.FetchChannelList()).Throws<Exception>();
+            var errorDisplay = new Mock<IErrorDisplay>();
+            var classUnderTest = new MailItemContextMenuEntry(
+                MockOfMailExplorer(),
+                DefaultSettingsLoadService,
+                Mock.Of<ISettingsSaveService>(),
+                errorDisplay.Object,
+                Mock.Of<ISettingsUserInterface>(),
+                session.Object,
+                Mock.Of<IStringProvider>());
+
+            classUnderTest.OnRefreshChannelListClick(control);
+
+            errorDisplay.Verify(x => x.Display(It.IsAny<Exception>()));
+        }
+
+        [Test]
+        public void OnRefreshChannelListClick_HandlesMattermostExceptionWhileFetchingChannels()
+        {
+            var control = MockOfRibbonControl();
+            var session = new Mock<ISession>();
+            session.Setup(x => x.FetchChannelList())
+                .Throws(new MattermostException(new OutlookMatters.Mattermost.DataObjects.Error()));
+            var errorDisplay = new Mock<IErrorDisplay>();
+            var classUnderTest = new MailItemContextMenuEntry(
+                MockOfMailExplorer(),
+                DefaultSettingsLoadService,
+                Mock.Of<ISettingsSaveService>(),
+                errorDisplay.Object,
+                Mock.Of<ISettingsUserInterface>(),
+                session.Object,
+                Mock.Of<IStringProvider>());
+
+            classUnderTest.OnRefreshChannelListClick(control);
+
+            errorDisplay.Verify(x => x.Display(It.IsAny<MattermostException>()));
+        }
+
+        [Test]
         public void OnRefreshChannelListClick_SavesChannelList()
         {
             const string channelId = "channel id";
