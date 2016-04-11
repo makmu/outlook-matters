@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using OutlookMatters.Utils;
+using OutlookMatters.Core.Utils;
 
-namespace OutlookMatters.Test.Utils
+namespace Test.OutlookMatters.Core.Utils
 {
     [TestFixture]
     public class UserAbortExceptionTest

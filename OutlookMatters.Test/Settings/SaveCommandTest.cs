@@ -3,10 +3,9 @@ using System.Windows.Input;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using OutlookMatters.Mattermost.DataObjects;
-using OutlookMatters.Settings;
+using OutlookMatters.Core.Settings;
 
-namespace OutlookMatters.Test.Settings
+namespace Test.OutlookMatters.Core.Settings
 {
     [TestFixture]
     public class SaveCommandTest
@@ -29,7 +28,7 @@ namespace OutlookMatters.Test.Settings
             const string teamId = "teamId";
             const string username = "username";
             var viewModel = new SettingsViewModel(
-                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty,
+                new AddInSettings(string.Empty, string.Empty, string.Empty,
                     string.Empty),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>())
@@ -50,7 +49,7 @@ namespace OutlookMatters.Test.Settings
         public void Execute_ClosesWindow()
         {
             var viewModel = new SettingsViewModel(
-                new OutlookMatters.Settings.Settings(string.Empty, string.Empty, string.Empty,
+                new AddInSettings(string.Empty, string.Empty, string.Empty,
                     string.Empty),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>());

@@ -183,66 +183,11 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Error\IErrorDisplay.cs" />
-    <Compile Include="Error\MessageBoxErrorDisplay.cs" />
-    <Compile Include="Http\HttpException.cs" />
-    <Compile Include="Mail\IExplorerService.cs" />
-    <Compile Include="Mattermost\Channel.cs" />
-    <Compile Include="Mattermost\ChannelList.cs" />
-    <Compile Include="Mail\MailException.cs" />
-    <Compile Include="Mail\OutlookExplorerService.cs" />
-    <Compile Include="Mattermost\ChannelType.cs" />
-    <Compile Include="Mattermost\DataObjects\Error.cs" />
-    <Compile Include="Mattermost\DataObjects\Login.cs" />
-    <Compile Include="Mattermost\DataObjects\Post.cs" />
-    <Compile Include="Mattermost\DataObjects\Thread.cs" />
-    <Compile Include="Mattermost\DataObjects\User.cs" />
-    <Compile Include="Mattermost\IStringProvider.cs" />
-    <Compile Include="Mattermost\MattermostException.cs" />
-    <Compile Include="Mattermost\PermalinkDialog.xaml.cs">
-      <DependentUpon>PermalinkDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Mattermost\PermalinkDialogShell.cs" />
-    <Compile Include="Mattermost\PostIdFromPermalinkFilter.cs" />
-    <Compile Include="Mattermost\Session\CompositeCache.cs" />
-    <Compile Include="Mattermost\Session\ICache.cs" />
-    <Compile Include="Mattermost\Session\TransientSession.cs" />
-    <Compile Include="Security\IPasswordProvider.cs" />
-    <Compile Include="Security\PasswordDialog.xaml.cs">
-      <DependentUpon>PasswordDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Security\PasswordDialogShell.cs" />
-    <Compile Include="Settings\ApplicationSettingsService.cs" />
-    <Compile Include="Http\DotNetHttpClient.cs" />
-    <Compile Include="Http\HttpWebRequestAdaptor.cs" />
-    <Compile Include="Http\DefaultHttpResponse.cs" />
-    <Compile Include="Http\IHttpClient.cs" />
-    <Compile Include="Http\IHttpRequest.cs" />
-    <Compile Include="Http\IHttpResponse.cs" />
-    <Compile Include="Mattermost\IMattermost.cs" />
-    <Compile Include="Mail\IMailExplorer.cs" />
-    <Compile Include="Settings\CloseCommand.cs" />
-    <Compile Include="Settings\IClosableWindow.cs" />
-    <Compile Include="Settings\ISettingsLoadService.cs" />
-    <Compile Include="Mattermost\Session\ISession.cs" />
-    <Compile Include="Mattermost\Session\ISessionFactory.cs" />
-    <Compile Include="ContextMenu\MailItemContextMenuEntry.cs" />
-    <Compile Include="Mail\OutlookMailExplorer.cs" />
+    <Compile Include="ApplicationSettingsService.cs" />
+    <Compile Include="OutlookExplorerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Mattermost\RestMattermost.cs" />
-    <Compile Include="Mattermost\Session\UserSession.cs" />
-    <Compile Include="Mattermost\Session\UserSessionFactory.cs" />
-    <Compile Include="Settings\ISettingsSaveService.cs" />
-    <Compile Include="Settings\ISettingsUserInterface.cs" />
-    <Compile Include="Settings\SaveCommand.cs" />
-    <Compile Include="Settings\Settings.cs" />
-    <Compile Include="Settings\SettingsViewModel.cs" />
-    <Compile Include="Settings\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Utils\UserAbortException.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -256,19 +201,18 @@
     <None Include="app.config" />
     <None Include="OutlookMatters_TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <DependentUpon>Settings.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ThisAddIn.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <Compile Include="Settings\WpfSettingsUserInterface.cs" />
-    <Compile Include="ThisAddIn.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>
@@ -278,23 +222,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ContextMenu\MailItemContextMenuEntry.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Mattermost\PermalinkDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Security\PasswordDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Settings\SettingsWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <ProjectReference Include="..\OutlookMatters.Core\OutlookMatters.Core.csproj">
+      <Project>{38425864-e84c-4a8d-b579-ae524e74596f}</Project>
+      <Name>OutlookMatters.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -2,7 +2,7 @@ using System.Xml;
 using FluentAssertions;
 using FluentAssertions.Primitives;
 
-namespace OutlookMatters.Test.TestUtils
+namespace Test.OutlookMatters.Core.TestUtils
 {
     public static class ExtensionMethods
     {
