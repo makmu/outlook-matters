@@ -1,8 +1,8 @@
 ﻿namespace OutlookMatters.Core.Settings
 {
-    public class Settings
+    public class AddInSettings
     {
-        public Settings(string mattermostUrl, string teamId, string username, string channelsMap)
+        public AddInSettings(string mattermostUrl, string teamId, string username, string channelsMap)
         {
             MattermostUrl = mattermostUrl;
             TeamId = teamId;
@@ -15,7 +15,7 @@
         public string Username { get; private set; }
         public string ChannelsMap { get; private set; }
 
-        protected bool Equals(Settings other)
+        protected bool Equals(AddInSettings other)
         {
             return string.Equals(MattermostUrl, other.MattermostUrl) && string.Equals(TeamId, other.TeamId) && 
                    string.Equals(Username, other.Username) &&
@@ -27,7 +27,7 @@
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Settings) obj);
+            return Equals((AddInSettings) obj);
         }
 
         public override int GetHashCode()

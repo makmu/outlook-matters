@@ -12,9 +12,9 @@ namespace OutlookMatters
             _cache = cache;
         }
 
-        public Settings Load()
+        public AddInSettings Load()
         {
-            return new Settings(
+            return new AddInSettings(
                 Properties.Settings.Default.MattermostUrl,
                 Properties.Settings.Default.TeamId,
                 Properties.Settings.Default.Username,

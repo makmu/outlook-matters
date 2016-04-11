@@ -121,7 +121,7 @@
     <Compile Include="Settings\ISettingsSaveService.cs" />
     <Compile Include="Settings\ISettingsUserInterface.cs" />
     <Compile Include="Settings\SaveCommand.cs" />
-    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Settings\AddInSettings.cs" />
     <Compile Include="Settings\SettingsViewModel.cs" />
     <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>

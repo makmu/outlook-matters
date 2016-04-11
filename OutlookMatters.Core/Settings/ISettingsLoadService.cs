@@ -2,6 +2,6 @@
 {
     public interface ISettingsLoadService
     {
-        Settings Load();
+        AddInSettings Load();
     }
 }

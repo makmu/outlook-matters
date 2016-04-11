@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace OutlookMatters.Core.Test.Settings
 {
     [TestFixture]
-    public class SettingsTest
+    public class AddInSettingsTest
     {
         [Test]
         [TestCase("", "", "", "", true)]
@@ -19,9 +19,9 @@ namespace OutlookMatters.Core.Test.Settings
             const string teamId = "team id";
             const string username = "user name";
             const string channelMap = "channel map";
-            var otherSettings = new Core.Settings.Settings(url + urlModifier, teamId + teamIdModifier,
+            var otherSettings = new Core.Settings.AddInSettings(url + urlModifier, teamId + teamIdModifier,
                 username + usernameModifier, channelMap + channelMapModifier);
-            var classUnderTest = new Core.Settings.Settings(url, teamId, username, channelMap);
+            var classUnderTest = new Core.Settings.AddInSettings(url, teamId, username, channelMap);
 
             var result = classUnderTest.Equals(otherSettings);
 
@@ -33,7 +33,7 @@ namespace OutlookMatters.Core.Test.Settings
         [TestCase("")]
         public void Equals_ReturnsFalse_IfObjectTypeDoesNotMatch(object other)
         {
-            var classUnderTest = new Core.Settings.Settings(string.Empty, string.Empty,
+            var classUnderTest = new Core.Settings.AddInSettings(string.Empty, string.Empty,
                 string.Empty, string.Empty);
 
             var result = classUnderTest.Equals(other);
@@ -44,7 +44,7 @@ namespace OutlookMatters.Core.Test.Settings
         [Test]
         public void Equals_ReturnsTrue_IfReferenceEqual()
         {
-            var classUnderTest = new Core.Settings.Settings(string.Empty, string.Empty,
+            var classUnderTest = new Core.Settings.AddInSettings(string.Empty, string.Empty,
                 string.Empty, string.Empty);
 
             var result = classUnderTest.Equals(classUnderTest);
@@ -65,8 +65,8 @@ namespace OutlookMatters.Core.Test.Settings
             const string teamId = "team id";
             const string username = "user name";
             const string channelMap = "channel map";
-            var otherSettings = new Core.Settings.Settings(url + urlModifier, teamId + teamIdModifier, username + usernameModifier, channelMap + channelMapModifier);
-            var classUnderTest = new Core.Settings.Settings(url, teamId, username, channelMap);
+            var otherSettings = new Core.Settings.AddInSettings(url + urlModifier, teamId + teamIdModifier, username + usernameModifier, channelMap + channelMapModifier);
+            var classUnderTest = new Core.Settings.AddInSettings(url, teamId, username, channelMap);
 
             var result = classUnderTest.GetHashCode() == otherSettings.GetHashCode();
 
@@ -76,8 +76,8 @@ namespace OutlookMatters.Core.Test.Settings
         [Test]
         public void GetHashCode_ReturnsSameHashCodeIfAllMembersAreNull()
         {
-            var otherSettings = new Core.Settings.Settings(null,  null, null, null);
-            var classUnderTest = new Core.Settings.Settings(null, null, null, null);
+            var otherSettings = new Core.Settings.AddInSettings(null,  null, null, null);
+            var classUnderTest = new Core.Settings.AddInSettings(null, null, null, null);
 
             var result = classUnderTest.GetHashCode();
 

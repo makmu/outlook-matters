@@ -24,7 +24,7 @@ namespace OutlookMatters.Core.Test.Settings
         public void Load_ReturnsSavedSettings()
         {
             var classUnderTest = new ApplicationSettingsService(Mock.Of<ICache>());
-            var settings = new Core.Settings.Settings("url42", "teamId42", "username42", "channelMap");
+            var settings = new Core.Settings.AddInSettings("url42", "teamId42", "username42", "channelMap");
             classUnderTest.SaveCredentials("url42", "teamId42", "username42");
             classUnderTest.SaveChannels("channelMap");
 
