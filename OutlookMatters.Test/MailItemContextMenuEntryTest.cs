@@ -98,18 +98,18 @@ namespace OutlookMatters.Test
         }
 
         [Test]
-        public void GetDynamicMenu_ReturnsNoChannelButtons_IfUserIsNotSubscribedToAnyChannel()
+        public void GetDynamicMenu_ReturnsNoChannelButtons_IfChannelTypeIsDirect()
         {
             const string channelName = "FunnyChannelName";
             const string channelId = "1234";
-            const string notSubscribedChannelType = "User is not subscribed to this channel";
+            const ChannelType directChannel= ChannelType.Direct;
             const string subscribedChannelAttribut = "OnPostIntoChannelClick";
             var channelList = new ChannelList
             {
                 Channels =
                     new List<Channel>
                     {
-                        new Channel {ChannelName = channelName, ChannelId = channelId, Type = notSubscribedChannelType}
+                        new Channel {ChannelName = channelName, ChannelId = channelId, Type = directChannel}
                     }
             };
             var channels = JsonConvert.SerializeObject(channelList);
@@ -141,13 +141,13 @@ namespace OutlookMatters.Test
             const string channelButtonIdPrefix = "channel_id-";
             const string channelName = "FunnyChannelName";
             const string channelId = "1234";
-            const string subscribedChannelType = "O";
+            const ChannelType publicChannel = ChannelType.Public;
             var channelList = new ChannelList
             {
                 Channels =
                     new List<Channel>
                     {
-                        new Channel {ChannelName = channelName, ChannelId = channelId, Type = subscribedChannelType}
+                        new Channel {ChannelName = channelName, ChannelId = channelId, Type = publicChannel}
                     }
             };
             var channels = JsonConvert.SerializeObject(channelList);
@@ -401,9 +401,9 @@ namespace OutlookMatters.Test
         {
             const string channelId = "channel id";
             const string channelName = "channel name";
-            const string channelType = "channel type";
+            const ChannelType channelType = ChannelType.Public;
             const string expectedChannelMapResult =
-                "{\"channels\":[{\"id\":\"channel id\",\"display_name\":\"channel name\",\"type\":\"channel type\"}]}";
+                "{\"channels\":[{\"id\":\"channel id\",\"display_name\":\"channel name\",\"type\":\"O\"}]}";
             var channelList = new ChannelList
             {
                 Channels =
