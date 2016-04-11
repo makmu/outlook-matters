@@ -1,5 +1,4 @@
-﻿using OutlookMatters.Core.Mattermost;
-using OutlookMatters.Core.Utils;
+﻿using OutlookMatters.Core.Utils;
 
 namespace OutlookMatters.Core.Reply
 {
