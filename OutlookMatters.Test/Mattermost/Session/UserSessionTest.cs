@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using OutlookMatters.Http;
 using OutlookMatters.Mattermost;
+using OutlookMatters.Mattermost.DataObjects;
 using OutlookMatters.Mattermost.Session;
 
 namespace OutlookMatters.Test.Mattermost.Session
@@ -21,7 +22,7 @@ namespace OutlookMatters.Test.Mattermost.Session
         public void CreatePost_PostsHttpRequest()
         {
             const string jsonPost =
-                @"{""channel_id"":""channelId"",""message"":""Hello World!"",""user_id"":""userId"",""root_id"":""""}";
+                @"{""id"":"""",""channel_id"":""channelId"",""message"":""Hello World!"",""user_id"":""userId"",""root_id"":""""}";
             var httpRequest = new Mock<IHttpRequest>();
             var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
 
@@ -38,6 +39,7 @@ namespace OutlookMatters.Test.Mattermost.Session
             const string channelName = "FunnyChannelName";
             const string channelId = "1234";
             const string channelType = "O";
+            const ChannelType expectedChannelType = ChannelType.Public;
             const string jsonResponse =
                 "{\"channels\":[{\"id\":\"" + channelId +
                 "\",\"create_at\":1458911668852,\"update_at\":1458911668852,\"delete_at\":0,\"type\":\"" + channelType +
@@ -49,7 +51,7 @@ namespace OutlookMatters.Test.Mattermost.Session
 
             result.Channels[0].ChannelId.Should().Be(channelId);
             result.Channels[0].ChannelName.Should().Be(channelName);
-            result.Channels[0].Type.Should().Be(channelType);
+            result.Channels[0].Type.Should().Be(expectedChannelType);
         }
 
         [Test]
@@ -87,7 +89,7 @@ namespace OutlookMatters.Test.Mattermost.Session
         public void CreatePost_PostsHttpRequestWithRootId_IfRootIdProvided()
         {
             const string jsonPost =
-                @"{""channel_id"":""channelId"",""message"":""Hello World!"",""user_id"":""userId"",""root_id"":""rootId""}";
+                @"{""id"":"""",""channel_id"":""channelId"",""message"":""Hello World!"",""user_id"":""userId"",""root_id"":""rootId""}";
             var httpRequest = new Mock<IHttpRequest>();
             var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
 
@@ -138,7 +140,7 @@ namespace OutlookMatters.Test.Mattermost.Session
         }
 
         [Test]
-        public void GetPostById_GetsPostsRootId()
+        public void GetRootPost_ReturnsRootPost()
         {
             const string response =
                 "{\"order\":[\"pts7w4o6rignmm5jkwntk6st1a\"],\"posts\":{\"948swb8oxjf1ifc464ddz8h1ph\":{\"id\":\"948swb8oxjf1ifc464ddz8h1ph\",\"create_at\":1458850996664,\"update_at\":1458850996664,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"root_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"parent_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"},\"pts7w4o6rignmm5jkwntk6st1a\":{\"id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"create_at\":1458847220284,\"update_at\":1458850996665,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"root_id\":\"\",\"parent_id\":\"\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"}}}";
@@ -156,13 +158,13 @@ namespace OutlookMatters.Test.Mattermost.Session
             httpRequest.Setup(x => x.Get()).Returns(httpResponse.Object);
             var classUnderTest = new UserSession(baseUri, Token, UserId, httpClient.Object);
 
-            var post = classUnderTest.GetPostById(postId);
+            var post = classUnderTest.GetRootPost(postId);
 
-            post.root_id.Should().Be("pts7w4o6rignmm5jkwntk6st1a");
+            post.id.Should().Be("pts7w4o6rignmm5jkwntk6st1a");
         }
 
         [Test]
-        public void GetPostById_ThrowsMattermostException_IfHttpExceptionIsThrown()
+        public void GetRootPost_ThrowsMattermostException_IfHttpExceptionIsThrown()
         {
             const string errorMessage = "error message";
             const string detailedError = "detailed error";
@@ -183,7 +185,7 @@ namespace OutlookMatters.Test.Mattermost.Session
 
             try
             {
-                classUnderTest.GetPostById(postId);
+                classUnderTest.GetRootPost(postId);
                 Assert.Fail();
             }
             catch (MattermostException mex)
@@ -194,12 +196,13 @@ namespace OutlookMatters.Test.Mattermost.Session
         }
 
         [Test]
-        public void GetPostById_DisposesHttpResponse()
+        public void GetRootPost_DisposesHttpResponse()
         {
             const string response =
                 "{\"order\":[\"pts7w4o6rignmm5jkwntk6st1a\"],\"posts\":{\"948swb8oxjf1ifc464ddz8h1ph\":{\"id\":\"948swb8oxjf1ifc464ddz8h1ph\",\"create_at\":1458850996664,\"update_at\":1458850996664,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"root_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"parent_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"},\"pts7w4o6rignmm5jkwntk6st1a\":{\"id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"create_at\":1458847220284,\"update_at\":1458850996665,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"root_id\":\"\",\"parent_id\":\"\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"}}}";
 
             const string postId = "948swb8oxjf1ifc464ddz8h1ph";
+            
             var baseUri = new Uri("http://localhost");
             var httpRequest = new Mock<IHttpRequest>();
             httpRequest.Setup(x => x.WithHeader(It.IsAny<string>(), It.IsAny<string>())).Returns(httpRequest.Object);
@@ -212,11 +215,36 @@ namespace OutlookMatters.Test.Mattermost.Session
             httpRequest.Setup(x => x.Get()).Returns(httpResponse.Object);
             var classUnderTest = new UserSession(baseUri, Token, UserId, httpClient.Object);
 
-            classUnderTest.GetPostById(postId);
-
+            classUnderTest.GetRootPost(postId);
+            
             httpResponse.Verify(x => x.Dispose());
         }
 
+        [Test]
+        public void GetRootPost_ReturnsRootPost_IfParentIsNotRootPost()
+        {
+            const string response =
+                "{\"order\":[\"pts7w4o6rignmm5jkwntk6st1a\"],\"posts\":{\"948swb8oxjf1ifc464ddz8h1ph\":{\"id\":\"948swb8oxjf1ifc464ddz8h1ph\",\"create_at\":1458850996664,\"update_at\":1458850996664,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"root_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"parent_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"},\"pts7w4o6rignmm5jkwntk6st1a\":{\"id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"create_at\":1458847220284,\"update_at\":1458850996665,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"root_id\":\"\",\"parent_id\":\"\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"}}}";
+
+            const string postId = "948swb8oxjf1ifc464ddz8h1ph";
+            const string rootId = "pts7w4o6rignmm5jkwntk6st1a";
+            var baseUri = new Uri("http://localhost");
+            var httpRequest = new Mock<IHttpRequest>();
+            httpRequest.Setup(x => x.WithHeader(It.IsAny<string>(), It.IsAny<string>())).Returns(httpRequest.Object);
+            httpRequest.Setup(x => x.WithContentType(It.IsAny<string>())).Returns(httpRequest.Object);
+            var httpResponse = new Mock<IHttpResponse>();
+            httpResponse.Setup(x => x.GetPayload()).Returns(response);
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.Setup(x => x.Request(It.IsAny<Uri>()))
+                .Returns(httpRequest.Object);
+            httpRequest.Setup(x => x.Get()).Returns(httpResponse.Object);
+            var classUnderTest = new UserSession(baseUri, Token, UserId, httpClient.Object);
+
+            
+            var result = classUnderTest.GetRootPost(postId);
+
+            Assert.That(result.id, Is.EqualTo(rootId));
+        }
 
         private static UserSession SetupUserSessionForCreatingPosts(Mock<IHttpRequest> httpRequest)
         {

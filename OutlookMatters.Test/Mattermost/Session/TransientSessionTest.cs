@@ -118,9 +118,9 @@ namespace OutlookMatters.Test.Mattermost.Session
                 settingsLoadService.Object,
                 Mock.Of<IPasswordProvider>());
 
-            classUnderTest.GetPostById(PostId);
+            classUnderTest.GetRootPost(PostId);
 
-            session.Verify(x => x.GetPostById(PostId));
+            session.Verify(x => x.GetRootPost(PostId));
         }
 
         [Test]

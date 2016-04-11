@@ -139,17 +139,9 @@ namespace OutlookMatters.ContextMenu
             try
             {
                 var postId = _rootPostIdProvider.Get();
-                var rootPost = _session.GetPostById(postId);
+                var rootPost = _session.GetRootPost(postId);
+                var rootId = rootPost.id;
 
-                string rootId;
-                if (rootPost.root_id == "")
-                {
-                    rootId = postId;
-                }
-                else
-                {
-                    rootId = rootPost.root_id;
-                }
                 _session.CreatePost(rootPost.channel_id, message, rootId);
             }
             catch (UserAbortException)

@@ -462,9 +462,9 @@ namespace OutlookMatters.Test
         {
             const string rootId = "rootId";
             const string channelId = "channelId";
-            var post = new Post {root_id = rootId, channel_id = channelId};
+            var rootPost = new Post {id = rootId, channel_id = channelId};
             var session = new Mock<ISession>();
-            session.Setup(x => x.GetPostById(rootId)).Returns(post);
+            session.Setup(x => x.GetRootPost(rootId)).Returns(rootPost);
             var explorer = new Mock<IMailExplorer>();
             explorer.Setup(x => x.QuerySelectedMailItem()).Returns(MockMailItem());
             var rootPostIdProvider = new Mock<IStringProvider>();
@@ -512,7 +512,7 @@ namespace OutlookMatters.Test
             postIdProvider.Setup(x => x.Get()).Returns(string.Empty);
             var post = new Post {root_id = string.Empty};
             var session = new Mock<ISession>();
-            session.Setup(x => x.GetPostById(string.Empty)).Returns(post);
+            session.Setup(x => x.GetRootPost(string.Empty)).Returns(post);
             session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new MattermostException(new OutlookMatters.Mattermost.DataObjects.Error()));
             var errorDisplay = new Mock<IErrorDisplay>();
@@ -528,56 +528,6 @@ namespace OutlookMatters.Test
             classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
 
             errorDisplay.Verify(x => x.Display(It.IsAny<MattermostException>()));
-        }
-
-        [Test]
-        public void OnReplyClick_UsesPostId_IfRootIdIsEmpty()
-        {
-            const string postId = "postId";
-            const string emptyRootId = "";
-            var postIdProvider = new Mock<IStringProvider>();
-            postIdProvider.Setup(x => x.Get()).Returns(postId);
-            var post = new Post { root_id = emptyRootId };
-            var session = new Mock<ISession>();
-            session.Setup(x => x.GetPostById(postId)).Returns(post);
-            var errorDisplay = new Mock<IErrorDisplay>();
-            var classUnderTest = new MailItemContextMenuEntry(
-                MockOfMailExplorer(),
-                DefaultSettingsLoadService,
-                Mock.Of<ISettingsSaveService>(),
-                errorDisplay.Object,
-                Mock.Of<ISettingsUserInterface>(),
-                session.Object,
-                postIdProvider.Object);
-
-            classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
-
-            session.Verify(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), postId));
-        }
-
-        [Test]
-        public void OnReplyClick_UsesRootId_IfRootIdIsNotEmpty()
-        {
-            const string postId = "postId";
-            const string notEmptyRootId = "NotEmpty";
-            var postIdProvider = new Mock<IStringProvider>();
-            postIdProvider.Setup(x => x.Get()).Returns(postId);
-            var post = new Post { root_id = notEmptyRootId };
-            var session = new Mock<ISession>();
-            session.Setup(x => x.GetPostById(postId)).Returns(post);
-            var errorDisplay = new Mock<IErrorDisplay>();
-            var classUnderTest = new MailItemContextMenuEntry(
-                MockOfMailExplorer(),
-                DefaultSettingsLoadService,
-                Mock.Of<ISettingsSaveService>(),
-                errorDisplay.Object,
-                Mock.Of<ISettingsUserInterface>(),
-                session.Object,
-                postIdProvider.Object);
-
-            classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
-
-            session.Verify(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), notEmptyRootId));
         }
 
         [Test]
