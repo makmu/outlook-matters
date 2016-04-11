@@ -34,7 +34,7 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             httpRequest.Setup(x => x.WithContentType("text/json")).Returns(httpRequest.Object);
             httpRequest.Setup(x => x.Post(jsonPost)).Returns(httpResponse.Object);
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.Request(new Uri(new Uri(url), "api/v1/users/client")))
+            httpClient.Setup(x => x.Request(new Uri(new Uri(url), "api/v1/users/login")))
                 .Returns(httpRequest.Object);
             var classUnderTest = new HttpClient(sessionFactory.Object, httpClient.Object);
 

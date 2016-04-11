@@ -20,7 +20,7 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
         {
             try
             {
-                var loginUrl = new Uri(new Uri(url), "api/v1/users/client");
+                var loginUrl = new Uri(new Uri(url), "api/v1/users/login");
                 var login = new Login
                 {
                     name = teamId,
