@@ -1,4 +1,4 @@
-﻿using OutlookMatters.Core.Mattermost.Session;
+﻿using OutlookMatters.Core.Cache;
 using OutlookMatters.Core.Settings;
 
 namespace OutlookMatters

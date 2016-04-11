@@ -3,12 +3,15 @@ using System.Deployment.Application;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
+using OutlookMatters.Core.Cache;
 using OutlookMatters.Core.ContextMenu;
 using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Http;
 using OutlookMatters.Core.Mail;
 using OutlookMatters.Core.Mattermost;
-using OutlookMatters.Core.Mattermost.Session;
+using OutlookMatters.Core.Mattermost.HttpImpl;
+using OutlookMatters.Core.Mattermost.Utils;
+using OutlookMatters.Core.Reply;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Settings;
 using Office = Microsoft.Office.Core;
@@ -50,7 +53,7 @@ namespace OutlookMatters
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             var httpClient = new DotNetHttpClient();
-            var mattermost = new RestMattermost(new UserSessionFactory(httpClient), httpClient);
+            var mattermost = new HttpClient(new HttpSessionFactory(httpClient), httpClient);
             var passwordDialog = new PasswordDialogShell();
             var caches = new CompositeCache();
             var settingsService = new ApplicationSettingsService(caches);

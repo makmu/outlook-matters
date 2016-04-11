@@ -2,7 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using OutlookMatters;
-using OutlookMatters.Core.Mattermost.Session;
+using OutlookMatters.Core.Cache;
 using OutlookMatters.Core.Settings;
 
 namespace Test.OutlookMatters.Core.Settings
