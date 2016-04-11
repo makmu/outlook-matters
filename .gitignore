@@ -6,3 +6,4 @@
 *.suo
 TestResult.xml
 results.xml
+.nuget
