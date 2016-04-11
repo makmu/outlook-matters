@@ -11,6 +11,7 @@ using OutlookMatters.Core.Mattermost;
 using OutlookMatters.Core.Mattermost.Session;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Settings;
+using Application = Microsoft.Office.Interop.Outlook.Application;
 using Office = Microsoft.Office.Core;
 
 namespace OutlookMatters
@@ -56,7 +57,7 @@ namespace OutlookMatters
             var settingsService = new ApplicationSettingsService(caches);
             var sessionCache = new TransientSession(mattermost, settingsService, passwordDialog);
             caches.Add(sessionCache);
-            var explorerService = new OutlookExplorerService(Globals.ThisAddIn.Application);
+            var explorerService = new OutlookExplorerService();
             var mailExplorer = new OutlookMailExplorer(explorerService);
             var errorDisplay = new MessageBoxErrorDisplay();
             var settingsUi = new WpfSettingsUserInterface(settingsService, settingsService);

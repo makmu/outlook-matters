@@ -1,6 +1,7 @@
 ﻿using OutlookMatters.Core.Mattermost.Session;
+using OutlookMatters.Core.Settings;
 
-namespace OutlookMatters.Core.Settings
+namespace OutlookMatters
 {
     public class ApplicationSettingsService : ISettingsLoadService, ISettingsSaveService
     {

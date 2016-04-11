@@ -96,6 +96,10 @@
       <Project>{38425864-e84c-4a8d-b579-ae524e74596f}</Project>
       <Name>OutlookMatters.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OutlookMatters\OutlookMatters.csproj">
+      <Project>{098e0b7f-1210-4931-aba5-1b7ffde478e1}</Project>
+      <Name>OutlookMatters</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

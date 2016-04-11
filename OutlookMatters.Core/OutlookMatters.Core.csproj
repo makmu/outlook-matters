@@ -84,7 +84,6 @@
     <Compile Include="Mail\IExplorerService.cs" />
     <Compile Include="Mail\IMailExplorer.cs" />
     <Compile Include="Mail\MailException.cs" />
-    <Compile Include="Mail\OutlookExplorerService.cs" />
     <Compile Include="Mail\OutlookMailExplorer.cs" />
     <Compile Include="Mattermost\Channel.cs" />
     <Compile Include="Mattermost\ChannelList.cs" />
@@ -111,17 +110,11 @@
     <Compile Include="Mattermost\Session\UserSession.cs" />
     <Compile Include="Mattermost\Session\UserSessionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <DependentUpon>Settings.settings</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <Compile Include="Security\IPasswordProvider.cs" />
     <Compile Include="Security\PasswordDialog.xaml.cs">
       <DependentUpon>PasswordDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Security\PasswordDialogShell.cs" />
-    <Compile Include="Settings\ApplicationSettingsService.cs" />
     <Compile Include="Settings\CloseCommand.cs" />
     <Compile Include="Settings\IClosableWindow.cs" />
     <Compile Include="Settings\ISettingsLoadService.cs" />
@@ -156,11 +149,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
