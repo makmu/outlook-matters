@@ -11,6 +11,6 @@ namespace OutlookMatters.Mattermost
         public string ChannelName { get; set; }
 
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public ChannelType Type { get; set; }
     }
 }

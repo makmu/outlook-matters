@@ -137,6 +137,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
@@ -190,6 +191,7 @@
     <Compile Include="Mattermost\ChannelList.cs" />
     <Compile Include="Mail\MailException.cs" />
     <Compile Include="Mail\OutlookExplorerService.cs" />
+    <Compile Include="Mattermost\ChannelType.cs" />
     <Compile Include="Mattermost\DataObjects\Error.cs" />
     <Compile Include="Mattermost\DataObjects\Login.cs" />
     <Compile Include="Mattermost\DataObjects\Post.cs" />

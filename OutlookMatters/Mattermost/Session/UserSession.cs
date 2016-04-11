@@ -24,7 +24,7 @@ namespace OutlookMatters.Mattermost.Session
         {
             try
             {
-                var post = new Post {channel_id = channelId, message = message, user_id = _userId, root_id = rootId};
+                var post = new Post { id = string.Empty, channel_id = channelId, message = message, user_id = _userId, root_id = rootId};
                 var postUrl = PostUrl(channelId);
                 using (_httpClient.Request(postUrl)
                     .WithContentType("text/json")
@@ -46,7 +46,7 @@ namespace OutlookMatters.Mattermost.Session
             return exception;
         }
 
-        public Post GetPostById(string postId)
+        public Post GetRootPost(string postId)
         {
             try
             {
@@ -58,7 +58,15 @@ namespace OutlookMatters.Mattermost.Session
                 {
                     var payload = response.GetPayload();
                     var thread = JsonConvert.DeserializeObject<Thread>(payload);
-                    return thread.posts[postId];
+                    var rootId = thread.posts[postId].root_id;
+
+                    if (rootId == "")
+                    {
+                        return thread.posts[postId];
+                    }
+                    
+                    return thread.posts[rootId];
+                    
                 }
             }
             catch (HttpException hex)

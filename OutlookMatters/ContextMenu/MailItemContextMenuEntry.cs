@@ -18,7 +18,6 @@ namespace OutlookMatters.ContextMenu
     public class MailItemContextMenuEntry : Office.IRibbonExtensibility
     {
         private const string CHANNEL_BUTTON_ID_PREFIX = "channel_id-";
-        private const string SUBSCRIBED_CHANNEL_TYPE = "O";
 
         private readonly IErrorDisplay _errorDisplay;
         private readonly IMailExplorer _explorer;
@@ -64,7 +63,7 @@ namespace OutlookMatters.ContextMenu
             {
                 for (int index = 0; index < channelList.Channels.Count; index++)
                 {
-                    if (channelList.Channels[index].Type == SUBSCRIBED_CHANNEL_TYPE)
+                    if (channelList.Channels[index].Type == ChannelType.Public)
                     {
                         xmlString += CreateChannelButton(channelList.Channels[index].ChannelId,
                             channelList.Channels[index].ChannelName);
@@ -140,17 +139,9 @@ namespace OutlookMatters.ContextMenu
             try
             {
                 var postId = _rootPostIdProvider.Get();
-                var rootPost = _session.GetPostById(postId);
+                var rootPost = _session.GetRootPost(postId);
+                var rootId = rootPost.id;
 
-                string rootId;
-                if (rootPost.root_id == "")
-                {
-                    rootId = postId;
-                }
-                else
-                {
-                    rootId = rootPost.root_id;
-                }
                 _session.CreatePost(rootPost.channel_id, message, rootId);
             }
             catch (UserAbortException)
