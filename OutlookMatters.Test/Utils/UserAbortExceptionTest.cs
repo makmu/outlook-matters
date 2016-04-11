@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using OutlookMatters.Core.Utils;
 
-namespace OutlookMatters.Core.Test.Utils
+namespace Test.OutlookMatters.Core.Utils
 {
     [TestFixture]
     public class UserAbortExceptionTest

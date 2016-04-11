@@ -5,7 +5,7 @@ using OutlookMatters.Core.Mattermost.Session;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Settings;
 
-namespace OutlookMatters.Core.Test.Mattermost.Session
+namespace Test.OutlookMatters.Core.Mattermost.Session
 {
     [TestFixture]
     public class TransientSessionTest
@@ -19,7 +19,7 @@ namespace OutlookMatters.Core.Test.Mattermost.Session
         public void CreatePost_CreatesPostUsingCurrentSession()
         {
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new Core.Settings.AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
+            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var mattermost = new Mock<IMattermost>();
             var session = new Mock<ISession>();
@@ -83,7 +83,7 @@ namespace OutlookMatters.Core.Test.Mattermost.Session
             var session1 = new Mock<ISession>();
             var session2 = new Mock<ISession>();
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new Core.Settings.AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
+            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
 
             mattermost.SetupSequence(
@@ -106,7 +106,7 @@ namespace OutlookMatters.Core.Test.Mattermost.Session
         public void GetPostById_ReturnsPostFromCurrentSession()
         {
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new Core.Settings.AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
+            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var mattermost = new Mock<IMattermost>();
             var session = new Mock<ISession>();
@@ -126,7 +126,7 @@ namespace OutlookMatters.Core.Test.Mattermost.Session
         public void FetchChannelList_ReturnsChannelListFromCurrentSession()
         {
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new Core.Settings.AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
+            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var mattermost = new Mock<IMattermost>();
             var session = new Mock<ISession>();
@@ -145,7 +145,7 @@ namespace OutlookMatters.Core.Test.Mattermost.Session
         {
             get
             {
-                var settings = new Core.Settings.AddInSettings("http://localhost", "teamId",
+                var settings = new AddInSettings("http://localhost", "teamId",
                     "username", "channels");
                 var settingsLoadService = new Mock<ISettingsLoadService>();
                 settingsLoadService.Setup(x => x.Load()).Returns(settings);

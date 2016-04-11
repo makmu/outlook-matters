@@ -6,7 +6,7 @@ using OutlookMatters.Core.Http;
 using OutlookMatters.Core.Mattermost;
 using OutlookMatters.Core.Mattermost.Session;
 
-namespace OutlookMatters.Core.Test.Mattermost.Session
+namespace Test.OutlookMatters.Core.Mattermost.Session
 {
     [TestFixture]
     public class UserSessionTest

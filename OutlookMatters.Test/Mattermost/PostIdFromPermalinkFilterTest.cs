@@ -3,7 +3,7 @@ using Moq;
 using NUnit.Framework;
 using OutlookMatters.Core.Mattermost;
 
-namespace OutlookMatters.Core.Test.Mattermost
+namespace Test.OutlookMatters.Core.Mattermost
 {
     [TestFixture]
     public class PostIdFromPermalinkFilterTest

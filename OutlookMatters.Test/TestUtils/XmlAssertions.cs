@@ -1,6 +1,6 @@
 using FluentAssertions.Primitives;
 
-namespace OutlookMatters.Core.Test.TestUtils
+namespace Test.OutlookMatters.Core.TestUtils
 {
     public class XmlAssertions
     {

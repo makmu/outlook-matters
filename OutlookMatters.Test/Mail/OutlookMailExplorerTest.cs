@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using OutlookMatters.Core.Mail;
 
-namespace OutlookMatters.Core.Test.Mail
+namespace Test.OutlookMatters.Core.Mail
 {
     [TestFixture]
     public class OutlookMailExplorerTest

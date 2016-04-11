@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using OutlookMatters.Core.Mattermost.Session;
 
-namespace OutlookMatters.Core.Test.Mattermost.Session
+namespace Test.OutlookMatters.Core.Mattermost.Session
 {
     [TestFixture]
     public class CompositeCacheTest

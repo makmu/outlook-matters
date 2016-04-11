@@ -3,7 +3,7 @@ using Moq;
 using NUnit.Framework;
 using OutlookMatters.Core.Settings;
 
-namespace OutlookMatters.Core.Test
+namespace Test.OutlookMatters.Core
 {
     [TestFixture]
     public class CloseCommandTest

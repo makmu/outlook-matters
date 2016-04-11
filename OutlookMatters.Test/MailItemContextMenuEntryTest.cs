@@ -13,11 +13,11 @@ using OutlookMatters.Core.Mattermost.DataObjects;
 using OutlookMatters.Core.Mattermost.Session;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Settings;
-using OutlookMatters.Core.Test.TestUtils;
 using OutlookMatters.Core.Utils;
+using Test.OutlookMatters.Core.TestUtils;
 using Exception = System.Exception;
 
-namespace OutlookMatters.Core.Test
+namespace Test.OutlookMatters.Core
 {
     [TestFixture]
     public class MailItemContextMenuEntryTest
@@ -26,7 +26,7 @@ namespace OutlookMatters.Core.Test
         {
             get
             {
-                var settings = new Core.Settings.AddInSettings("http://localhost", "teamId",
+                var settings = new AddInSettings("http://localhost", "teamId",
                     "username", "channels");
                 var settingsLoadService = new Mock<ISettingsLoadService>();
                 settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -113,7 +113,7 @@ namespace OutlookMatters.Core.Test
                     }
             };
             var channels = JsonConvert.SerializeObject(channelList);
-            var settings = new Core.Settings.AddInSettings("http://localhost", "teamId", 
+            var settings = new AddInSettings("http://localhost", "teamId", 
                 "username", channels);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -151,7 +151,7 @@ namespace OutlookMatters.Core.Test
                     }
             };
             var channels = JsonConvert.SerializeObject(channelList);
-            var settings = new Core.Settings.AddInSettings("http://localhost", "teamId", 
+            var settings = new AddInSettings("http://localhost", "teamId", 
                 "username", channels);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -180,7 +180,7 @@ namespace OutlookMatters.Core.Test
         [Test]
         public void GetDynamicMenu_ReturnsReplyButton()
         {
-            var settings = new Core.Settings.AddInSettings("http://localhost", "teamId", 
+            var settings = new AddInSettings("http://localhost", "teamId", 
                 "username", string.Empty);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -208,7 +208,7 @@ namespace OutlookMatters.Core.Test
         [Test]
         public void GetDynamicMenu_ReturnsSettingsButton()
         {
-            var settings = new Core.Settings.AddInSettings(string.Empty, string.Empty,
+            var settings = new AddInSettings(string.Empty, string.Empty,
                 string.Empty, string.Empty);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -238,7 +238,7 @@ namespace OutlookMatters.Core.Test
         {
             const string subscribedChannelAttribut = "OnPostIntoChannelClick";
             var channels = string.Empty;
-            var settings = new Core.Settings.AddInSettings("http://localhost", "teamId",
+            var settings = new AddInSettings("http://localhost", "teamId",
                 "username", channels);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -337,7 +337,7 @@ namespace OutlookMatters.Core.Test
             var control = MockOfRibbonControl();
             var session = new Mock<ISession>();
             session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Throws(new MattermostException(new Core.Mattermost.DataObjects.Error()));
+                .Throws(new MattermostException(new Error()));
             var errorDisplay = new Mock<IErrorDisplay>();
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
@@ -380,7 +380,7 @@ namespace OutlookMatters.Core.Test
             var control = MockOfRibbonControl();
             var session = new Mock<ISession>();
             session.Setup(x => x.FetchChannelList())
-                .Throws(new MattermostException(new Core.Mattermost.DataObjects.Error()));
+                .Throws(new MattermostException(new Error()));
             var errorDisplay = new Mock<IErrorDisplay>();
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
@@ -514,7 +514,7 @@ namespace OutlookMatters.Core.Test
             var session = new Mock<ISession>();
             session.Setup(x => x.GetRootPost(string.Empty)).Returns(post);
             session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Throws(new MattermostException(new Core.Mattermost.DataObjects.Error()));
+                .Throws(new MattermostException(new Error()));
             var errorDisplay = new Mock<IErrorDisplay>();
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
