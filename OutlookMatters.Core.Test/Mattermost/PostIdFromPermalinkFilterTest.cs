@@ -12,7 +12,7 @@ namespace Test.OutlookMatters.Core.Mattermost
         public void Get_ExtractsPostIdFromPermalink()
         {
             var baseProvider = new Mock<IStringProvider>();
-            baseProvider.Setup( x=>x.Get()).Returns("http://localhost/teamid/pl/abcdefghijklmnopqrstuvwxyz");
+            baseProvider.Setup(x => x.Get()).Returns("http://localhost/teamid/pl/abcdefghijklmnopqrstuvwxyz");
             var classUnderTest = new PostIdFromPermalinkFilter(baseProvider.Object);
 
             var result = classUnderTest.Get();

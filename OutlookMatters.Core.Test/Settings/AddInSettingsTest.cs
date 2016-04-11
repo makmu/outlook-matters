@@ -66,7 +66,8 @@ namespace Test.OutlookMatters.Core.Settings
             const string teamId = "team id";
             const string username = "user name";
             const string channelMap = "channel map";
-            var otherSettings = new AddInSettings(url + urlModifier, teamId + teamIdModifier, username + usernameModifier, channelMap + channelMapModifier);
+            var otherSettings = new AddInSettings(url + urlModifier, teamId + teamIdModifier,
+                username + usernameModifier, channelMap + channelMapModifier);
             var classUnderTest = new AddInSettings(url, teamId, username, channelMap);
 
             var result = classUnderTest.GetHashCode() == otherSettings.GetHashCode();
@@ -77,7 +78,7 @@ namespace Test.OutlookMatters.Core.Settings
         [Test]
         public void GetHashCode_ReturnsSameHashCodeIfAllMembersAreNull()
         {
-            var otherSettings = new AddInSettings(null,  null, null, null);
+            var otherSettings = new AddInSettings(null, null, null, null);
             var classUnderTest = new AddInSettings(null, null, null, null);
 
             var result = classUnderTest.GetHashCode();

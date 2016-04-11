@@ -102,7 +102,7 @@ namespace Test.OutlookMatters.Core
         {
             const string channelName = "FunnyChannelName";
             const string channelId = "1234";
-            const ChannelType directChannel= ChannelType.Direct;
+            const ChannelType directChannel = ChannelType.Direct;
             const string subscribedChannelAttribut = "OnPostIntoChannelClick";
             var channelList = new ChannelList
             {
@@ -113,7 +113,7 @@ namespace Test.OutlookMatters.Core
                     }
             };
             var channels = JsonConvert.SerializeObject(channelList);
-            var settings = new AddInSettings("http://localhost", "teamId", 
+            var settings = new AddInSettings("http://localhost", "teamId",
                 "username", channels);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -151,7 +151,7 @@ namespace Test.OutlookMatters.Core
                     }
             };
             var channels = JsonConvert.SerializeObject(channelList);
-            var settings = new AddInSettings("http://localhost", "teamId", 
+            var settings = new AddInSettings("http://localhost", "teamId",
                 "username", channels);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
@@ -180,7 +180,7 @@ namespace Test.OutlookMatters.Core
         [Test]
         public void GetDynamicMenu_ReturnsReplyButton()
         {
-            var settings = new AddInSettings("http://localhost", "teamId", 
+            var settings = new AddInSettings("http://localhost", "teamId",
                 "username", string.Empty);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);

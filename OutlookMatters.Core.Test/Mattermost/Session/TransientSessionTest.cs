@@ -140,7 +140,7 @@ namespace Test.OutlookMatters.Core.Mattermost.Session
 
             session.Verify(x => x.FetchChannelList());
         }
-        
+
         private static ISettingsLoadService DefaultSettingsLoadService
         {
             get

@@ -129,7 +129,6 @@ namespace OutlookMatters.Core.ContextMenu
             {
                 _errorDisplay.Display(exception);
             }
-            
         }
 
         public void OnReplyClick(Office.IRibbonControl control)

@@ -4,14 +4,11 @@ using System.Runtime.Serialization;
 
 namespace OutlookMatters.Core.Mattermost
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof (StringEnumConverter))]
     public enum ChannelType
     {
-        [EnumMember(Value="O")]
-        Public,
-        [EnumMember(Value="P")]
-        Private,
-        [EnumMember(Value="D")]
-        Direct
+        [EnumMember(Value = "O")] Public,
+        [EnumMember(Value = "P")] Private,
+        [EnumMember(Value = "D")] Direct
     }
 }

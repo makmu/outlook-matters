@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Office.Interop.Outlook;
+﻿using Microsoft.Office.Interop.Outlook;
 using OutlookMatters.Core.Mail;
 
 namespace OutlookMatters

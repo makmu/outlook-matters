@@ -2,7 +2,7 @@
 
 namespace OutlookMatters.Core.Mattermost
 {
-    public class PermalinkDialogShell: IStringProvider
+    public class PermalinkDialogShell : IStringProvider
     {
         public string Get()
         {

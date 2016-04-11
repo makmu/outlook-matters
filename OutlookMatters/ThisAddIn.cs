@@ -11,7 +11,6 @@ using OutlookMatters.Core.Mattermost;
 using OutlookMatters.Core.Mattermost.Session;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Settings;
-using Application = Microsoft.Office.Interop.Outlook.Application;
 using Office = Microsoft.Office.Core;
 
 namespace OutlookMatters

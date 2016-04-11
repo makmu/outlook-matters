@@ -17,7 +17,7 @@
 
         protected bool Equals(AddInSettings other)
         {
-            return string.Equals(MattermostUrl, other.MattermostUrl) && string.Equals(TeamId, other.TeamId) && 
+            return string.Equals(MattermostUrl, other.MattermostUrl) && string.Equals(TeamId, other.TeamId) &&
                    string.Equals(Username, other.Username) &&
                    string.Equals(ChannelsMap, other.ChannelsMap);
         }

@@ -24,7 +24,14 @@ namespace OutlookMatters.Core.Mattermost.Session
         {
             try
             {
-                var post = new Post { id = string.Empty, channel_id = channelId, message = message, user_id = _userId, root_id = rootId};
+                var post = new Post
+                {
+                    id = string.Empty,
+                    channel_id = channelId,
+                    message = message,
+                    user_id = _userId,
+                    root_id = rootId
+                };
                 var postUrl = PostUrl(channelId);
                 using (_httpClient.Request(postUrl)
                     .WithContentType("text/json")
@@ -64,9 +71,8 @@ namespace OutlookMatters.Core.Mattermost.Session
                     {
                         return thread.posts[postId];
                     }
-                    
+
                     return thread.posts[rootId];
-                    
                 }
             }
             catch (HttpException hex)

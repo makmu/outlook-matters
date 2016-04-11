@@ -36,7 +36,7 @@ namespace Test.OutlookMatters.Core.Settings
         [Test]
         public void Username_ReturnsUsernameFromSettingsProvider()
         {
-            var settings = new AddInSettings("http://localhost", "teamId",  "username", "channels");
+            var settings = new AddInSettings("http://localhost", "teamId", "username", "channels");
             var classUnderTest = new SettingsViewModel(settings, Mock.Of<ICommand>(), Mock.Of<ICommand>());
 
             var result = classUnderTest.Username;
@@ -48,7 +48,7 @@ namespace Test.OutlookMatters.Core.Settings
         [Test]
         public void Save_ReturnsSaveCommand()
         {
-            var settings = new AddInSettings("http://localhost", "teamId",  "username", "channels");
+            var settings = new AddInSettings("http://localhost", "teamId", "username", "channels");
             var saveCommand = new Mock<ICommand>();
             var classUnderTest = new SettingsViewModel(settings, saveCommand.Object, Mock.Of<ICommand>());
 
@@ -66,7 +66,8 @@ namespace Test.OutlookMatters.Core.Settings
 
             var result = classUnderTest.Cancel;
 
-            result.Should().Be(cancelCommand.Object, "because the view model should return the cancel command for binding");
+            result.Should()
+                .Be(cancelCommand.Object, "because the view model should return the cancel command for binding");
         }
     }
 }
