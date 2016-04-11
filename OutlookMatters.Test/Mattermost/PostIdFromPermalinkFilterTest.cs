@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using OutlookMatters.Mattermost;
+using OutlookMatters.Core.Mattermost;
 
-namespace OutlookMatters.Test.Mattermost
+namespace OutlookMatters.Core.Test.Mattermost
 {
     [TestFixture]
     public class PostIdFromPermalinkFilterTest

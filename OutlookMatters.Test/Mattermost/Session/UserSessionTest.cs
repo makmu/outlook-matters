@@ -2,12 +2,11 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using OutlookMatters.Http;
-using OutlookMatters.Mattermost;
-using OutlookMatters.Mattermost.DataObjects;
-using OutlookMatters.Mattermost.Session;
+using OutlookMatters.Core.Http;
+using OutlookMatters.Core.Mattermost;
+using OutlookMatters.Core.Mattermost.Session;
 
-namespace OutlookMatters.Test.Mattermost.Session
+namespace OutlookMatters.Core.Test.Mattermost.Session
 {
     [TestFixture]
     public class UserSessionTest

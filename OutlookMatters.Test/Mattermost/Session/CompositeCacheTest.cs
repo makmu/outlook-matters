@@ -1,8 +1,8 @@
 ﻿using Moq;
 using NUnit.Framework;
-using OutlookMatters.Mattermost.Session;
+using OutlookMatters.Core.Mattermost.Session;
 
-namespace OutlookMatters.Test.Mattermost.Session
+namespace OutlookMatters.Core.Test.Mattermost.Session
 {
     [TestFixture]
     public class CompositeCacheTest

@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using OutlookMatters.Mail;
+using OutlookMatters.Core.Mail;
 
-namespace OutlookMatters.Test.Mail
+namespace OutlookMatters.Core.Test.Mail
 {
     [TestFixture]
     public class MailExceptionTest

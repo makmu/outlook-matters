@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using OutlookMatters.Settings;
+using OutlookMatters.Core.Settings;
 
-namespace OutlookMatters.Test
+namespace OutlookMatters.Core.Test
 {
     [TestFixture]
     public class CloseCommandTest

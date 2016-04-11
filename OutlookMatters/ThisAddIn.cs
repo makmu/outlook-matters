@@ -3,14 +3,14 @@ using System.Deployment.Application;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
-using OutlookMatters.ContextMenu;
-using OutlookMatters.Error;
-using OutlookMatters.Http;
-using OutlookMatters.Mail;
-using OutlookMatters.Mattermost;
-using OutlookMatters.Mattermost.Session;
-using OutlookMatters.Security;
-using OutlookMatters.Settings;
+using OutlookMatters.Core.ContextMenu;
+using OutlookMatters.Core.Error;
+using OutlookMatters.Core.Http;
+using OutlookMatters.Core.Mail;
+using OutlookMatters.Core.Mattermost;
+using OutlookMatters.Core.Mattermost.Session;
+using OutlookMatters.Core.Security;
+using OutlookMatters.Core.Settings;
 using Office = Microsoft.Office.Core;
 
 namespace OutlookMatters
@@ -56,7 +56,7 @@ namespace OutlookMatters
             var settingsService = new ApplicationSettingsService(caches);
             var sessionCache = new TransientSession(mattermost, settingsService, passwordDialog);
             caches.Add(sessionCache);
-            var explorerService = new OutlookExplorerService();
+            var explorerService = new OutlookExplorerService(Globals.ThisAddIn.Application);
             var mailExplorer = new OutlookMailExplorer(explorerService);
             var errorDisplay = new MessageBoxErrorDisplay();
             var settingsUi = new WpfSettingsUserInterface(settingsService, settingsService);

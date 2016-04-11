@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using OutlookMatters.Mattermost.Session;
-using OutlookMatters.Settings;
+using OutlookMatters.Core.Mattermost.Session;
+using OutlookMatters.Core.Settings;
 
-namespace OutlookMatters.Test.Settings
+namespace OutlookMatters.Core.Test.Settings
 {
     [TestFixture]
     public class ApplicationSettingsServiceTest
@@ -24,7 +24,7 @@ namespace OutlookMatters.Test.Settings
         public void Load_ReturnsSavedSettings()
         {
             var classUnderTest = new ApplicationSettingsService(Mock.Of<ICache>());
-            var settings = new OutlookMatters.Settings.Settings("url42", "teamId42", "username42", "channelMap");
+            var settings = new Core.Settings.Settings("url42", "teamId42", "username42", "channelMap");
             classUnderTest.SaveCredentials("url42", "teamId42", "username42");
             classUnderTest.SaveChannels("channelMap");
 
