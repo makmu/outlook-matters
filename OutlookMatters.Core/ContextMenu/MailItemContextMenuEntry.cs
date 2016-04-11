@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Mail;
-using OutlookMatters.Core.Mattermost;
 using OutlookMatters.Core.Mattermost.Interface;
 using OutlookMatters.Core.Reply;
 using OutlookMatters.Core.Settings;

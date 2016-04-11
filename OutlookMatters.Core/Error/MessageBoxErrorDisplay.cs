@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using OutlookMatters.Core.Mattermost;
 using OutlookMatters.Core.Mattermost.Interface;
 
 namespace OutlookMatters.Core.Error
