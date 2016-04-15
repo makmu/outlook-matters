@@ -14,18 +14,10 @@ internal class Version
 {
     // refer to http://semver.org for more information
     public const string Major = "1";
-    public const string Minor = "2";
+    public const string Minor = "3";
     public const string Patch = "0";
 
-    public const string Label = ReleaseLabel.Dev;
     public const string AdditionalReleaseInformation = "";
     public const string Current = Major + "." + Minor + "." + Patch;
-    public const string FullCurrent = Current + "-" + Label + AdditionalReleaseInformation;
-}
-
-internal class ReleaseLabel
-{
-    public const string Dev = "dev";
-    public const string ReleaseCandidate = "rc";
-    public const string Final = "official";
+    public const string FullCurrent = Current + "-release" + AdditionalReleaseInformation;
 }
