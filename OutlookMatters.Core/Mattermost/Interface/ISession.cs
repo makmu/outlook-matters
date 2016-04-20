@@ -2,7 +2,7 @@
 {
     public interface ISession
     {
-        void CreatePost(string channelId, string message, string rootId = "");
+        Payload CreatePost(string channelId, string message, string rootId = "");
         Post GetRootPost(string postId);
         ChannelList FetchChannelList();
     }

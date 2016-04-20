@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -17,6 +18,7 @@ namespace OutlookMatters.Core.ContextMenu
     public class MailItemContextMenuEntry : Office.IRibbonExtensibility
     {
         private const string CHANNEL_BUTTON_ID_PREFIX = "channel_id-";
+        private const int MAX_MESSAGE_LENGTH = 4000;
 
         private readonly IErrorDisplay _errorDisplay;
         private readonly IMailExplorer _explorer;
@@ -25,7 +27,6 @@ namespace OutlookMatters.Core.ContextMenu
         private readonly ISettingsLoadService _settingsLoadService;
         private readonly ISettingsSaveService _settingsSaveService;
         private readonly ISettingsUserInterface _settingsUi;
-
 
         public MailItemContextMenuEntry(IMailExplorer explorer,
             ISettingsLoadService settingsLoadService,
@@ -98,10 +99,18 @@ namespace OutlookMatters.Core.ContextMenu
         public void OnPostIntoChannelClick(Office.IRibbonControl control)
         {
             var channelId = control.Id.Substring(CHANNEL_BUTTON_ID_PREFIX.Length);
-            var message = FormatMessage();
+            var messageParts = FormatMessage();
             try
             {
-                _session.CreatePost(channelId, message);
+                var rootId = "";
+                foreach (var messagePart in messageParts)
+                {
+                    var payload = _session.CreatePost(channelId, messagePart, rootId);
+                    if (rootId == string.Empty)
+                    {
+                        rootId = payload.PostId;
+                    }
+                }
             }
             catch (MattermostException mex)
             {
@@ -133,14 +142,14 @@ namespace OutlookMatters.Core.ContextMenu
 
         public void OnReplyClick(Office.IRibbonControl control)
         {
-            var message = FormatMessage();
+            var messageParts = FormatMessage();
             try
             {
                 var postId = _rootPostIdProvider.Get();
                 var rootPost = _session.GetRootPost(postId);
                 var rootId = rootPost.id;
 
-                _session.CreatePost(rootPost.channel_id, message, rootId);
+                _session.CreatePost(rootPost.channel_id, messageParts[0], rootId);
             }
             catch (UserAbortException)
             {
@@ -155,13 +164,38 @@ namespace OutlookMatters.Core.ContextMenu
             }
         }
 
-        private string FormatMessage()
+        private List<string> FormatMessage()
         {
             var mail = _explorer.QuerySelectedMailItem();
             var message = ":email: From: " + mail.SenderName + "\n";
             message += ":email: Subject: " + mail.Subject + "\n";
             message += mail.Body;
-            return message;
+
+            return GenerateCompleteMessage(message);
+        }
+
+        private List<string> GenerateCompleteMessage(string message)
+        {
+            var messageParts = new List<string>();
+            
+            while (message.Length > 0)
+            {
+                if (message.Length > MAX_MESSAGE_LENGTH)
+                {
+                    var messageSlice = message.Substring(0, MAX_MESSAGE_LENGTH);
+                    var positionOfLastSpace = messageSlice.LastIndexOf(" ");
+                    var slicedMessagePart = message.Substring(0, positionOfLastSpace);
+                    messageParts.Add(slicedMessagePart);
+                    var leftOverLength = message.Length - positionOfLastSpace;
+                    message = message.Substring(positionOfLastSpace, leftOverLength);
+                }
+                else
+                {
+                    messageParts.Add(message);
+                    break;
+                }
+            }
+            return messageParts;
         }
 
         private static string GetResourceText(string resourceName)
