@@ -23,6 +23,9 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             const string jsonPost =
                 @"{""id"":"""",""channel_id"":""channelId"",""message"":""Hello World!"",""user_id"":""userId"",""root_id"":""""}";
             var httpRequest = new Mock<IHttpRequest>();
+            var httpResponse = new Mock<IHttpResponse>();
+            httpResponse.Setup(x => x.GetPayload()).Returns(string.Empty);
+            httpRequest.Setup(x => x.Post(It.IsAny<string>())).Returns(httpResponse.Object);
             var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
 
             classUnderTest.CreatePost(ChannelId, Message);
@@ -90,6 +93,9 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             const string jsonPost =
                 @"{""id"":"""",""channel_id"":""channelId"",""message"":""Hello World!"",""user_id"":""userId"",""root_id"":""rootId""}";
             var httpRequest = new Mock<IHttpRequest>();
+            var httpResponse = new Mock<IHttpResponse>();
+            httpResponse.Setup(x => x.GetPayload()).Returns(string.Empty);
+            httpRequest.Setup(x => x.Post(It.IsAny<string>())).Returns(httpResponse.Object);
             var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
 
             classUnderTest.CreatePost(ChannelId, Message, RootId);
@@ -130,6 +136,7 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         {
             var httpRequest = new Mock<IHttpRequest>();
             var httpResponse = new Mock<IHttpResponse>();
+            httpResponse.Setup(x => x.GetPayload()).Returns(string.Empty);
             httpRequest.Setup(x => x.Post(It.IsAny<string>())).Returns(httpResponse.Object);
             var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
 

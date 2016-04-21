@@ -166,17 +166,17 @@ namespace OutlookMatters.Core.ContextMenu
             }
         }
 
-        private List<string> FormatMessage()
+        private IEnumerable<string> FormatMessage()
         {
             var mail = _explorer.QuerySelectedMailItem();
             var message = ":email: From: " + mail.SenderName + "\n";
             message += ":email: Subject: " + mail.Subject + "\n";
             message += mail.Body;
 
-            return GenerateCompleteMessage(message);
+            return SplitMessageIntoParts(message);
         }
 
-        private List<string> GenerateCompleteMessage(string message)
+        private IEnumerable<string> SplitMessageIntoParts(string message)
         {
             var messageParts = new List<string>();
             
@@ -185,11 +185,15 @@ namespace OutlookMatters.Core.ContextMenu
                 if (message.Length > MAX_MESSAGE_LENGTH)
                 {
                     var messageSlice = message.Substring(0, MAX_MESSAGE_LENGTH);
-                    var positionOfLastSpace = messageSlice.LastIndexOf(" ");
-                    var slicedMessagePart = message.Substring(0, positionOfLastSpace);
+                    var cuttingIndex = messageSlice.LastIndexOf(" ");
+                    if (cuttingIndex <= 0)
+                    {
+                        cuttingIndex = MAX_MESSAGE_LENGTH - 1;
+                    }
+                    var slicedMessagePart = message.Substring(0, cuttingIndex);
                     messageParts.Add(slicedMessagePart);
-                    var leftOverLength = message.Length - positionOfLastSpace;
-                    message = message.Substring(positionOfLastSpace, leftOverLength);
+                    var leftOverLength = message.Length - cuttingIndex;
+                    message = message.Substring(cuttingIndex, leftOverLength);
                 }
                 else
                 {
