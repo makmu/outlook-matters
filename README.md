@@ -14,7 +14,9 @@ An Outlook Add-in to forward mails to [Mattermost](http://www.mattermost.org/)
 ### Configuration
 * In Outlook right-click on any e-mail in your mail folder
 * From the context menu select `Mattermost`-> `Settings...`
-* Configure url, team id and channel id and provide a valid username
+  * Configure mattermost base url (e.g. `http://mattermost.some-company.com`)
+  * team id (e.g. `myteam`)
+  * your email address as known to mattermost (i.e. username)
 
 ### Usage
 * In Outlook right-click on any e-mail in your mail folder that you want to forward to Mattermost
