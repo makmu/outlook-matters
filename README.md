@@ -3,6 +3,8 @@
 ### Introduction
 An Outlook Add-in to forward mails to [Mattermost](http://www.mattermost.org/)
 
+![Screenshot](doc/screenshot.jpg)
+
 ### Installation
 * Make sure that [Microsoft Visual Studio Tools for Office Runtime 2010](https://www.microsoft.com/en-us/download/details.aspx?id=48217) is installed
 * Download the latest binary distribution from the [releases page](https://github.com/makmu/outlook-matters/releases)
