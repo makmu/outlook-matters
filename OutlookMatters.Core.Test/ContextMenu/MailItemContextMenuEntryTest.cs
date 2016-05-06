@@ -264,7 +264,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
         }
 
         [Test]
-        public void OnPostIntoChannelClick_CanHandleUserPasswordAbort()
+        public async Task OnPostIntoChannelClick_CanHandleUserPasswordAbort()
         {
             var control = MockOfRibbonControl();
             var passwordProvider = new Mock<IPasswordProvider>();
@@ -282,11 +282,11 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 sessionCache,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnPostIntoChannelClick(control);
+            await classUnderTest.OnPostIntoChannelClick(control);
         }
 
         [Test]
-        public void OnPostIntoChannelClick_CreatesPostUsingSession()
+        public async Task OnPostIntoChannelClick_CreatesPostUsingSession()
         {
             const string channelId = "funny ChannelId";
             const string channelIdWithPrefix = "channel_id-funny ChannelId";
@@ -306,7 +306,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 sessionRepository.Object,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnPostIntoChannelClick(control.Object);
+            await classUnderTest.OnPostIntoChannelClick(control.Object);
 
             session.Verify(
                 x =>
