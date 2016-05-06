@@ -12,11 +12,6 @@ namespace Test.OutlookMatters.Core.Session
     [TestFixture]
     public class SingleSignOnSessionRepositoryTest
     {
-        const string ChannelId = "myChannel";
-        const string Message = "message";
-        const string RootId = "rootId";
-        const string PostId = "postId";
-
         [Test]
         public async Task RestoreSession_ReturnsNewSessionFromClient()
         {
