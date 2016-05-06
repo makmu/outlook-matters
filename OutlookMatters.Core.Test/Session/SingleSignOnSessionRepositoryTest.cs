@@ -1,14 +1,16 @@
-﻿using Moq;
+﻿using System.Threading.Tasks;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using OutlookMatters.Core.Mattermost.Interface;
-using OutlookMatters.Core.Mattermost.Utils;
 using OutlookMatters.Core.Security;
+using OutlookMatters.Core.Session;
 using OutlookMatters.Core.Settings;
 
-namespace Test.OutlookMatters.Core.Mattermost.Utils
+namespace Test.OutlookMatters.Core.Session
 {
     [TestFixture]
-    public class TransientSessionTest
+    public class SingleSignOnSessionRepositoryTest
     {
         const string ChannelId = "myChannel";
         const string Message = "message";
@@ -16,7 +18,7 @@ namespace Test.OutlookMatters.Core.Mattermost.Utils
         const string PostId = "postId";
 
         [Test]
-        public void CreatePost_CreatesPostUsingCurrentSession()
+        public async Task RestoreSession_ReturnsNewSessionFromClient()
         {
             var settingsLoadService = new Mock<ISettingsLoadService>();
             var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
@@ -26,17 +28,17 @@ namespace Test.OutlookMatters.Core.Mattermost.Utils
             mattermost.Setup(
                 x => x.LoginByUsername(settings.MattermostUrl, settings.TeamId, settings.Username, It.IsAny<string>()))
                 .Returns(session.Object);
-            var classUnderTest = new TransientSession(mattermost.Object,
+            var classUnderTest = new SingleSignOnSessionRepository(mattermost.Object,
                 settingsLoadService.Object,
                 Mock.Of<IPasswordProvider>());
 
-            classUnderTest.CreatePost(ChannelId, Message, RootId);
+            var result = await classUnderTest.RestoreSession();
 
-            session.Verify(x => x.CreatePost(ChannelId, Message, RootId));
+            result.Should().Be(session.Object);
         }
 
         [Test]
-        public void CreatePost_UsesLoadedPassword()
+        public async Task RestoreSession_UsesProvidedPassword()
         {
             const string password = "42";
             var passwordProvider = new Mock<IPasswordProvider>();
@@ -46,17 +48,17 @@ namespace Test.OutlookMatters.Core.Mattermost.Utils
             mattermost.Setup(
                 x => x.LoginByUsername(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), password))
                 .Returns(session.Object);
-            var classUnderTest = new TransientSession(mattermost.Object,
+            var classUnderTest = new SingleSignOnSessionRepository(mattermost.Object,
                 DefaultSettingsLoadService,
                 passwordProvider.Object);
 
-            classUnderTest.CreatePost(ChannelId, Message, RootId);
+            var result = await classUnderTest.RestoreSession();
 
-            session.Verify(x => x.CreatePost(ChannelId, Message, RootId));
+            result.Should().Be(session.Object);
         }
 
         [Test]
-        public void CreatePost_CachesSession()
+        public async Task RestoreSession_HasCachingSemantics()
         {
             var mattermost = new Mock<IClient>();
             var session1 = new Mock<ISession>();
@@ -65,19 +67,19 @@ namespace Test.OutlookMatters.Core.Mattermost.Utils
                 x => x.LoginByUsername(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(session1.Object)
                 .Returns(session2.Object);
-            var classUnderTest = new TransientSession(mattermost.Object,
+            var classUnderTest = new SingleSignOnSessionRepository(mattermost.Object,
                 DefaultSettingsLoadService,
                 Mock.Of<IPasswordProvider>());
 
-            classUnderTest.CreatePost(ChannelId, Message, RootId);
-            classUnderTest.CreatePost(ChannelId, Message, RootId);
+            var result1 = await classUnderTest.RestoreSession();
+            var result2 = await classUnderTest.RestoreSession();
 
-            session1.Verify(x => x.CreatePost(ChannelId, Message, RootId), Times.Exactly(2));
-            session2.Verify(x => x.CreatePost(ChannelId, Message, RootId), Times.Never);
+            result1.Should().Be(session1.Object);
+            result2.Should().Be(session1.Object);
         }
 
         [Test]
-        public void CreatePost_UsesNewSession_AfterUpdateTimestampChanged()
+        public async Task RestoreSession_CreatesNewSession_IfCacheInvalidated()
         {
             var mattermost = new Mock<IClient>();
             var session1 = new Mock<ISession>();
@@ -90,55 +92,16 @@ namespace Test.OutlookMatters.Core.Mattermost.Utils
                 x => x.LoginByUsername(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(session1.Object)
                 .Returns(session2.Object);
-            var classUnderTest = new TransientSession(mattermost.Object,
+            var classUnderTest = new SingleSignOnSessionRepository(mattermost.Object,
                 settingsLoadService.Object,
                 Mock.Of<IPasswordProvider>());
 
-            classUnderTest.CreatePost(ChannelId, Message, RootId);
+            var result1 = await classUnderTest.RestoreSession();
             classUnderTest.Invalidate();
-            classUnderTest.CreatePost(ChannelId, Message, RootId);
+            var result2 = await classUnderTest.RestoreSession();
 
-            session1.Verify(x => x.CreatePost(ChannelId, Message, RootId), Times.Once);
-            session2.Verify(x => x.CreatePost(ChannelId, Message, RootId), Times.Once);
-        }
-
-        [Test]
-        public void GetPostById_ReturnsPostFromCurrentSession()
-        {
-            var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
-            settingsLoadService.Setup(x => x.Load()).Returns(settings);
-            var mattermost = new Mock<IClient>();
-            var session = new Mock<ISession>();
-            mattermost.Setup(
-                x => x.LoginByUsername(settings.MattermostUrl, settings.TeamId, settings.Username, It.IsAny<string>()))
-                .Returns(session.Object);
-            var classUnderTest = new TransientSession(mattermost.Object,
-                settingsLoadService.Object,
-                Mock.Of<IPasswordProvider>());
-
-            classUnderTest.GetRootPost(PostId);
-
-            session.Verify(x => x.GetRootPost(PostId));
-        }
-
-        [Test]
-        public void FetchChannelList_ReturnsChannelListFromCurrentSession()
-        {
-            var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
-            settingsLoadService.Setup(x => x.Load()).Returns(settings);
-            var mattermost = new Mock<IClient>();
-            var session = new Mock<ISession>();
-            mattermost.Setup(
-                x => x.LoginByUsername(settings.MattermostUrl, settings.TeamId, settings.Username, It.IsAny<string>()))
-                .Returns(session.Object);
-            var classUnderTest = new TransientSession(mattermost.Object, settingsLoadService.Object,
-                Mock.Of<IPasswordProvider>());
-
-            classUnderTest.FetchChannelList();
-
-            session.Verify(x => x.FetchChannelList());
+            result1.Should().Be(session1.Object);
+            result2.Should().Be(session2.Object);
         }
 
         private static ISettingsLoadService DefaultSettingsLoadService

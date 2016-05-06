@@ -9,9 +9,9 @@ using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Http;
 using OutlookMatters.Core.Mail;
 using OutlookMatters.Core.Mattermost.HttpImpl;
-using OutlookMatters.Core.Mattermost.Utils;
 using OutlookMatters.Core.Reply;
 using OutlookMatters.Core.Security;
+using OutlookMatters.Core.Session;
 using OutlookMatters.Core.Settings;
 using Office = Microsoft.Office.Core;
 
@@ -56,8 +56,8 @@ namespace OutlookMatters
             var passwordDialog = new PasswordDialogShell();
             var caches = new CompositeCache();
             var settingsService = new ApplicationSettingsService(caches);
-            var sessionCache = new TransientSession(mattermost, settingsService, passwordDialog);
-            caches.Add(sessionCache);
+            var sessionRepository = new SingleSignOnSessionRepository(mattermost, settingsService, passwordDialog);
+            caches.Add(sessionRepository);
             var explorerService = new OutlookExplorerService();
             var mailExplorer = new OutlookMailExplorer(explorerService);
             var errorDisplay = new MessageBoxErrorDisplay();
@@ -71,7 +71,7 @@ namespace OutlookMatters
                 settingsService,
                 errorDisplay,
                 settingsUi,
-                sessionCache,
+                sessionRepository,
                 postIdFilter);
         }
 

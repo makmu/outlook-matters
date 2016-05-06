@@ -74,7 +74,7 @@
     <Compile Include="Mattermost\Interface\MattermostExceptionTest.cs" />
     <Compile Include="Reply\PostIdFromPermalinkFilterTest.cs" />
     <Compile Include="Cache\CompositeCacheTest.cs" />
-    <Compile Include="Mattermost\Utils\TransientSessionTest.cs" />
+    <Compile Include="Session\SingleSignOnSessionRepositoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mattermost\HttpImpl\HttpClientTest.cs" />
     <Compile Include="Settings\ApplicationSettingsServiceTest.cs" />
