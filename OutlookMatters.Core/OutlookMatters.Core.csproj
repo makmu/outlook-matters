@@ -95,6 +95,7 @@
     <Compile Include="Mattermost\Interface\ChannelType.cs" />
     <Compile Include="Mattermost\Interface\Error.cs" />
     <Compile Include="Mattermost\Interface\Login.cs" />
+    <Compile Include="Mattermost\Interface\Payload.cs" />
     <Compile Include="Mattermost\Interface\Post.cs" />
     <Compile Include="Mattermost\Interface\Thread.cs" />
     <Compile Include="Mattermost\Interface\User.cs" />

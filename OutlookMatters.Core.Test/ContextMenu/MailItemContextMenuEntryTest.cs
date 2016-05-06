@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using FluentAssertions;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
@@ -56,6 +57,21 @@ namespace Test.OutlookMatters.Core.ContextMenu
             mock.Setup(m => m.SenderName).Returns(sender);
             mock.Setup(m => m.Subject).Returns(subject);
             mock.Setup(m => m.Body).Returns(body);
+
+            return mock.Object;
+        }
+
+        private static MailItem MockMailItemWithMultipleChars(int charValue, string sender = "sender", string subject = "subject")
+        {
+            var stringBuilder = new StringBuilder();
+            for (var i = 0; i < charValue; i++)
+            {
+                stringBuilder.Append("a");
+            }
+            var mock = new Mock<MailItem>();
+            mock.Setup(m => m.SenderName).Returns(sender);
+            mock.Setup(m => m.Subject).Returns(subject);
+            mock.Setup(m => m.Body).Returns(stringBuilder.ToString);
 
             return mock.Object;
         }
@@ -309,6 +325,33 @@ namespace Test.OutlookMatters.Core.ContextMenu
                         string.Empty));
         }
 
+        [Test]
+        public void OnPostIntoChannelClick_CreatesTwoPosts_IfMailIsLongerThanFourThousandChars()
+        {
+            const string arbitraryChannelPrefrix = "123412341234";
+            const int enoughCharsForExcactlyTwoMails = 3980;
+            var mail = MockMailItemWithMultipleChars(enoughCharsForExcactlyTwoMails);
+            var explorer = new Mock<IMailExplorer>();
+            var control = new Mock<IRibbonControl>();
+            var payload = new Payload {PostId = It.IsAny<string>()};
+            control.Setup(x => x.Id).Returns(arbitraryChannelPrefrix);
+            var session = new Mock<ISession>();
+            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(payload);
+            explorer.Setup(x => x.QuerySelectedMailItem()).Returns(mail);
+            var classUnderTest = new MailItemContextMenuEntry(
+                explorer.Object,
+                Mock.Of<ISettingsLoadService>(),
+                Mock.Of<ISettingsSaveService>(),
+                Mock.Of<IErrorDisplay>(),
+                Mock.Of<ISettingsUserInterface>(),
+                session.Object,
+                Mock.Of<IStringProvider>());
+
+            classUnderTest.OnPostIntoChannelClick(control.Object);
+            
+            session.Verify(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(2));
+        }
+        
         [Test]
         public void OnPostIntoChannelClick_HandlesAnyExceptionsWhileCreatingPost()
         {

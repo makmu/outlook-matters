@@ -20,7 +20,7 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
             _httpClient = httpClient;
         }
 
-        public void CreatePost(string channelId, string message, string rootId = "")
+        public Payload CreatePost(string channelId, string message, string rootId = "")
         {
             try
             {
@@ -33,11 +33,13 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
                     root_id = rootId
                 };
                 var postUrl = PostUrl(channelId);
-                using (_httpClient.Request(postUrl)
+                using (var response = _httpClient.Request(postUrl)
                     .WithContentType("text/json")
                     .WithHeader("Authorization", "Bearer " + _token)
                     .Post(JsonConvert.SerializeObject(post)))
                 {
+                    var payload = response.GetPayload();
+                    return JsonConvert.DeserializeObject<Payload>(payload);
                 }
             }
             catch (HttpException hex)

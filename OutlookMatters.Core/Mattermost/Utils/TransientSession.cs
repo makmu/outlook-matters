@@ -40,9 +40,9 @@ namespace OutlookMatters.Core.Mattermost.Utils
             }
         }
 
-        public void CreatePost(string channelId, string message, string rootId = "")
+        public Payload CreatePost(string channelId, string message, string rootId = "")
         {
-            Session.CreatePost(channelId, message, rootId);
+            return Session.CreatePost(channelId, message, rootId);
         }
 
         public Post GetRootPost(string postId)
