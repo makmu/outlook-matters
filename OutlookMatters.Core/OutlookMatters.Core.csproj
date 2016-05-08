@@ -86,6 +86,7 @@
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Http\IHttpResponse.cs" />
+    <Compile Include="Session\ISessionRepository.cs" />
     <Compile Include="Mail\IExplorerService.cs" />
     <Compile Include="Mail\IMailExplorer.cs" />
     <Compile Include="Mail\MailException.cs" />
@@ -103,7 +104,7 @@
     <Compile Include="Mattermost\HttpImpl\HttpClient.cs" />
     <Compile Include="Mattermost\Interface\ISession.cs" />
     <Compile Include="Mattermost\HttpImpl\ISessionFactory.cs" />
-    <Compile Include="Mattermost\Utils\TransientSession.cs" />
+    <Compile Include="Session\SingleSignOnSessionRepository.cs" />
     <Compile Include="Mattermost\HttpImpl\HttpSession.cs" />
     <Compile Include="Mattermost\HttpImpl\HttpSessionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -158,6 +159,7 @@
   <ItemGroup>
     <Resource Include="Security\Profile.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

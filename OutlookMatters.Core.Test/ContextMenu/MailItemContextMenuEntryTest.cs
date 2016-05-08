@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
@@ -9,9 +10,9 @@ using OutlookMatters.Core.ContextMenu;
 using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Mail;
 using OutlookMatters.Core.Mattermost.Interface;
-using OutlookMatters.Core.Mattermost.Utils;
 using OutlookMatters.Core.Reply;
 using OutlookMatters.Core.Security;
+using OutlookMatters.Core.Session;
 using OutlookMatters.Core.Settings;
 using OutlookMatters.Core.Utils;
 using Test.OutlookMatters.Core.TestUtils;
@@ -69,7 +70,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
-                Mock.Of<ISession>(),
+                Mock.Of<ISessionRepository>(),
                 Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetCustomUI("Microsoft.Outlook.Explorer");
@@ -89,7 +90,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
-                Mock.Of<ISession>(),
+                Mock.Of<ISessionRepository>(),
                 Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetCustomUI("unknown");
@@ -124,7 +125,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
-                Mock.Of<ISession>(),
+                Mock.Of<ISessionRepository>(),
                 Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
@@ -162,7 +163,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
-                Mock.Of<ISession>(),
+                Mock.Of<ISessionRepository>(),
                 Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
@@ -190,7 +191,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
-                Mock.Of<ISession>(),
+                Mock.Of<ISessionRepository>(),
                 Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
@@ -218,7 +219,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
-                Mock.Of<ISession>(),
+                Mock.Of<ISessionRepository>(),
                 Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
@@ -249,7 +250,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
-                Mock.Of<ISession>(),
+                Mock.Of<ISessionRepository>(),
                 Mock.Of<IStringProvider>());
 
             var result = classUnderTest.GetDynamicMenu(Mock.Of<IRibbonControl>());
@@ -261,12 +262,12 @@ namespace Test.OutlookMatters.Core.ContextMenu
         }
 
         [Test]
-        public void OnPostIntoChannelClick_CanHandleUserPasswordAbort()
+        public async Task OnPostIntoChannelClick_CanHandleUserPasswordAbort()
         {
             var control = MockOfRibbonControl();
             var passwordProvider = new Mock<IPasswordProvider>();
             passwordProvider.Setup(x => x.GetPassword(It.IsAny<string>())).Throws<Exception>();
-            var sessionCache = new TransientSession(Mock.Of<IClient>(),
+            var sessionCache = new SingleSignOnSessionRepository(Mock.Of<IClient>(),
                 DefaultSettingsLoadService,
                 passwordProvider.Object);
 
@@ -279,17 +280,19 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 sessionCache,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnPostIntoChannelClick(control);
+            await classUnderTest.OnPostIntoChannelClick(control);
         }
 
         [Test]
-        public void OnPostIntoChannelClick_CreatesPostUsingSession()
+        public async Task OnPostIntoChannelClick_CreatesPostUsingSession()
         {
             const string channelId = "funny ChannelId";
             const string channelIdWithPrefix = "channel_id-funny ChannelId";
             var control = new Mock<IRibbonControl>();
             control.Setup(x => x.Id).Returns(channelIdWithPrefix);
             var session = new Mock<ISession>();
+            var sessionRepository = new Mock<ISessionRepository>();
+            sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var explorer = new Mock<IMailExplorer>();
             explorer.Setup(x => x.QuerySelectedMailItem()).Returns(MockMailItem());
             var classUnderTest = new MailItemContextMenuEntry(
@@ -298,10 +301,10 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
-                session.Object,
+                sessionRepository.Object,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnPostIntoChannelClick(control.Object);
+            await classUnderTest.OnPostIntoChannelClick(control.Object);
 
             session.Verify(
                 x =>
@@ -310,12 +313,14 @@ namespace Test.OutlookMatters.Core.ContextMenu
         }
 
         [Test]
-        public void OnPostIntoChannelClick_HandlesAnyExceptionsWhileCreatingPost()
+        public async Task OnPostIntoChannelClick_HandlesAnyExceptionsWhileCreatingPost()
         {
             var control = MockOfRibbonControl();
             var session = new Mock<ISession>();
             session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<Exception>();
+            var sessionRepository = new Mock<ISessionRepository>();
+            sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var errorDisplay = new Mock<IErrorDisplay>();
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
@@ -323,21 +328,23 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>(),
-                session.Object,
+                sessionRepository.Object,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnPostIntoChannelClick(control);
+            await classUnderTest.OnPostIntoChannelClick(control);
 
             errorDisplay.Verify(x => x.Display(It.IsAny<Exception>()));
         }
 
         [Test]
-        public void OnPostIntoChannelClick_HandlesMattermostExceptionsWhileCreatingPost()
+        public async Task OnPostIntoChannelClick_HandlesMattermostExceptionsWhileCreatingPost()
         {
             var control = MockOfRibbonControl();
             var session = new Mock<ISession>();
             session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new MattermostException(new Error()));
+            var sessionRepository = new Mock<ISessionRepository>();
+            sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var errorDisplay = new Mock<IErrorDisplay>();
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
@@ -345,20 +352,22 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>(),
-                session.Object,
+                sessionRepository.Object,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnPostIntoChannelClick(control);
+            await classUnderTest.OnPostIntoChannelClick(control);
 
             errorDisplay.Verify(x => x.Display(It.IsAny<MattermostException>()));
         }
 
         [Test]
-        public void OnRefreshChannelListClick_HandlesAnyExceptionsWhileCreatingPost()
+        public async Task OnRefreshChannelListClick_HandlesAnyExceptionsWhileCreatingPost()
         {
             var control = MockOfRibbonControl();
             var session = new Mock<ISession>();
             session.Setup(x => x.FetchChannelList()).Throws<Exception>();
+            var sessionRepository = new Mock<ISessionRepository>();
+            sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var errorDisplay = new Mock<IErrorDisplay>();
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
@@ -366,21 +375,23 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>(),
-                session.Object,
+                sessionRepository.Object,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnRefreshChannelListClick(control);
+            await classUnderTest.OnRefreshChannelListClick(control);
 
             errorDisplay.Verify(x => x.Display(It.IsAny<Exception>()));
         }
 
         [Test]
-        public void OnRefreshChannelListClick_HandlesMattermostExceptionWhileFetchingChannels()
+        public async Task OnRefreshChannelListClick_HandlesMattermostExceptionWhileFetchingChannels()
         {
             var control = MockOfRibbonControl();
             var session = new Mock<ISession>();
             session.Setup(x => x.FetchChannelList())
                 .Throws(new MattermostException(new Error()));
+            var sessionRepository = new Mock<ISessionRepository>();
+            sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var errorDisplay = new Mock<IErrorDisplay>();
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
@@ -388,16 +399,16 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>(),
-                session.Object,
+                sessionRepository.Object,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnRefreshChannelListClick(control);
+            await classUnderTest.OnRefreshChannelListClick(control);
 
             errorDisplay.Verify(x => x.Display(It.IsAny<MattermostException>()));
         }
 
         [Test]
-        public void OnRefreshChannelListClick_SavesChannelList()
+        public async Task OnRefreshChannelListClick_SavesChannelList()
         {
             const string channelId = "channel id";
             const string channelName = "channel name";
@@ -415,6 +426,8 @@ namespace Test.OutlookMatters.Core.ContextMenu
 
             var session = new Mock<ISession>();
             session.Setup(x => x.FetchChannelList()).Returns(channelList);
+            var sessionRepository = new Mock<ISessionRepository>();
+            sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var saveService = new Mock<ISettingsSaveService>();
             var classUnderTest = new MailItemContextMenuEntry(
                 Mock.Of<IMailExplorer>(),
@@ -422,16 +435,16 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 saveService.Object,
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
-                session.Object,
+                sessionRepository.Object,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnRefreshChannelListClick(Mock.Of<IRibbonControl>());
+            await classUnderTest.OnRefreshChannelListClick(Mock.Of<IRibbonControl>());
 
             saveService.Verify(x => x.SaveChannels(expectedChannelMapResult));
         }
 
         [Test]
-        public void OnReplyClick_CanHandleUserPermalinkAbort()
+        public async Task OnReplyClick_CanHandleUserPermalinkAbort()
         {
             var postIdProvider = new Mock<IStringProvider>();
             postIdProvider.Setup(x => x.Get()).Throws<UserAbortException>();
@@ -448,23 +461,24 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>(),
-                session.Object,
+                Mock.Of<ISessionRepository>(),
                 postIdProvider.Object);
 
-            classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
+            await classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
 
-            session.Verify(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
             errorDisplay.Verify(x => x.Display(It.IsAny<Exception>()), Times.Never);
         }
 
         [Test]
-        public void OnReplyClick_CreatesPostWithRootIdUsingSession()
+        public async Task OnReplyClick_CreatesPostWithRootIdUsingSession()
         {
             const string rootId = "rootId";
             const string channelId = "channelId";
             var rootPost = new Post {id = rootId, channel_id = channelId};
             var session = new Mock<ISession>();
             session.Setup(x => x.GetRootPost(rootId)).Returns(rootPost);
+            var sessionRepository = new Mock<ISessionRepository>();
+            sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var explorer = new Mock<IMailExplorer>();
             explorer.Setup(x => x.QuerySelectedMailItem()).Returns(MockMailItem());
             var rootPostIdProvider = new Mock<IStringProvider>();
@@ -475,21 +489,23 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 Mock.Of<ISettingsUserInterface>(),
-                session.Object,
+                sessionRepository.Object,
                 rootPostIdProvider.Object);
 
-            classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
+            await classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
 
             session.Verify(
                 x => x.CreatePost(channelId, ":email: From: sender\n:email: Subject: subject\nmessage", rootId));
         }
 
         [Test]
-        public void OnReplyClick_HandlesAnyExceptionsWhileCreatingPost()
+        public async Task OnReplyClick_HandlesAnyExceptionsWhileCreatingPost()
         {
             var session = new Mock<ISession>();
             session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<Exception>();
+            var sessionRepository = new Mock<ISessionRepository>();
+            sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var errorDisplay = new Mock<IErrorDisplay>();
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
@@ -497,16 +513,16 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>(),
-                session.Object,
+                sessionRepository.Object,
                 Mock.Of<IStringProvider>());
 
-            classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
+            await classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
 
             errorDisplay.Verify(x => x.Display(It.IsAny<Exception>()));
         }
 
         [Test]
-        public void OnReplyClick_HandlesMattermostExceptionsWhileCreatingPost()
+        public async Task OnReplyClick_HandlesMattermostExceptionsWhileCreatingPost()
         {
             var postIdProvider = new Mock<IStringProvider>();
             postIdProvider.Setup(x => x.Get()).Returns(string.Empty);
@@ -515,6 +531,8 @@ namespace Test.OutlookMatters.Core.ContextMenu
             session.Setup(x => x.GetRootPost(string.Empty)).Returns(post);
             session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new MattermostException(new Error()));
+            var sessionRepository = new Mock<ISessionRepository>();
+            sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var errorDisplay = new Mock<IErrorDisplay>();
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
@@ -522,10 +540,10 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 errorDisplay.Object,
                 Mock.Of<ISettingsUserInterface>(),
-                session.Object,
+                sessionRepository.Object,
                 postIdProvider.Object);
 
-            classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
+            await classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
 
             errorDisplay.Verify(x => x.Display(It.IsAny<MattermostException>()));
         }
@@ -540,7 +558,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
                 Mock.Of<ISettingsSaveService>(),
                 Mock.Of<IErrorDisplay>(),
                 settingsUi.Object,
-                Mock.Of<ISession>(),
+                Mock.Of<ISessionRepository>(),
                 Mock.Of<IStringProvider>());
 
             classUnderTest.OnSettingsClick(Mock.Of<IRibbonControl>());

@@ -2,11 +2,14 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
+using OutlookMatters.Core.Cache;
 using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Mail;
 using OutlookMatters.Core.Mattermost.Interface;
 using OutlookMatters.Core.Reply;
+using OutlookMatters.Core.Session;
 using OutlookMatters.Core.Settings;
 using OutlookMatters.Core.Utils;
 using Office = Microsoft.Office.Core;
@@ -21,7 +24,7 @@ namespace OutlookMatters.Core.ContextMenu
         private readonly IErrorDisplay _errorDisplay;
         private readonly IMailExplorer _explorer;
         private readonly IStringProvider _rootPostIdProvider;
-        private readonly ISession _session;
+        private readonly ISessionRepository _sessionRepository;
         private readonly ISettingsLoadService _settingsLoadService;
         private readonly ISettingsSaveService _settingsSaveService;
         private readonly ISettingsUserInterface _settingsUi;
@@ -32,7 +35,7 @@ namespace OutlookMatters.Core.ContextMenu
             ISettingsSaveService settingsSaveService,
             IErrorDisplay errorDisplay,
             ISettingsUserInterface settingsUi,
-            ISession session,
+            ISessionRepository sessionRepository,
             IStringProvider rootPostIdProvider)
         {
             _explorer = explorer;
@@ -40,7 +43,7 @@ namespace OutlookMatters.Core.ContextMenu
             _settingsSaveService = settingsSaveService;
             _errorDisplay = errorDisplay;
             _settingsUi = settingsUi;
-            _session = session;
+            _sessionRepository = sessionRepository;
             _rootPostIdProvider = rootPostIdProvider;
         }
 
@@ -95,13 +98,14 @@ namespace OutlookMatters.Core.ContextMenu
             _settingsUi.OpenSettings();
         }
 
-        public void OnPostIntoChannelClick(Office.IRibbonControl control)
+        public async Task OnPostIntoChannelClick(Office.IRibbonControl control)
         {
             var channelId = control.Id.Substring(CHANNEL_BUTTON_ID_PREFIX.Length);
             var message = FormatMessage();
             try
             {
-                _session.CreatePost(channelId, message);
+                var session = await _sessionRepository.RestoreSession();
+                await Task.Run(() => session.CreatePost(channelId, message));
             }
             catch (MattermostException mex)
             {
@@ -113,13 +117,14 @@ namespace OutlookMatters.Core.ContextMenu
             }
         }
 
-        public void OnRefreshChannelListClick(Office.IRibbonControl control)
+        public async Task OnRefreshChannelListClick(Office.IRibbonControl control)
         {
             try
             {
-                var channelList = _session.FetchChannelList();
+                var session = await _sessionRepository.RestoreSession();
+                var channelList = await Task.Run(() => session.FetchChannelList());
                 var channelMap = JsonConvert.SerializeObject(channelList);
-                _settingsSaveService.SaveChannels(channelMap);
+                await Task.Run(() => _settingsSaveService.SaveChannels(channelMap));
             }
             catch (MattermostException mex)
             {
@@ -131,16 +136,17 @@ namespace OutlookMatters.Core.ContextMenu
             }
         }
 
-        public void OnReplyClick(Office.IRibbonControl control)
+        public async Task OnReplyClick(Office.IRibbonControl control)
         {
             var message = FormatMessage();
             try
             {
                 var postId = _rootPostIdProvider.Get();
-                var rootPost = _session.GetRootPost(postId);
+                var session = await _sessionRepository.RestoreSession();
+                var rootPost = await Task.Run(() => session.GetRootPost(postId));
                 var rootId = rootPost.id;
 
-                _session.CreatePost(rootPost.channel_id, message, rootId);
+                await Task.Run(() => session.CreatePost(rootPost.channel_id, message, rootId));
             }
             catch (UserAbortException)
             {
