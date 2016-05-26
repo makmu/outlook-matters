@@ -52,7 +52,8 @@ namespace OutlookMatters
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             var httpClient = new DotNetHttpClient();
-            var mattermost = new HttpClient(new HttpSessionFactory(httpClient), httpClient);
+            var restService = new HttpRestService(httpClient);
+            var mattermost = new HttpClient(new HttpSessionFactory(httpClient), restService);
             var passwordDialog = new PasswordDialogShell();
             var caches = new CompositeCache();
             var settingsService = new ApplicationSettingsService(caches);

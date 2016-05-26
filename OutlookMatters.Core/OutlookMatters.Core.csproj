@@ -86,6 +86,8 @@
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Http\IHttpResponse.cs" />
+    <Compile Include="Mattermost\HttpImpl\HttpRestService.cs" />
+    <Compile Include="Mattermost\HttpImpl\IRestService.cs" />
     <Compile Include="Session\ISessionRepository.cs" />
     <Compile Include="Mail\IExplorerService.cs" />
     <Compile Include="Mail\IMailExplorer.cs" />

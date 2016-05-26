@@ -1,49 +1,30 @@
 ﻿using System;
-using Newtonsoft.Json;
-using OutlookMatters.Core.Http;
 using OutlookMatters.Core.Mattermost.Interface;
 
 namespace OutlookMatters.Core.Mattermost.HttpImpl
 {
     public class HttpClient : IClient
     {
-        private readonly IHttpClient _client;
+        private readonly IRestService _restService;
         private readonly ISessionFactory _sessionFactory;
 
-        public HttpClient(ISessionFactory sessionFactory, IHttpClient client)
+        public HttpClient(ISessionFactory sessionFactory, IRestService restService)
         {
             _sessionFactory = sessionFactory;
-            _client = client;
+            _restService = restService;
         }
 
         public ISession LoginByUsername(string url, string teamId, string username, string password)
         {
-            try
+            var login = new Login
             {
-                var loginUrl = new Uri(new Uri(url), "api/v1/users/login");
-                var login = new Login
-                {
-                    name = teamId,
-                    email = username,
-                    password = password
-                };
-                using (var response = _client.Request(loginUrl)
-                    .WithContentType("text/json")
-                    .Post(JsonConvert.SerializeObject(login)))
-                {
-                    var token = response.GetHeaderValue("Token");
-                    var payload = response.GetPayload();
-                    var user = JsonConvert.DeserializeObject<User>(payload);
-
-                    return _sessionFactory.CreateSession(new Uri(url), token, user.id);
-                }
-            }
-            catch (HttpException hex)
-            {
-                var errorJson = hex.Response.GetPayload();
-                var error = JsonConvert.DeserializeObject<Interface.Error>(errorJson);
-                throw new MattermostException(error);
-            }
+                Name = teamId,
+                Email = username,
+                Password = password
+            };
+            string token;
+            var user = _restService.Login(new Uri(url), login, out token);
+            return _sessionFactory.CreateSession(new Uri(url), token, user.Id);
         }
     }
 }

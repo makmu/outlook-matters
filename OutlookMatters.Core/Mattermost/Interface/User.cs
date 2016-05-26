@@ -1,7 +1,28 @@
+using Newtonsoft.Json;
+
 namespace OutlookMatters.Core.Mattermost.Interface
 {
     public class User
     {
-        public string id { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        protected bool Equals(User other)
+        {
+            return string.Equals(Id, other.Id);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((User) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id != null ? Id.GetHashCode() : 0;
+        }
     }
 }
