@@ -36,9 +36,24 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
             }
         }
 
-        public Post CreatePost(Uri baseUri, string token, Post newPost)
+        public void CreatePost(Uri baseUri, string token, string channelId, Post newPost)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var postUrl = new Uri(baseUri, "api/v1/channels/" + channelId + "/create");
+                using (_httpClient.Request(postUrl)
+                    .WithContentType("text/json")
+                    .WithHeader("Authorization", "Bearer " + token)
+                    .Post(JsonConvert.SerializeObject(newPost)))
+                {
+                }
+            }
+            catch (HttpException hex)
+            {
+                var errorJson = hex.Response.GetPayload();
+                var error = JsonConvert.DeserializeObject<Interface.Error>(errorJson);
+                throw new MattermostException(error);
+            }
         }
 
         public Thread GetPostsThread(Uri baseUri, string token, string postId)

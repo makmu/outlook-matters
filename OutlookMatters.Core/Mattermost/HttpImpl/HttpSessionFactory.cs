@@ -7,15 +7,17 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
     public class HttpSessionFactory : ISessionFactory
     {
         private readonly IHttpClient _httpClient;
+        private readonly IRestService _restService;
 
-        public HttpSessionFactory(IHttpClient httpClient)
+        public HttpSessionFactory(IHttpClient httpClient, IRestService restService)
         {
             _httpClient = httpClient;
+            _restService = restService;
         }
 
         public ISession CreateSession(Uri url, string token, string userId)
         {
-            return new HttpSession(url, token, userId, _httpClient);
+            return new HttpSession(url, token, userId, _httpClient, _restService);
         }
     }
 }

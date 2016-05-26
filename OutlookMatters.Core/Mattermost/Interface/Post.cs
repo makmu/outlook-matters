@@ -1,11 +1,50 @@
+using Newtonsoft.Json;
+
 namespace OutlookMatters.Core.Mattermost.Interface
 {
     public class Post
     {
-        public string id { get; set; }
-        public string channel_id { get; set; }
-        public string message { get; set; }
-        public string user_id { get; set; }
-        public string root_id { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("channel_id")]
+        public string ChannelId { get; set; }
+
+        [JsonProperty("message")]
+        public string Message { get; set; }
+
+        [JsonProperty("user_id")]
+        public string UserId { get; set; }
+
+        [JsonProperty("RootId")]
+        public string RootId { get; set; }
+
+        protected bool Equals(Post other)
+        {
+            return string.Equals(Id, other.Id) && string.Equals(ChannelId, other.ChannelId) &&
+                   string.Equals(Message, other.Message) && string.Equals(UserId, other.UserId) &&
+                   string.Equals(RootId, other.RootId);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Post) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (Id != null ? Id.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (ChannelId != null ? ChannelId.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Message != null ? Message.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (UserId != null ? UserId.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (RootId != null ? RootId.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
     }
 }

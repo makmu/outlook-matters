@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using OutlookMatters.Core.Cache;
 using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Mail;
 using OutlookMatters.Core.Mattermost.Interface;
@@ -144,9 +143,9 @@ namespace OutlookMatters.Core.ContextMenu
                 var postId = _rootPostIdProvider.Get();
                 var session = await _sessionRepository.RestoreSession();
                 var rootPost = await Task.Run(() => session.GetRootPost(postId));
-                var rootId = rootPost.id;
+                var rootId = rootPost.Id;
 
-                await Task.Run(() => session.CreatePost(rootPost.channel_id, message, rootId));
+                await Task.Run(() => session.CreatePost(rootPost.ChannelId, message, rootId));
             }
             catch (UserAbortException)
             {

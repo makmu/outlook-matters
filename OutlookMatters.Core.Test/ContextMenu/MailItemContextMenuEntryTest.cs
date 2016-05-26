@@ -474,7 +474,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
         {
             const string rootId = "rootId";
             const string channelId = "channelId";
-            var rootPost = new Post {id = rootId, channel_id = channelId};
+            var rootPost = new Post {Id = rootId, ChannelId = channelId};
             var session = new Mock<ISession>();
             session.Setup(x => x.GetRootPost(rootId)).Returns(rootPost);
             var sessionRepository = new Mock<ISessionRepository>();
@@ -526,7 +526,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
         {
             var postIdProvider = new Mock<IStringProvider>();
             postIdProvider.Setup(x => x.Get()).Returns(string.Empty);
-            var post = new Post {root_id = string.Empty};
+            var post = new Post {RootId = string.Empty};
             var session = new Mock<ISession>();
             session.Setup(x => x.GetRootPost(string.Empty)).Returns(post);
             session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))

@@ -53,7 +53,7 @@ namespace OutlookMatters
         {
             var httpClient = new DotNetHttpClient();
             var restService = new HttpRestService(httpClient);
-            var mattermost = new HttpClient(new HttpSessionFactory(httpClient), restService);
+            var mattermost = new HttpClient(new HttpSessionFactory(httpClient, restService), restService);
             var passwordDialog = new PasswordDialogShell();
             var caches = new CompositeCache();
             var settingsService = new ApplicationSettingsService(caches);

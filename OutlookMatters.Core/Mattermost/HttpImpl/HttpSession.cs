@@ -9,41 +9,30 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
     {
         private readonly Uri _baseUri;
         private readonly IHttpClient _httpClient;
+        private readonly IRestService _restService;
         private readonly string _token;
         private readonly string _userId;
 
-        public HttpSession(Uri baseUri, string token, string userId, IHttpClient httpClient)
+        public HttpSession(Uri baseUri, string token, string userId, IHttpClient httpClient, IRestService restService)
         {
             _baseUri = baseUri;
             _token = token;
             _userId = userId;
             _httpClient = httpClient;
+            _restService = restService;
         }
 
         public void CreatePost(string channelId, string message, string rootId = "")
         {
-            try
+            var post = new Post
             {
-                var post = new Post
-                {
-                    id = string.Empty,
-                    channel_id = channelId,
-                    message = message,
-                    user_id = _userId,
-                    root_id = rootId
-                };
-                var postUrl = PostUrl(channelId);
-                using (_httpClient.Request(postUrl)
-                    .WithContentType("text/json")
-                    .WithHeader("Authorization", "Bearer " + _token)
-                    .Post(JsonConvert.SerializeObject(post)))
-                {
-                }
-            }
-            catch (HttpException hex)
-            {
-                throw TranslateException(hex);
-            }
+                Id = string.Empty,
+                ChannelId = channelId,
+                Message = message,
+                UserId = _userId,
+                RootId = rootId
+            };
+            _restService.CreatePost(_baseUri, _token, channelId, post);
         }
 
         private static MattermostException TranslateException(HttpException hex)
@@ -65,7 +54,7 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
                 {
                     var payload = response.GetPayload();
                     var thread = JsonConvert.DeserializeObject<Thread>(payload);
-                    var rootId = thread.posts[postId].root_id;
+                    var rootId = thread.posts[postId].RootId;
 
                     if (rootId == "")
                     {

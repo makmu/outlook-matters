@@ -11,25 +11,52 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
     [TestFixture]
     public class HttpSessionTest
     {
-        private const string Token = "token";
-        private const string UserId = "userId";
-        private const string ChannelId = "channelId";
-        private const string Message = "Hello World!";
-        private const string RootId = "rootId";
+        private const string TOKEN = "token";
+        private const string USER_ID = "userId";
+        private const string CHANNEL_ID = "channelId";
+        private const string MESSAGE = "Hello World!";
+        private const string ROOT_ID = "rootId";
 
         [Test]
-        public void CreatePost_PostsHttpRequest()
+        public void CreatePost_UsesRestServiceCorrectly()
         {
-            const string jsonPost =
-                @"{""id"":"""",""channel_id"":""channelId"",""message"":""Hello World!"",""user_id"":""userId"",""root_id"":""""}";
-            var httpRequest = new Mock<IHttpRequest>();
-            var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
+            var baseUri = new Uri("http://localhost/");
+            var post = new Post
+            {
+                Id = string.Empty,
+                ChannelId = CHANNEL_ID,
+                Message = MESSAGE,
+                UserId = USER_ID,
+                RootId = string.Empty
+            };
+            var restService = new Mock<IRestService>();
+            restService.Setup(x => x.CreatePost(baseUri, TOKEN, CHANNEL_ID, post));
+            var sut = new HttpSession(baseUri, TOKEN, USER_ID, null, restService.Object);
 
-            classUnderTest.CreatePost(ChannelId, Message);
+            sut.CreatePost(CHANNEL_ID, MESSAGE);
 
-            httpRequest.Verify(x => x.WithContentType("text/json"));
-            httpRequest.Verify(x => x.WithHeader("Authorization", "Bearer " + Token));
-            httpRequest.Verify(x => x.Post(jsonPost));
+            restService.VerifyAll();
+        }
+
+        [Test]
+        public void CreatePost_UsesRestServiceCorrectly_IfRootIdIsProvided()
+        {
+            var baseUri = new Uri("http://localhost/");
+            var post = new Post
+            {
+                Id = string.Empty,
+                ChannelId = CHANNEL_ID,
+                Message = MESSAGE,
+                UserId = USER_ID,
+                RootId = ROOT_ID
+            };
+            var restService = new Mock<IRestService>();
+            restService.Setup(x => x.CreatePost(baseUri, TOKEN, CHANNEL_ID, post));
+            var sut = new HttpSession(baseUri, TOKEN, USER_ID, null, restService.Object);
+
+            sut.CreatePost(CHANNEL_ID, MESSAGE, ROOT_ID);
+
+            restService.VerifyAll();
         }
 
         [Test]
@@ -70,7 +97,7 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             httpClient.Setup(x => x.Request(new Uri(baseUri, "api/v1/channels/")))
                 .Returns(httpRequest.Object);
             httpRequest.Setup(x => x.Get()).Throws(new HttpException(httpResponse.Object));
-            var classUnderTest = new HttpSession(baseUri, Token, UserId, httpClient.Object);
+            var classUnderTest = new HttpSession(baseUri, TOKEN, USER_ID, httpClient.Object, Mock.Of<IRestService>());
 
             try
             {
@@ -82,60 +109,6 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
                 mex.Message.Should().Be(errorMessage);
                 mex.Details.Should().Be(detailedError);
             }
-        }
-
-        [Test]
-        public void CreatePost_PostsHttpRequestWithRootId_IfRootIdProvided()
-        {
-            const string jsonPost =
-                @"{""id"":"""",""channel_id"":""channelId"",""message"":""Hello World!"",""user_id"":""userId"",""root_id"":""rootId""}";
-            var httpRequest = new Mock<IHttpRequest>();
-            var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
-
-            classUnderTest.CreatePost(ChannelId, Message, RootId);
-
-            httpRequest.Verify(x => x.WithContentType("text/json"));
-            httpRequest.Verify(x => x.WithHeader("Authorization", "Bearer " + Token));
-            httpRequest.Verify(x => x.Post(jsonPost));
-        }
-
-        [Test]
-        public void CreatePost_ThrowsMattermostException_IfHttpExceptionIsThrown()
-        {
-            const string errorMessage = "error message";
-            const string detailedError = "detailed error";
-            const string jsonResponse =
-                "{\"message\":\"" + errorMessage + "\",\"detailed_error\":\"" + detailedError + "\"}";
-            var httpRequest = new Mock<IHttpRequest>();
-            var httpResponse = new Mock<IHttpResponse>();
-            httpResponse.Setup(x => x.GetPayload()).Returns(jsonResponse);
-            HttpException httpException = new HttpException(httpResponse.Object);
-            httpRequest.Setup(x => x.Post(It.IsAny<string>())).Throws(httpException);
-            var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
-
-            try
-            {
-                classUnderTest.CreatePost(ChannelId, Message, RootId);
-                Assert.Fail();
-            }
-            catch (MattermostException mex)
-            {
-                mex.Message.Should().Be(errorMessage);
-                mex.Details.Should().Be(detailedError);
-            }
-        }
-
-        [Test]
-        public void CreatePost_DisposesResponse()
-        {
-            var httpRequest = new Mock<IHttpRequest>();
-            var httpResponse = new Mock<IHttpResponse>();
-            httpRequest.Setup(x => x.Post(It.IsAny<string>())).Returns(httpResponse.Object);
-            var classUnderTest = SetupUserSessionForCreatingPosts(httpRequest);
-
-            classUnderTest.CreatePost(ChannelId, Message);
-
-            httpResponse.Verify(x => x.Dispose());
         }
 
         [Test]
@@ -156,7 +129,7 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             httpClient.Setup(x => x.Request(new Uri(baseUri, "api/v1/posts/" + postId)))
                 .Returns(httpRequest.Object);
             httpRequest.Setup(x => x.Get()).Throws(new HttpException(httpResponse.Object));
-            var classUnderTest = new HttpSession(baseUri, Token, UserId, httpClient.Object);
+            var classUnderTest = new HttpSession(baseUri, TOKEN, USER_ID, httpClient.Object, Mock.Of<IRestService>());
 
             try
             {
@@ -174,7 +147,7 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         public void GetRootPost_DisposesHttpResponse()
         {
             const string response =
-                "{\"order\":[\"pts7w4o6rignmm5jkwntk6st1a\"],\"posts\":{\"948swb8oxjf1ifc464ddz8h1ph\":{\"id\":\"948swb8oxjf1ifc464ddz8h1ph\",\"create_at\":1458850996664,\"update_at\":1458850996664,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"root_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"parent_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"},\"pts7w4o6rignmm5jkwntk6st1a\":{\"id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"create_at\":1458847220284,\"update_at\":1458850996665,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"root_id\":\"\",\"parent_id\":\"\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"}}}";
+                "{\"order\":[\"pts7w4o6rignmm5jkwntk6st1a\"],\"posts\":{\"948swb8oxjf1ifc464ddz8h1ph\":{\"id\":\"948swb8oxjf1ifc464ddz8h1ph\",\"create_at\":1458850996664,\"update_at\":1458850996664,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"RootId\":\"pts7w4o6rignmm5jkwntk6st1a\",\"parent_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"},\"pts7w4o6rignmm5jkwntk6st1a\":{\"id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"create_at\":1458847220284,\"update_at\":1458850996665,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"RootId\":\"\",\"parent_id\":\"\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"}}}";
 
             const string postId = "948swb8oxjf1ifc464ddz8h1ph";
 
@@ -188,7 +161,7 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             httpClient.Setup(x => x.Request(It.IsAny<Uri>()))
                 .Returns(httpRequest.Object);
             httpRequest.Setup(x => x.Get()).Returns(httpResponse.Object);
-            var classUnderTest = new HttpSession(baseUri, Token, UserId, httpClient.Object);
+            var classUnderTest = new HttpSession(baseUri, TOKEN, USER_ID, httpClient.Object, Mock.Of<IRestService>());
 
             classUnderTest.GetRootPost(postId);
 
@@ -199,7 +172,7 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         public void GetRootPost_ReturnsRootPost_IfParentIsNotRootPost()
         {
             const string response =
-                "{\"order\":[\"pts7w4o6rignmm5jkwntk6st1a\"],\"posts\":{\"948swb8oxjf1ifc464ddz8h1ph\":{\"id\":\"948swb8oxjf1ifc464ddz8h1ph\",\"create_at\":1458850996664,\"update_at\":1458850996664,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"root_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"parent_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"},\"pts7w4o6rignmm5jkwntk6st1a\":{\"id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"create_at\":1458847220284,\"update_at\":1458850996665,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"root_id\":\"\",\"parent_id\":\"\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"}}}";
+                "{\"order\":[\"pts7w4o6rignmm5jkwntk6st1a\"],\"posts\":{\"948swb8oxjf1ifc464ddz8h1ph\":{\"id\":\"948swb8oxjf1ifc464ddz8h1ph\",\"create_at\":1458850996664,\"update_at\":1458850996664,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"RootId\":\"pts7w4o6rignmm5jkwntk6st1a\",\"parent_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"},\"pts7w4o6rignmm5jkwntk6st1a\":{\"id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"create_at\":1458847220284,\"update_at\":1458850996665,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"RootId\":\"\",\"parent_id\":\"\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"}}}";
 
             const string postId = "948swb8oxjf1ifc464ddz8h1ph";
             const string rootId = "pts7w4o6rignmm5jkwntk6st1a";
@@ -213,19 +186,18 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             httpClient.Setup(x => x.Request(It.IsAny<Uri>()))
                 .Returns(httpRequest.Object);
             httpRequest.Setup(x => x.Get()).Returns(httpResponse.Object);
-            var classUnderTest = new HttpSession(baseUri, Token, UserId, httpClient.Object);
-
+            var classUnderTest = new HttpSession(baseUri, TOKEN, USER_ID, httpClient.Object, Mock.Of<IRestService>());
 
             var result = classUnderTest.GetRootPost(postId);
 
-            Assert.That(result.id, Is.EqualTo(rootId));
+            Assert.That(result.Id, Is.EqualTo(rootId));
         }
 
         [Test]
         public void GetRootPost_ReturnsRootPost_IfRootIdOfPostIsEmpty()
         {
             const string response =
-                "{\"order\":[\"pts7w4o6rignmm5jkwntk6st1a\"],\"posts\":{\"948swb8oxjf1ifc464ddz8h1ph\":{\"id\":\"948swb8oxjf1ifc464ddz8h1ph\",\"create_at\":1458850996664,\"update_at\":1458850996664,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"root_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"parent_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"},\"pts7w4o6rignmm5jkwntk6st1a\":{\"id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"create_at\":1458847220284,\"update_at\":1458850996665,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"root_id\":\"\",\"parent_id\":\"\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"}}}";
+                "{\"order\":[\"pts7w4o6rignmm5jkwntk6st1a\"],\"posts\":{\"948swb8oxjf1ifc464ddz8h1ph\":{\"id\":\"948swb8oxjf1ifc464ddz8h1ph\",\"create_at\":1458850996664,\"update_at\":1458850996664,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"RootId\":\"pts7w4o6rignmm5jkwntk6st1a\",\"parent_id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"},\"pts7w4o6rignmm5jkwntk6st1a\":{\"id\":\"pts7w4o6rignmm5jkwntk6st1a\",\"create_at\":1458847220284,\"update_at\":1458850996665,\"delete_at\":0,\"user_id\":\"izcjneaxrbbr3y13wh9dg94twr\",\"channel_id\":\"6oadmtc9upfwxqy15hg9id6o8o\",\"RootId\":\"\",\"parent_id\":\"\",\"original_id\":\"\",\"message\":\":email: From: \\n:email: Subject: blub\\nFoobar asdf lorem ipsum\",\"type\":\"\",\"props\":{},\"hashtags\":\"\",\"filenames\":[],\"pending_post_id\":\"\"}}}";
 
             const string postId = "pts7w4o6rignmm5jkwntk6st1a";
             var baseUri = new Uri("http://localhost");
@@ -238,12 +210,11 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             httpClient.Setup(x => x.Request(It.IsAny<Uri>()))
                 .Returns(httpRequest.Object);
             httpRequest.Setup(x => x.Get()).Returns(httpResponse.Object);
-            var classUnderTest = new HttpSession(baseUri, Token, UserId, httpClient.Object);
-
+            var classUnderTest = new HttpSession(baseUri, TOKEN, USER_ID, httpClient.Object, Mock.Of<IRestService>());
 
             var result = classUnderTest.GetRootPost(postId);
 
-            Assert.That(result.id, Is.EqualTo(postId));
+            Assert.That(result.Id, Is.EqualTo(postId));
         }
 
         private static HttpSession SetupUserSessionForCreatingPosts(Mock<IHttpRequest> httpRequest)
@@ -252,9 +223,9 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             httpRequest.Setup(x => x.WithHeader(It.IsAny<string>(), It.IsAny<string>())).Returns(httpRequest.Object);
             httpRequest.Setup(x => x.WithContentType(It.IsAny<string>())).Returns(httpRequest.Object);
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.Request(new Uri(baseUri, "api/v1/channels/" + ChannelId + "/create")))
+            httpClient.Setup(x => x.Request(new Uri(baseUri, "api/v1/channels/" + CHANNEL_ID + "/create")))
                 .Returns(httpRequest.Object);
-            var classUnderTest = new HttpSession(baseUri, Token, UserId, httpClient.Object);
+            var classUnderTest = new HttpSession(baseUri, TOKEN, USER_ID, httpClient.Object, Mock.Of<IRestService>());
             return classUnderTest;
         }
 
@@ -272,7 +243,7 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
 
             var httpClient = new Mock<IHttpClient>();
             httpClient.Setup(x => x.Request(new Uri(baseUri, "api/v1/channels/"))).Returns(httpRequest.Object);
-            var classUnderTest = new HttpSession(baseUri, Token, UserId, httpClient.Object);
+            var classUnderTest = new HttpSession(baseUri, TOKEN, USER_ID, httpClient.Object, Mock.Of<IRestService>());
             return classUnderTest;
         }
     }
