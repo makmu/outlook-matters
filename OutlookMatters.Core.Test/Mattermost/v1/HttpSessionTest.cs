@@ -105,20 +105,5 @@ namespace Test.OutlookMatters.Core.Mattermost.v1
 
             Assert.That(result, Is.EqualTo(chatPost.Object));
         }
-
-        [Test]
-        public void FetchChannelList_ReturnsChannelListFromRestService()
-        {
-            var baseUri = new Uri("http://localhost/");
-            var channelList = new ChannelList();
-            var restService = new Mock<IRestService>();
-            restService.Setup(x => x.GetChannelList(baseUri, TOKEN)).Returns(channelList);
-            var sut = new HttpSession(restService.Object, baseUri,
-                TOKEN, USER_ID, Mock.Of<IChatPostFactory>(), Mock.Of<IChatChannelFactory>());
-
-            var result = sut.FetchChannelList();
-
-            Assert.That(result, Is.EqualTo(channelList));
-        }
     }
 }

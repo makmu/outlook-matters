@@ -38,11 +38,6 @@ namespace OutlookMatters.Core.Mattermost.v1
             return _factory.NewInstance(_baseUri, _token, _userId, thread.Posts[postId]);
         }
 
-        public ChannelList FetchChannelList()
-        {
-            return _restService.GetChannelList(_baseUri, _token);
-        }
-
         public IEnumerable<IChatChannel> GetChannels()
         {
             return _restService.GetChannelList(_baseUri, _token).Channels
