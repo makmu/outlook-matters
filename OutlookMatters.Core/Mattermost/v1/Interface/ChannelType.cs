@@ -2,7 +2,7 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace OutlookMatters.Core.Mattermost.Interface
+namespace OutlookMatters.Core.Mattermost.v1.Interface
 {
     [JsonConverter(typeof (StringEnumConverter))]
     public enum ChannelType

@@ -10,7 +10,7 @@ using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.ContextMenu;
 using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Mail;
-using OutlookMatters.Core.Mattermost.Interface;
+using OutlookMatters.Core.Mattermost.v1.Interface;
 using OutlookMatters.Core.Reply;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Session;

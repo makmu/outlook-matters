@@ -1,11 +1,11 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
-using OutlookMatters.Core.Mattermost;
-using OutlookMatters.Core.Mattermost.Interface;
+using OutlookMatters.Core.Mattermost.v1;
+using OutlookMatters.Core.Mattermost.v1.Interface;
 using OutlookMatters.Core.Settings;
 
-namespace Test.OutlookMatters.Core.Mattermost
+namespace Test.OutlookMatters.Core.Mattermost.v1
 {
     [TestFixture]
     public class ChatChannelImplTest

@@ -1,7 +1,7 @@
 ﻿using System;
 using OutlookMatters.Core.Chat;
 
-namespace OutlookMatters.Core.Mattermost
+namespace OutlookMatters.Core.Mattermost.v1
 {
     public interface ISessionFactory
     {

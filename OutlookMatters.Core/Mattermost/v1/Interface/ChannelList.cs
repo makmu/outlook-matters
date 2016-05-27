@@ -2,7 +2,7 @@
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace OutlookMatters.Core.Mattermost.Interface
+namespace OutlookMatters.Core.Mattermost.v1.Interface
 {
     public class ChannelList
     {

@@ -68,17 +68,17 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Mattermost\ChatChannelImplTest.cs" />
-    <Compile Include="Mattermost\ChatPostImplTest.cs" />
-    <Compile Include="Mattermost\HttpClientMockRestHelper.cs" />
-    <Compile Include="Mattermost\HttpClientTest.cs" />
-    <Compile Include="Mattermost\HttpRestServiceTest.cs" />
-    <Compile Include="Mattermost\HttpSessionTest.cs" />
+    <Compile Include="Mattermost\v1\ChatChannelImplTest.cs" />
+    <Compile Include="Mattermost\v1\ChatPostImplTest.cs" />
+    <Compile Include="Mattermost\v1\HttpClientMockRestHelper.cs" />
+    <Compile Include="Mattermost\v1\HttpClientTest.cs" />
+    <Compile Include="Mattermost\v1\HttpRestServiceTest.cs" />
+    <Compile Include="Mattermost\v1\HttpSessionTest.cs" />
+    <Compile Include="Mattermost\v1\Interface\MattermostExceptionTest.cs" />
     <Compile Include="Settings\CloseCommandTest.cs" />
     <Compile Include="ContextMenu\MailItemContextMenuEntryTest.cs" />
     <Compile Include="Mail\MailExceptionTest.cs" />
     <Compile Include="Mail\OutlookMailExplorerTest.cs" />
-    <Compile Include="Mattermost\Interface\MattermostExceptionTest.cs" />
     <Compile Include="Reply\PostIdFromPermalinkFilterTest.cs" />
     <Compile Include="Cache\CompositeCacheTest.cs" />
     <Compile Include="Session\SingleSignOnSessionRepositoryTest.cs" />

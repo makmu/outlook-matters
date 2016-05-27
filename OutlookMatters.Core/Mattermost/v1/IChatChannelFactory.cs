@@ -1,8 +1,8 @@
 ﻿using System;
 using OutlookMatters.Core.Chat;
-using OutlookMatters.Core.Mattermost.Interface;
+using OutlookMatters.Core.Mattermost.v1.Interface;
 
-namespace OutlookMatters.Core.Mattermost
+namespace OutlookMatters.Core.Mattermost.v1
 {
     public interface IChatChannelFactory
     {

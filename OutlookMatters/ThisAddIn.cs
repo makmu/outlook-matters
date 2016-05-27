@@ -9,6 +9,7 @@ using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Http;
 using OutlookMatters.Core.Mail;
 using OutlookMatters.Core.Mattermost;
+using OutlookMatters.Core.Mattermost.v1;
 using OutlookMatters.Core.Reply;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Session;

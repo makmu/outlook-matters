@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using OutlookMatters.Core.Cache;
 using OutlookMatters.Core.Chat;
-using OutlookMatters.Core.Mattermost.Interface;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Settings;
 

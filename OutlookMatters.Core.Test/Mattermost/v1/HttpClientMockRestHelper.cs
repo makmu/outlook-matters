@@ -2,7 +2,7 @@ using System;
 using Moq;
 using OutlookMatters.Core.Http;
 
-namespace Test.OutlookMatters.Core.Mattermost
+namespace Test.OutlookMatters.Core.Mattermost.v1
 {
     public static class HttpClientMockRestHelper
     {

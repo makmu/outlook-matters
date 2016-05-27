@@ -1,9 +1,9 @@
 using System;
 using Newtonsoft.Json;
 using OutlookMatters.Core.Http;
-using OutlookMatters.Core.Mattermost.Interface;
+using OutlookMatters.Core.Mattermost.v1.Interface;
 
-namespace OutlookMatters.Core.Mattermost
+namespace OutlookMatters.Core.Mattermost.v1
 {
     public class HttpRestService : IRestService
     {
@@ -93,7 +93,7 @@ namespace OutlookMatters.Core.Mattermost
 
         private static MattermostException TranslateException(HttpException hex)
         {
-            var error = JsonConvert.DeserializeObject<Interface.Error>(hex.Response.GetPayload());
+            var error = JsonConvert.DeserializeObject<v1.Interface.Error>(hex.Response.GetPayload());
             var exception = new MattermostException(error);
             return exception;
         }

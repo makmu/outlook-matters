@@ -5,10 +5,10 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using OutlookMatters.Core.Http;
-using OutlookMatters.Core.Mattermost;
-using OutlookMatters.Core.Mattermost.Interface;
+using OutlookMatters.Core.Mattermost.v1;
+using OutlookMatters.Core.Mattermost.v1.Interface;
 
-namespace Test.OutlookMatters.Core.Mattermost
+namespace Test.OutlookMatters.Core.Mattermost.v1
 {
     [TestFixture]
     public class HttpRestServiceTest
@@ -368,7 +368,7 @@ namespace Test.OutlookMatters.Core.Mattermost
         {
             return
                 "{\"order\":[\"" + string.Join(",", post.Order) + "\"],\"posts\":{" +
-                string.Join(",", post.Posts.Select(x => "\"" + x.Key + "\":" + x.Value.SerializeToPayload())) +
+                string.Join(",", post.Posts.Select(x => "\"" + x.Key + "\":" + SerializeToPayload((Post) x.Value))) +
                 "}}";
         }
 
