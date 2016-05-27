@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -59,12 +60,12 @@ namespace OutlookMatters.Core.ContextMenu
         {
             var xmlString = @"<menu xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">";
             var settings = _settingsLoadService.Load();
-            var channelList = JsonConvert.DeserializeObject<ChannelList>(settings.ChannelsMap);
+            var channelList = JsonConvert.DeserializeObject<ChannelListSetting>(settings.ChannelsMap);
             if (channelList != null)
             {
                 for (int index = 0; index < channelList.Channels.Count; index++)
                 {
-                    if (channelList.Channels[index].Type == ChannelType.Public)
+                    if (channelList.Channels[index].Type == ChannelTypeSetting.Public)
                     {
                         xmlString += CreateChannelButton(channelList.Channels[index].ChannelId,
                             channelList.Channels[index].ChannelName);
@@ -122,8 +123,12 @@ namespace OutlookMatters.Core.ContextMenu
             try
             {
                 var session = await _sessionRepository.RestoreSession();
-                var channelList = await Task.Run(() => session.FetchChannelList());
-                var channelMap = JsonConvert.SerializeObject(channelList);
+                var channelList = await Task.Run(() => session.GetChannels());
+                var channelSettings = new ChannelListSetting
+                {
+                    Channels = channelList.Select(x => x.ToSetting()).ToList()
+                };
+                var channelMap = JsonConvert.SerializeObject(channelSettings);
                 await Task.Run(() => _settingsSaveService.SaveChannels(channelMap));
             }
             catch (MattermostException mex)

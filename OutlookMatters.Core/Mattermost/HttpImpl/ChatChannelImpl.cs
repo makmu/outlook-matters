@@ -1,20 +1,12 @@
 ﻿using System;
+using System.Windows.Media;
 using OutlookMatters.Core.Mattermost.Interface;
+using OutlookMatters.Core.Settings;
 
 namespace OutlookMatters.Core.Mattermost.HttpImpl
 {
     public class ChatChannelImpl : IChatChannel
     {
-        public string Id
-        {
-            get { return _channel.ChannelId; }
-        }
-
-        public string Name
-        {
-            get { return _channel.ChannelName; }
-        }
-
         private readonly string _userId;
         private readonly Uri _baseUri;
         private readonly string _token;
@@ -41,6 +33,31 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
                 RootId = string.Empty
             };
             _restService.CreatePost(_baseUri, _token, _channel.ChannelId, post);
+        }
+
+        public ChannelSetting ToSetting()
+        {
+            return new ChannelSetting
+            {
+                ChannelId = _channel.ChannelId,
+                ChannelName = _channel.ChannelName,
+                Type = ConvertType(_channel.Type)
+            };
+        }
+
+        private ChannelTypeSetting ConvertType(ChannelType type)
+        {
+            switch (type)
+            {
+                case ChannelType.Direct:
+                    return ChannelTypeSetting.Direct;
+                case ChannelType.Public:
+                    return ChannelTypeSetting.Public;
+                case ChannelType.Private:
+                    return ChannelTypeSetting.Private;
+                default:
+                    return ChannelTypeSetting.Public;
+            }
         }
     }
 }

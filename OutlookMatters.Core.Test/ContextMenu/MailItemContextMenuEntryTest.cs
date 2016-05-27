@@ -370,7 +370,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
         {
             var control = MockOfRibbonControl();
             var session = new Mock<ISession>();
-            session.Setup(x => x.FetchChannelList()).Throws<Exception>();
+            session.Setup(x => x.GetChannels()).Throws<Exception>();
             var sessionRepository = new Mock<ISessionRepository>();
             sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var errorDisplay = new Mock<IErrorDisplay>();
@@ -393,7 +393,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
         {
             var control = MockOfRibbonControl();
             var session = new Mock<ISession>();
-            session.Setup(x => x.FetchChannelList())
+            session.Setup(x => x.GetChannels())
                 .Throws(new MattermostException(new Error()));
             var sessionRepository = new Mock<ISessionRepository>();
             sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
@@ -415,22 +415,19 @@ namespace Test.OutlookMatters.Core.ContextMenu
         [Test]
         public async Task OnRefreshChannelListClick_SavesChannelList()
         {
-            const string channelId = "channel id";
-            const string channelName = "channel name";
-            const ChannelType channelType = ChannelType.Public;
             const string expectedChannelMapResult =
                 "{\"channels\":[{\"id\":\"channel id\",\"display_name\":\"channel name\",\"type\":\"O\"}]}";
-            var channelList = new ChannelList
-            {
-                Channels =
-                    new List<Channel>
-                    {
-                        new Channel {ChannelId = channelId, ChannelName = channelName, Type = channelType}
-                    }
-            };
-
+            var channel = new Mock<IChatChannel>();
+            channel.Setup(x => x.ToSetting())
+                .Returns(new ChannelSetting()
+                {
+                    ChannelId = "channel id",
+                    ChannelName = "channel name",
+                    Type = ChannelTypeSetting.Public
+                });
+            var channels = new List<IChatChannel> {channel.Object};
             var session = new Mock<ISession>();
-            session.Setup(x => x.FetchChannelList()).Returns(channelList);
+            session.Setup(x => x.GetChannels()).Returns(channels);
             var sessionRepository = new Mock<ISessionRepository>();
             sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var saveService = new Mock<ISettingsSaveService>();

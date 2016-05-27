@@ -39,7 +39,6 @@ namespace OutlookMatters.Core.Session
                         settings.TeamId,
                         settings.Username,
                         password));
-                await Task.Run(() => _session.FetchChannelList());
             }
             return _session;
         }

@@ -128,6 +128,9 @@
       <DependentUpon>PasswordDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Security\PasswordDialogShell.cs" />
+    <Compile Include="Settings\ChannelSetting.cs" />
+    <Compile Include="Settings\ChannelListSetting.cs" />
+    <Compile Include="Settings\ChannelTypeSetting.cs" />
     <Compile Include="Settings\CloseCommand.cs" />
     <Compile Include="Settings\IClosableWindow.cs" />
     <Compile Include="Settings\ISettingsLoadService.cs" />

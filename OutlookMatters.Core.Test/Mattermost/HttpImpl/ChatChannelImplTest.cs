@@ -3,6 +3,7 @@ using Moq;
 using NUnit.Framework;
 using OutlookMatters.Core.Mattermost.HttpImpl;
 using OutlookMatters.Core.Mattermost.Interface;
+using OutlookMatters.Core.Settings;
 
 namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
 {
@@ -14,6 +15,8 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         public const string USER_ID = "userId";
         public const string CHANNEL_ID = "channelId";
         public const string CHANNEL_NAME = "channelName";
+        public const ChannelType CHANNEL_TYPE = ChannelType.Public;
+        public const ChannelTypeSetting CHANNEL_TYPE_SETTING = ChannelTypeSetting.Public;
 
         [Test]
         public void CreatePost_UsesRestServiceToCreatePost()
@@ -38,27 +41,17 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         }
 
         [Test]
-        public void Id_ReturnsChannelId()
+        public void ToSetting_ReturnsChannelId()
         {
             var baseUri = new Uri("http://localhost/");
-            var channel = new Channel {ChannelId = CHANNEL_ID};
+            var channel = new Channel {ChannelId = CHANNEL_ID, ChannelName = CHANNEL_NAME, Type = CHANNEL_TYPE};
             var sut = new ChatChannelImpl(Mock.Of<IRestService>(), baseUri, TOKEN, USER_ID, channel);
 
-            var result = sut.Id;
+            var result = sut.ToSetting();
 
-            Assert.That(result, Is.EqualTo(CHANNEL_ID));
-        }
-
-        [Test]
-        public void Name_ReturnsChannelName()
-        {
-            var baseUri = new Uri("http://localhost/");
-            var channel = new Channel {ChannelName = CHANNEL_NAME};
-            var sut = new ChatChannelImpl(Mock.Of<IRestService>(), baseUri, TOKEN, USER_ID, channel);
-
-            var result = sut.Name;
-
-            Assert.That(result, Is.EqualTo(CHANNEL_NAME));
+            Assert.That(result.ChannelId, Is.EqualTo(CHANNEL_ID));
+            Assert.That(result.ChannelName, Is.EqualTo(CHANNEL_NAME));
+            Assert.That(result.Type, Is.EqualTo(CHANNEL_TYPE_SETTING));
         }
     }
 }
