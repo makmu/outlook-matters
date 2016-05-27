@@ -1,10 +1,10 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
-using OutlookMatters.Core.Mattermost.HttpImpl;
+using OutlookMatters.Core.Mattermost;
 using OutlookMatters.Core.Mattermost.Interface;
 
-namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
+namespace Test.OutlookMatters.Core.Mattermost
 {
     [TestFixture]
     public class ChatPostImplTest

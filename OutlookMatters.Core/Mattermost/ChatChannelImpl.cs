@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Windows.Media;
 using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.Mattermost.Interface;
 using OutlookMatters.Core.Settings;
 
-namespace OutlookMatters.Core.Mattermost.HttpImpl
+namespace OutlookMatters.Core.Mattermost
 {
     public class ChatChannelImpl : IChatChannel
     {

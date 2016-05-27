@@ -1,7 +1,7 @@
 ﻿using System;
 using OutlookMatters.Core.Mattermost.Interface;
 
-namespace OutlookMatters.Core.Mattermost.HttpImpl
+namespace OutlookMatters.Core.Mattermost
 {
     public interface IRestService
     {

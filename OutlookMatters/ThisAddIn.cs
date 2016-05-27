@@ -8,7 +8,7 @@ using OutlookMatters.Core.ContextMenu;
 using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Http;
 using OutlookMatters.Core.Mail;
-using OutlookMatters.Core.Mattermost.HttpImpl;
+using OutlookMatters.Core.Mattermost;
 using OutlookMatters.Core.Reply;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Session;

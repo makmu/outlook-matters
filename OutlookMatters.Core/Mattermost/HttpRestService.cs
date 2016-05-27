@@ -1,10 +1,9 @@
 using System;
 using Newtonsoft.Json;
-using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.Http;
 using OutlookMatters.Core.Mattermost.Interface;
 
-namespace OutlookMatters.Core.Mattermost.HttpImpl
+namespace OutlookMatters.Core.Mattermost
 {
     public class HttpRestService : IRestService
     {
