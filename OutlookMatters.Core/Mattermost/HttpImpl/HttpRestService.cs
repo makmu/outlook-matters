@@ -74,7 +74,21 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
 
         public ChannelList GetChannelList(Uri baseUri, string token)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var getUrl = new Uri(baseUri, "api/v1/channels/");
+                using (var response = _httpClient.Request(getUrl)
+                    .WithHeader("Authorization", "Bearer " + token)
+                    .Get())
+                {
+                    var payload = response.GetPayload();
+                    return JsonConvert.DeserializeObject<ChannelList>(payload);
+                }
+            }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
+            }
         }
 
         private static MattermostException TranslateException(HttpException hex)

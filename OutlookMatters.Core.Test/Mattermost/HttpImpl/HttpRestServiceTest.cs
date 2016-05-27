@@ -14,13 +14,15 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
     public class HttpRestServiceTest
     {
         const string TOKEN = "token";
-        const string CHANNEL_ID = "channelId";
         const string MESSAGE = "message";
         const string TEAM_ID = "teamId";
         const string USER_ID = "userId";
         const string USER_EMAIL = "user@norely.com";
         const string USER_PASSWORD = "secret";
         const string POST_ID = "postId";
+        const string CHANNEL_ID = "channelId";
+        const string CHANNEL_NAME = "FunnyChannelName";
+        const ChannelType CHANNEL_TYPE = ChannelType.Public;
 
         [Test]
         public void Login_ReturnsUser()
@@ -210,6 +212,72 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             }
         }
 
+        [Test]
+        public void GetChannelList_GetsThreadViaHttp()
+        {
+            var channelList = SetupExampleChannelList();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v1/channels/")
+                .WithToken(TOKEN)
+                .Get()
+                .Responses(channelList.SerializeToPayload());
+            var sut = new HttpRestService(httpClient.Object);
+
+            var result = sut.GetChannelList(SetupExampleUri(), TOKEN);
+
+            Assert.That(result, Is.EqualTo(channelList));
+        }
+
+        [Test]
+        public void GetChannelList_DisposesHttpRequest()
+        {
+            var channelList = SetupExampleChannelList();
+            var httpClient = new Mock<IHttpClient>();
+            var httpResponse = httpClient.SetupRequest("http://localhost/", "api/v1/channels/")
+                .WithToken(TOKEN)
+                .Get()
+                .Responses(channelList.SerializeToPayload());
+            var sut = new HttpRestService(httpClient.Object);
+
+            sut.GetChannelList(SetupExampleUri(), TOKEN);
+
+            httpResponse.Verify(x => x.Dispose());
+        }
+
+        [Test]
+        public void GetChannelList_ThrowsMattermostExceptionWithError_IfHttpExceptionWithErrorPayload()
+        {
+            var error = SetupExampleError();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v1/channels/")
+                .WithToken(TOKEN)
+                .FailsAtGet()
+                .Responses(error.SerializeToPayload());
+            var sut = new HttpRestService(httpClient.Object);
+
+            try
+            {
+                sut.GetChannelList(SetupExampleUri(), TOKEN);
+                Assert.Fail();
+            }
+            catch (MattermostException mex)
+            {
+                mex.Message.Should().Be(error.message);
+                mex.Details.Should().Be(error.detailed_error);
+            }
+        }
+
+        private static ChannelList SetupExampleChannelList()
+        {
+            return new ChannelList
+            {
+                Channels = new List<Channel>
+                {
+                    new Channel {ChannelId = CHANNEL_ID, ChannelName = CHANNEL_NAME, Type = CHANNEL_TYPE}
+                }
+            };
+        }
+
         private Thread SetupExampleThread()
         {
             return new Thread
@@ -286,12 +354,27 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
                    "\",\"user_id\":\"" + post.UserId + "\",\"root_id\":\"" + post.RootId + "\"}";
         }
 
+        public static string SerializeToPayload(this Channel channel)
+        {
+            return "{\"id\":\"" + channel.ChannelId +
+                   "\",\"create_at\":1458911668852,\"update_at\":1458911668852,\"delete_at\":0,\"type\":\"" +
+                   channel.Type +
+                   "\",\"display_name\":\"" + channel.ChannelName + "\"}";
+        }
+
         public static string SerializeToPayload(this Thread post)
         {
             return
                 "{\"order\":[\"" + string.Join(",", post.Order) + "\"],\"posts\":{" +
                 string.Join(",", post.Posts.Select(x => "\"" + x.Key + "\":" + x.Value.SerializeToPayload())) +
                 "}}";
+        }
+
+        public static string SerializeToPayload(this ChannelList channelList)
+        {
+            return
+                "{\"channels\":[" + string.Join(",", channelList.Channels.Select(x => x.SerializeToPayload())) +
+                "]}";
         }
     }
 }
