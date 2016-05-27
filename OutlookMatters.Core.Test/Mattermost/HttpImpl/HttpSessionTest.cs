@@ -88,12 +88,10 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             var thread = new Thread
             {
                 Order = new[] {POST_ID, ROOT_ID},
-                Posts = new Dictionary<string, Post>
-                {
-                    [POST_ID] = new Post {Id = POST_ID, RootId = ROOT_ID},
-                    [ROOT_ID] = new Post {Id = ROOT_ID, RootId = string.Empty}
-                }
+                Posts = new Dictionary<string, Post>()
             };
+            thread.Posts[POST_ID] = new Post {Id = POST_ID, RootId = ROOT_ID};
+            thread.Posts[ROOT_ID] = new Post {Id = ROOT_ID, RootId = string.Empty};
             var restService = new Mock<IRestService>();
             var factory = new Mock<IChatPostFactory>();
             var chatPost = new Mock<IChatPost>();

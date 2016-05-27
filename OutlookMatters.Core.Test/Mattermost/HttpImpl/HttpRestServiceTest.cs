@@ -280,11 +280,13 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
 
         private Thread SetupExampleThread()
         {
-            return new Thread
+            var thread = new Thread
             {
                 Order = new[] {POST_ID},
-                Posts = new Dictionary<string, Post> {[POST_ID] = SetupExamplePost()}
+                Posts = new Dictionary<string, Post>()
             };
+            thread.Posts[POST_ID] = SetupExamplePost();
+            return thread;
         }
 
         private Post SetupExamplePost()
