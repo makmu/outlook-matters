@@ -2,8 +2,8 @@
 {
     public interface ISession
     {
-        void CreatePost(string channelId, string message, string rootId = "");
-        Post GetRootPost(string postId);
+        void CreatePost(string channelId, string message);
+        IChatPost GetPost(string postId);
         ChannelList FetchChannelList();
     }
 }

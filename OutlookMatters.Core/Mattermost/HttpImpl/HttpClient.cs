@@ -24,7 +24,7 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
             };
             string token;
             var user = _restService.Login(new Uri(url), login, out token);
-            return _sessionFactory.CreateSession(new Uri(url), token, user.Id);
+            return _sessionFactory.NewInstance(new Uri(url), token, user.Id);
         }
     }
 }

@@ -142,10 +142,8 @@ namespace OutlookMatters.Core.ContextMenu
             {
                 var postId = _rootPostIdProvider.Get();
                 var session = await _sessionRepository.RestoreSession();
-                var rootPost = await Task.Run(() => session.GetRootPost(postId));
-                var rootId = rootPost.Id;
-
-                await Task.Run(() => session.CreatePost(rootPost.ChannelId, message, rootId));
+                var post = await Task.Run(() => session.GetPost(postId));
+                await Task.Run(() => post.Reply(message));
             }
             catch (UserAbortException)
             {

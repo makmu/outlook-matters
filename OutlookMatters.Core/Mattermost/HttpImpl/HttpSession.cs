@@ -9,16 +9,18 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
         private readonly IRestService _restService;
         private readonly string _token;
         private readonly string _userId;
+        private readonly IChatPostFactory _factory;
 
-        public HttpSession(Uri baseUri, string token, string userId, IRestService restService)
+        public HttpSession(Uri baseUri, string token, string userId, IRestService restService, IChatPostFactory factory)
         {
             _baseUri = baseUri;
             _token = token;
             _userId = userId;
             _restService = restService;
+            _factory = factory;
         }
 
-        public void CreatePost(string channelId, string message, string rootId = "")
+        public void CreatePost(string channelId, string message)
         {
             var post = new Post
             {
@@ -26,22 +28,15 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
                 ChannelId = channelId,
                 Message = message,
                 UserId = _userId,
-                RootId = rootId
+                RootId = string.Empty
             };
             _restService.CreatePost(_baseUri, _token, channelId, post);
         }
 
-        public Post GetRootPost(string postId)
+        public IChatPost GetPost(string postId)
         {
             var thread = _restService.GetThreadOfPosts(_baseUri, _token, postId);
-            var rootId = thread.Posts[postId].RootId;
-
-            if (rootId == "")
-            {
-                return thread.Posts[postId];
-            }
-
-            return thread.Posts[rootId];
+            return _factory.NewInstance(_baseUri, _token, _userId, thread.Posts[postId]);
         }
 
         public ChannelList FetchChannelList()

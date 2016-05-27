@@ -67,6 +67,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Mattermost\HttpImpl\ChatPostImplTest.cs" />
     <Compile Include="Mattermost\HttpImpl\HttpClientMockRestHelper.cs" />
     <Compile Include="Mattermost\HttpImpl\HttpRestServiceTest.cs" />
     <Compile Include="Settings\CloseCommandTest.cs" />

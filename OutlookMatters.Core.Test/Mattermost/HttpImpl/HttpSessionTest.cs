@@ -31,7 +31,7 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             };
             var restService = new Mock<IRestService>();
             restService.Setup(x => x.CreatePost(baseUri, TOKEN, CHANNEL_ID, post));
-            var sut = new HttpSession(baseUri, TOKEN, USER_ID, restService.Object);
+            var sut = new HttpSession(baseUri, TOKEN, USER_ID, restService.Object, Mock.Of<IChatPostFactory>());
 
             sut.CreatePost(CHANNEL_ID, MESSAGE);
 
@@ -39,32 +39,12 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         }
 
         [Test]
-        public void CreatePost_UsesRestServiceCorrectly_IfRootIdIsProvided()
-        {
-            var baseUri = new Uri("http://localhost/");
-            var post = new Post
-            {
-                Id = string.Empty,
-                ChannelId = CHANNEL_ID,
-                Message = MESSAGE,
-                UserId = USER_ID,
-                RootId = ROOT_ID
-            };
-            var restService = new Mock<IRestService>();
-            restService.Setup(x => x.CreatePost(baseUri, TOKEN, CHANNEL_ID, post));
-            var sut = new HttpSession(baseUri, TOKEN, USER_ID, restService.Object);
-
-            sut.CreatePost(CHANNEL_ID, MESSAGE, ROOT_ID);
-
-            restService.VerifyAll();
-        }
-
-        [Test]
-        public void GetRootPost_ReturnsRootPost_IfParentIsNotRootPost()
+        public void GetPost_CreatesChatPostCorrectly()
         {
             var baseUri = new Uri("http://localhost");
             var thread = new Thread
             {
+                Order = new[] {POST_ID, ROOT_ID},
                 Posts = new Dictionary<string, Post>
                 {
                     [POST_ID] = new Post {Id = POST_ID, RootId = ROOT_ID},
@@ -72,12 +52,15 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
                 }
             };
             var restService = new Mock<IRestService>();
+            var factory = new Mock<IChatPostFactory>();
+            var chatPost = new Mock<IChatPost>();
             restService.Setup(x => x.GetThreadOfPosts(baseUri, TOKEN, POST_ID)).Returns(thread);
-            var sut = new HttpSession(baseUri, TOKEN, USER_ID, restService.Object);
+            factory.Setup(x => x.NewInstance(baseUri, TOKEN, USER_ID, thread.Posts[POST_ID])).Returns(chatPost.Object);
+            var sut = new HttpSession(baseUri, TOKEN, USER_ID, restService.Object, factory.Object);
 
-            var result = sut.GetRootPost(POST_ID);
+            var result = sut.GetPost(POST_ID);
 
-            Assert.That(result, Is.EqualTo(thread.Posts[ROOT_ID]));
+            Assert.That(result, Is.EqualTo(chatPost.Object));
         }
 
         [Test]
@@ -87,7 +70,7 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             var channelList = new ChannelList();
             var restService = new Mock<IRestService>();
             restService.Setup(x => x.GetChannelList(baseUri, TOKEN)).Returns(channelList);
-            var sut = new HttpSession(baseUri, TOKEN, USER_ID, restService.Object);
+            var sut = new HttpSession(baseUri, TOKEN, USER_ID, restService.Object, Mock.Of<IChatPostFactory>());
 
             var result = sut.FetchChannelList();
 

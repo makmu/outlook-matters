@@ -3,7 +3,7 @@ using OutlookMatters.Core.Mattermost.Interface;
 
 namespace OutlookMatters.Core.Mattermost.HttpImpl
 {
-    public class HttpSessionFactory : ISessionFactory
+    public class HttpSessionFactory : ISessionFactory, IChatPostFactory
     {
         private readonly IRestService _restService;
 
@@ -12,9 +12,14 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
             _restService = restService;
         }
 
-        public ISession CreateSession(Uri url, string token, string userId)
+        public ISession NewInstance(Uri url, string token, string userId)
         {
-            return new HttpSession(url, token, userId, _restService);
+            return new HttpSession(url, token, userId, _restService, this);
+        }
+
+        public IChatPost NewInstance(Uri baseUri, string token, string userId, Post post)
+        {
+            return new ChatPostImpl(_restService, baseUri, token, userId, post);
         }
     }
 }

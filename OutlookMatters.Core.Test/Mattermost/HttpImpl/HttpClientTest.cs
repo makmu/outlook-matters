@@ -25,7 +25,7 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
             restService.Setup(x => x.Login(new Uri(url), login, out token)).Returns(user);
             var session = new Mock<ISession>();
             var sessionFactory = new Mock<ISessionFactory>();
-            sessionFactory.Setup(x => x.CreateSession(new Uri(url), token, userId)).Returns(session.Object);
+            sessionFactory.Setup(x => x.NewInstance(new Uri(url), token, userId)).Returns(session.Object);
             var sut = new HttpClient(sessionFactory.Object, restService.Object);
 
             var result = sut.LoginByUsername(url, teamId, username, password);

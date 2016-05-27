@@ -3,8 +3,8 @@ using OutlookMatters.Core.Mattermost.Interface;
 
 namespace OutlookMatters.Core.Mattermost.HttpImpl
 {
-    public interface ISessionFactory
+    public interface IChatPostFactory
     {
-        ISession NewInstance(Uri url, string token, string userId);
+        IChatPost NewInstance(Uri baseUri, string token, string userId, Post posts);
     }
 }

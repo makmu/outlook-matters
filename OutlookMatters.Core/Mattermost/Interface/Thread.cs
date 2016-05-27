@@ -6,11 +6,9 @@ namespace OutlookMatters.Core.Mattermost.Interface
 {
     public struct Thread
     {
-        [JsonProperty("order")]
-        public string[] Order;
+        [JsonProperty("order")] public string[] Order;
 
-        [JsonProperty("posts")]
-        public Dictionary<string, Post> Posts;
+        [JsonProperty("posts")] public Dictionary<string, Post> Posts;
 
         public bool Equals(Thread other)
         {

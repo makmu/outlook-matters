@@ -308,8 +308,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
 
             session.Verify(
                 x =>
-                    x.CreatePost(channelId, ":email: From: sender\n:email: Subject: subject\nmessage",
-                        string.Empty));
+                    x.CreatePost(channelId, ":email: From: sender\n:email: Subject: subject\nmessage"));
         }
 
         [Test]
@@ -317,7 +316,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
         {
             var control = MockOfRibbonControl();
             var session = new Mock<ISession>();
-            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<Exception>();
             var sessionRepository = new Mock<ISessionRepository>();
             sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
@@ -341,7 +340,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
         {
             var control = MockOfRibbonControl();
             var session = new Mock<ISession>();
-            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new MattermostException(new Error()));
             var sessionRepository = new Mock<ISessionRepository>();
             sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
@@ -470,19 +469,18 @@ namespace Test.OutlookMatters.Core.ContextMenu
         }
 
         [Test]
-        public async Task OnReplyClick_CreatesPostWithRootIdUsingSession()
+        public async Task OnReplyClick_ReplysToPost()
         {
-            const string rootId = "rootId";
-            const string channelId = "channelId";
-            var rootPost = new Post {Id = rootId, ChannelId = channelId};
+            const string postId = "postId";
+            var post = new Mock<IChatPost>();
             var session = new Mock<ISession>();
-            session.Setup(x => x.GetRootPost(rootId)).Returns(rootPost);
+            session.Setup(x => x.GetPost(postId)).Returns(post.Object);
             var sessionRepository = new Mock<ISessionRepository>();
             sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var explorer = new Mock<IMailExplorer>();
             explorer.Setup(x => x.QuerySelectedMailItem()).Returns(MockMailItem());
             var rootPostIdProvider = new Mock<IStringProvider>();
-            rootPostIdProvider.Setup(x => x.Get()).Returns(rootId);
+            rootPostIdProvider.Setup(x => x.Get()).Returns(postId);
             var classUnderTest = new MailItemContextMenuEntry(
                 explorer.Object,
                 Mock.Of<ISettingsLoadService>(),
@@ -494,16 +492,17 @@ namespace Test.OutlookMatters.Core.ContextMenu
 
             await classUnderTest.OnReplyClick(Mock.Of<IRibbonControl>());
 
-            session.Verify(
-                x => x.CreatePost(channelId, ":email: From: sender\n:email: Subject: subject\nmessage", rootId));
+            post.Verify(x => x.Reply(":email: From: sender\n:email: Subject: subject\nmessage"));
         }
 
         [Test]
         public async Task OnReplyClick_HandlesAnyExceptionsWhileCreatingPost()
         {
-            var session = new Mock<ISession>();
-            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            var post = new Mock<IChatPost>();
+            post.Setup(x => x.Reply(It.IsAny<string>()))
                 .Throws<Exception>();
+            var session = new Mock<ISession>();
+            session.Setup(x => x.GetPost("postId")).Returns(post.Object);
             var sessionRepository = new Mock<ISessionRepository>();
             sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var errorDisplay = new Mock<IErrorDisplay>();
@@ -526,11 +525,11 @@ namespace Test.OutlookMatters.Core.ContextMenu
         {
             var postIdProvider = new Mock<IStringProvider>();
             postIdProvider.Setup(x => x.Get()).Returns(string.Empty);
-            var post = new Post {RootId = string.Empty};
-            var session = new Mock<ISession>();
-            session.Setup(x => x.GetRootPost(string.Empty)).Returns(post);
-            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            var post = new Mock<IChatPost>();
+            post.Setup(x => x.Reply(It.IsAny<string>()))
                 .Throws(new MattermostException(new Error()));
+            var session = new Mock<ISession>();
+            session.Setup(x => x.GetPost(It.IsAny<string>())).Returns(post.Object);
             var sessionRepository = new Mock<ISessionRepository>();
             sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var errorDisplay = new Mock<IErrorDisplay>();
