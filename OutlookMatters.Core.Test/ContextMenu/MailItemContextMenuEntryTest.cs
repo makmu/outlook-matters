@@ -290,7 +290,9 @@ namespace Test.OutlookMatters.Core.ContextMenu
             const string channelIdWithPrefix = "channel_id-funny ChannelId";
             var control = new Mock<IRibbonControl>();
             control.Setup(x => x.Id).Returns(channelIdWithPrefix);
+            var channel = new Mock<IChatChannel>();
             var session = new Mock<ISession>();
+            session.Setup(x => x.GetChannel(channelId)).Returns(channel.Object);
             var sessionRepository = new Mock<ISessionRepository>();
             sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var explorer = new Mock<IMailExplorer>();
@@ -306,18 +308,20 @@ namespace Test.OutlookMatters.Core.ContextMenu
 
             await classUnderTest.OnPostIntoChannelClick(control.Object);
 
-            session.Verify(
+            channel.Verify(
                 x =>
-                    x.CreatePost(channelId, ":email: From: sender\n:email: Subject: subject\nmessage"));
+                    x.CreatePost(":email: From: sender\n:email: Subject: subject\nmessage"));
         }
 
         [Test]
         public async Task OnPostIntoChannelClick_HandlesAnyExceptionsWhileCreatingPost()
         {
             var control = MockOfRibbonControl();
+            var channel = new Mock<IChatChannel>();
             var session = new Mock<ISession>();
-            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>()))
-                .Throws<Exception>();
+            session.Setup(x => x.GetChannel(It.IsAny<string>())).Returns(channel.Object);
+            channel.Setup(x => x.CreatePost(It.IsAny<string>()))
+                .Throws(new MattermostException(new Error()));
             var sessionRepository = new Mock<ISessionRepository>();
             sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var errorDisplay = new Mock<IErrorDisplay>();
@@ -339,8 +343,10 @@ namespace Test.OutlookMatters.Core.ContextMenu
         public async Task OnPostIntoChannelClick_HandlesMattermostExceptionsWhileCreatingPost()
         {
             var control = MockOfRibbonControl();
+            var channel = new Mock<IChatChannel>();
             var session = new Mock<ISession>();
-            session.Setup(x => x.CreatePost(It.IsAny<string>(), It.IsAny<string>()))
+            session.Setup(x => x.GetChannel(It.IsAny<string>())).Returns(channel.Object);
+            channel.Setup(x => x.CreatePost(It.IsAny<string>()))
                 .Throws(new MattermostException(new Error()));
             var sessionRepository = new Mock<ISessionRepository>();
             sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));

@@ -104,7 +104,8 @@ namespace OutlookMatters.Core.ContextMenu
             try
             {
                 var session = await _sessionRepository.RestoreSession();
-                await Task.Run(() => session.CreatePost(channelId, message));
+                var channel = session.GetChannel(channelId);
+                await Task.Run(() => channel.CreatePost(message));
             }
             catch (MattermostException mex)
             {
