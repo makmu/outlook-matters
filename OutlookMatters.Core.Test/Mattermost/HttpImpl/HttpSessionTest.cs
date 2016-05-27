@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.Mattermost.HttpImpl;
 using OutlookMatters.Core.Mattermost.Interface;
 

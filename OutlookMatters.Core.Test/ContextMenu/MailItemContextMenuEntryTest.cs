@@ -6,6 +6,7 @@ using Microsoft.Office.Interop.Outlook;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.ContextMenu;
 using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Mail;

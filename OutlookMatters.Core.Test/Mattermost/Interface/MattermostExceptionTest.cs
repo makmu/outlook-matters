@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.Mattermost.Interface;
 
 namespace Test.OutlookMatters.Core.Mattermost.Interface

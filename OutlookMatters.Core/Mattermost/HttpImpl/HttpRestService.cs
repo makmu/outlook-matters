@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.Http;
 using OutlookMatters.Core.Mattermost.Interface;
 

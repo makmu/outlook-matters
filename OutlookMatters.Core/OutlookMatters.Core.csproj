@@ -77,6 +77,10 @@
     </Compile>
     <Compile Include="Cache\CompositeCache.cs" />
     <Compile Include="Cache\ICache.cs" />
+    <Compile Include="Chat\IChatChannel.cs" />
+    <Compile Include="Chat\IChatPost.cs" />
+    <Compile Include="Chat\IClient.cs" />
+    <Compile Include="Chat\ISession.cs" />
     <Compile Include="ContextMenu\MailItemContextMenuEntry.cs" />
     <Compile Include="Error\IErrorDisplay.cs" />
     <Compile Include="Error\MessageBoxErrorDisplay.cs" />
@@ -93,8 +97,6 @@
     <Compile Include="Mattermost\HttpImpl\IChatChannelFactory.cs" />
     <Compile Include="Mattermost\HttpImpl\IChatPostFactory.cs" />
     <Compile Include="Mattermost\HttpImpl\IRestService.cs" />
-    <Compile Include="Mattermost\Interface\IChatChannel.cs" />
-    <Compile Include="Mattermost\Interface\IChatPost.cs" />
     <Compile Include="Session\ISessionRepository.cs" />
     <Compile Include="Mail\IExplorerService.cs" />
     <Compile Include="Mail\IMailExplorer.cs" />
@@ -108,10 +110,8 @@
     <Compile Include="Mattermost\Interface\Post.cs" />
     <Compile Include="Mattermost\Interface\Thread.cs" />
     <Compile Include="Mattermost\Interface\User.cs" />
-    <Compile Include="Mattermost\Interface\IClient.cs" />
     <Compile Include="Mattermost\Interface\MattermostException.cs" />
     <Compile Include="Mattermost\HttpImpl\HttpClient.cs" />
-    <Compile Include="Mattermost\Interface\ISession.cs" />
     <Compile Include="Mattermost\HttpImpl\ISessionFactory.cs" />
     <Compile Include="Session\SingleSignOnSessionRepository.cs" />
     <Compile Include="Mattermost\HttpImpl\HttpSession.cs" />

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OutlookMatters.Core.Mattermost.Interface
+namespace OutlookMatters.Core.Chat
 {
     public interface ISession
     {

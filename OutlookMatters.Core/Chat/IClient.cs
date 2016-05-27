@@ -1,4 +1,4 @@
-﻿namespace OutlookMatters.Core.Mattermost.Interface
+﻿namespace OutlookMatters.Core.Chat
 {
     public interface IClient
     {

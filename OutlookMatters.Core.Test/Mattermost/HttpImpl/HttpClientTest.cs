@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.Mattermost.HttpImpl;
 using OutlookMatters.Core.Mattermost.Interface;
 

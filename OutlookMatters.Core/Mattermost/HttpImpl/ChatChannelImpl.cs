@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Media;
+using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.Mattermost.Interface;
 using OutlookMatters.Core.Settings;
 
