@@ -318,10 +318,10 @@ namespace Test.OutlookMatters.Core.ContextMenu
         {
             var control = MockOfRibbonControl();
             var channel = new Mock<IChatChannel>();
+            channel.Setup(x => x.CreatePost(It.IsAny<string>()))
+                .Throws(new Exception());
             var session = new Mock<ISession>();
             session.Setup(x => x.GetChannel(It.IsAny<string>())).Returns(channel.Object);
-            channel.Setup(x => x.CreatePost(It.IsAny<string>()))
-                .Throws(new MattermostException(new Error()));
             var sessionRepository = new Mock<ISessionRepository>();
             sessionRepository.Setup(x => x.RestoreSession()).Returns(Task.FromResult(session.Object));
             var errorDisplay = new Mock<IErrorDisplay>();

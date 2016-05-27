@@ -82,28 +82,6 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         }
 
         [Test]
-        public void CreatePost_UsesRestServiceCorrectly()
-        {
-            var baseUri = new Uri("http://localhost/");
-            var post = new Post
-            {
-                Id = string.Empty,
-                ChannelId = CHANNEL1_ID,
-                Message = MESSAGE,
-                UserId = USER_ID,
-                RootId = string.Empty
-            };
-            var restService = new Mock<IRestService>();
-            restService.Setup(x => x.CreatePost(baseUri, TOKEN, CHANNEL1_ID, post));
-            var sut = new HttpSession(restService.Object, baseUri,
-                TOKEN, USER_ID, Mock.Of<IChatPostFactory>(), Mock.Of<IChatChannelFactory>());
-
-            sut.CreatePost(CHANNEL1_ID, MESSAGE);
-
-            restService.VerifyAll();
-        }
-
-        [Test]
         public void GetPost_CreatesChatPostCorrectly()
         {
             var baseUri = new Uri("http://localhost");

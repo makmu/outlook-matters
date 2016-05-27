@@ -25,19 +25,6 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
             _channelFactory = channelFactory;
         }
 
-        public void CreatePost(string channelId, string message)
-        {
-            var post = new Post
-            {
-                Id = string.Empty,
-                ChannelId = channelId,
-                Message = message,
-                UserId = _userId,
-                RootId = string.Empty
-            };
-            _restService.CreatePost(_baseUri, _token, channelId, post);
-        }
-
         public IChatChannel GetChannel(string channelId)
         {
             return _channelFactory.NewInstance(_restService, _baseUri, _token, _userId,
