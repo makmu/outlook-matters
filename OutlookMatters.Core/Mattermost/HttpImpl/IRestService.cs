@@ -7,7 +7,7 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
     {
         User Login(Uri baseUri, Login login, out string token);
         void CreatePost(Uri baseUri, string token, string channelId, Post newPost);
-        Thread GetPostsThread(Uri baseUri, string token, string postId);
+        Thread GetThreadOfPosts(Uri baseUri, string token, string postId);
         ChannelList GetChannelList(Uri baseUri, string token);
     }
 }

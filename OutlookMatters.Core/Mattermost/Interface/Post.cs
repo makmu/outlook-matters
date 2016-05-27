@@ -16,7 +16,7 @@ namespace OutlookMatters.Core.Mattermost.Interface
         [JsonProperty("user_id")]
         public string UserId { get; set; }
 
-        [JsonProperty("RootId")]
+        [JsonProperty("root_id")]
         public string RootId { get; set; }
 
         protected bool Equals(Post other)

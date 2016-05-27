@@ -44,30 +44,15 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
 
         public Post GetRootPost(string postId)
         {
-            try
-            {
-                var postUrl = "api/v1/posts/" + postId;
-                var url = new Uri(_baseUri, postUrl);
-                using (var response = _httpClient.Request(url)
-                    .WithHeader("Authorization", "Bearer " + _token)
-                    .Get())
-                {
-                    var payload = response.GetPayload();
-                    var thread = JsonConvert.DeserializeObject<Thread>(payload);
-                    var rootId = thread.posts[postId].RootId;
+            var thread = _restService.GetThreadOfPosts(_baseUri, _token, postId);
+            var rootId = thread.Posts[postId].RootId;
 
-                    if (rootId == "")
-                    {
-                        return thread.posts[postId];
-                    }
-
-                    return thread.posts[rootId];
-                }
-            }
-            catch (HttpException hex)
+            if (rootId == "")
             {
-                throw TranslateException(hex);
+                return thread.Posts[postId];
             }
+
+            return thread.Posts[rootId];
         }
 
         public ChannelList FetchChannelList()
@@ -87,14 +72,6 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
             {
                 throw TranslateException(hex);
             }
-        }
-
-        private Uri PostUrl(string channelId)
-        {
-            var postUrl = "api/v1/channels/" + channelId + "/create";
-
-            var url = new Uri(_baseUri, postUrl);
-            return url;
         }
     }
 }

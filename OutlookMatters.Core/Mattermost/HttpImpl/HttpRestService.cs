@@ -30,9 +30,7 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
             }
             catch (HttpException hex)
             {
-                var errorJson = hex.Response.GetPayload();
-                var error = JsonConvert.DeserializeObject<Interface.Error>(errorJson);
-                throw new MattermostException(error);
+                throw TranslateException(hex);
             }
         }
 
@@ -50,20 +48,40 @@ namespace OutlookMatters.Core.Mattermost.HttpImpl
             }
             catch (HttpException hex)
             {
-                var errorJson = hex.Response.GetPayload();
-                var error = JsonConvert.DeserializeObject<Interface.Error>(errorJson);
-                throw new MattermostException(error);
+                throw TranslateException(hex);
             }
         }
 
-        public Thread GetPostsThread(Uri baseUri, string token, string postId)
+        public Thread GetThreadOfPosts(Uri baseUri, string token, string postId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var postUrl = "api/v1/posts/" + postId;
+                var url = new Uri(baseUri, postUrl);
+                using (var response = _httpClient.Request(url)
+                    .WithHeader("Authorization", "Bearer " + token)
+                    .Get())
+                {
+                    var payload = response.GetPayload();
+                    return JsonConvert.DeserializeObject<Thread>(payload);
+                }
+            }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
+            }
         }
 
         public ChannelList GetChannelList(Uri baseUri, string token)
         {
             throw new NotImplementedException();
+        }
+
+        private static MattermostException TranslateException(HttpException hex)
+        {
+            var error = JsonConvert.DeserializeObject<Interface.Error>(hex.Response.GetPayload());
+            var exception = new MattermostException(error);
+            return exception;
         }
     }
 }

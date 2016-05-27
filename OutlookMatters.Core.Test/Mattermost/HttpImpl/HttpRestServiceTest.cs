@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -18,17 +20,18 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         const string USER_ID = "userId";
         const string USER_EMAIL = "user@norely.com";
         const string USER_PASSWORD = "secret";
+        const string POST_ID = "postId";
 
         [Test]
         public void Login_ReturnsUser()
         {
             var login = SetupExampleLogin();
             var user = SetupExampleUserData();
-            var httpClient = MockHttpClientUnauthorizedRequestWithResponse(
-                restPath: "api/v1/users/login",
-                request: login.SerializeToPayload(),
-                token: TOKEN,
-                response: user.SerializeToPayload());
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v1/users/login")
+                .Post(login.SerializeToPayload())
+                .Responses(user.SerializeToPayload())
+                .WithToken(TOKEN);
             var sut = new HttpRestService(httpClient.Object);
 
             string token;
@@ -38,15 +41,15 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         }
 
         [Test]
-        public void Login_OutsToken()
+        public void Login_OutputsToken()
         {
             var login = SetupExampleLogin();
             var user = SetupExampleUserData();
-            var httpClient = MockHttpClientUnauthorizedRequestWithResponse(
-                restPath: "api/v1/users/login",
-                request: login.SerializeToPayload(),
-                token: TOKEN,
-                response: user.SerializeToPayload());
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v1/users/login")
+                .Post(login.SerializeToPayload())
+                .Responses(user.SerializeToPayload())
+                .WithToken(TOKEN);
             var sut = new HttpRestService(httpClient.Object);
 
             string token;
@@ -60,13 +63,11 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         {
             var login = SetupExampleLogin();
             var user = SetupExampleUserData();
-            var httpResponse = MockHttpResponse(
-                token: TOKEN,
-                payload: user.SerializeToPayload());
-            var httpClient = MockHttpClientUnauthorizedRequestWithResponse(
-                restPath: "api/v1/users/login",
-                request: login.SerializeToPayload(),
-                response: httpResponse);
+            var httpClient = new Mock<IHttpClient>();
+            var httpResponse = httpClient.SetupRequest("http://localhost/", "api/v1/users/login")
+                .Post(login.SerializeToPayload())
+                .Responses(user.SerializeToPayload())
+                .WithToken(TOKEN);
             var sut = new HttpRestService(httpClient.Object);
 
             string token;
@@ -76,14 +77,14 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         }
 
         [Test]
-        public void Login_ThrowsMattermostExceptionWithError_IfMattermostReturnsError()
+        public void Login_ThrowsMattermostExceptionWithError_IfHttpExceptionWithErrorPayload()
         {
             var login = SetupExampleLogin();
             var error = SetupExampleError();
-            var httpClient = MockHttpClientUnauthorizedRequestWithError(
-                restPath: "api/v1/users/login",
-                request: login.SerializeToPayload(),
-                error: error.SerializeToPayload());
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v1/users/login")
+                .FailsAtPost(login.SerializeToPayload())
+                .Responses(error.SerializeToPayload());
             var sut = new HttpRestService(httpClient.Object);
 
             try
@@ -103,11 +104,10 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         public void CreatePost_MakesTheCorrectHttpRequests()
         {
             var post = SetupExamplePost();
-            var httpClient = MockHttpClientRequestWithResponse(
-                restPath: "api/v1/channels/" + post.ChannelId + "/create",
-                request: post.SerializeToPayload(),
-                token: TOKEN,
-                response: string.Empty);
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v1/channels/" + post.ChannelId + "/create")
+                .WithToken(TOKEN)
+                .Post(post.SerializeToPayload());
             var sut = new HttpRestService(httpClient.Object);
 
             sut.CreatePost(SetupExampleUri(), TOKEN, CHANNEL_ID, post);
@@ -119,14 +119,11 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         public void CreatePost_DisposesHttpResponse()
         {
             var post = SetupExamplePost();
-            var httpResponse = MockHttpResponse(
-                token: TOKEN,
-                payload: string.Empty);
-            var httpClient = MockHttpClientRequestWithResponse(
-                restPath: "api/v1/channels/" + post.ChannelId + "/create",
-                token: TOKEN,
-                request: post.SerializeToPayload(),
-                response: httpResponse);
+            var httpClient = new Mock<IHttpClient>();
+            var httpResponse = httpClient.SetupRequest("http://localhost/",
+                "api/v1/channels/" + post.ChannelId + "/create")
+                .WithToken(TOKEN)
+                .Post(post.SerializeToPayload());
             var sut = new HttpRestService(httpClient.Object);
 
             sut.CreatePost(SetupExampleUri(), TOKEN, CHANNEL_ID, post);
@@ -135,15 +132,15 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         }
 
         [Test]
-        public void CreatePost_ThrowsMattermostExceptionWithError_IfMattermostReturnsError()
+        public void CreatePost_ThrowsMattermostExceptionWithError_IfHttpExceptionWithErrorPayload()
         {
             var post = SetupExamplePost();
             var error = SetupExampleError();
-            var httpClient = MockHttpClientRequestWithError(
-                restPath: "api/v1/channels/" + post.ChannelId + "/create",
-                token: TOKEN,
-                request: post.SerializeToPayload(),
-                error: error.SerializeToPayload());
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v1/channels/" + post.ChannelId + "/create")
+                .WithToken(TOKEN)
+                .FailsAtPost(post.SerializeToPayload())
+                .Responses(error.SerializeToPayload());
             var sut = new HttpRestService(httpClient.Object);
 
             try
@@ -156,6 +153,70 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
                 mex.Message.Should().Be(error.message);
                 mex.Details.Should().Be(error.detailed_error);
             }
+        }
+
+        [Test]
+        public void GetThreadOfPosts_GetsThreadViaHttp()
+        {
+            var thread = SetupExampleThread();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v1/posts/" + POST_ID)
+                .WithToken(TOKEN)
+                .Get()
+                .Responses(thread.SerializeToPayload());
+            var sut = new HttpRestService(httpClient.Object);
+
+            var result = sut.GetThreadOfPosts(SetupExampleUri(), TOKEN, POST_ID);
+
+            Assert.That(result, Is.EqualTo(thread));
+        }
+
+        [Test]
+        public void GetThreadOfPosts_DisposesHttpResonse()
+        {
+            var thread = SetupExampleThread();
+            var httpClient = new Mock<IHttpClient>();
+            var httpResponse = httpClient.SetupRequest("http://localhost/", "api/v1/posts/" + POST_ID)
+                .WithToken(TOKEN)
+                .Get();
+            httpResponse.Responses(thread.SerializeToPayload());
+            var sut = new HttpRestService(httpClient.Object);
+
+            sut.GetThreadOfPosts(SetupExampleUri(), TOKEN, POST_ID);
+
+            httpResponse.Verify(x => x.Dispose());
+        }
+
+        [Test]
+        public void GetThreadOfPosts_ThrowsMattermostExceptionWithError_IfHttpExceptionWithErrorPayload()
+        {
+            var error = SetupExampleError();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v1/posts/" + POST_ID)
+                .WithToken(TOKEN)
+                .FailsAtGet()
+                .Responses(error.SerializeToPayload());
+            var sut = new HttpRestService(httpClient.Object);
+
+            try
+            {
+                sut.GetThreadOfPosts(SetupExampleUri(), TOKEN, POST_ID);
+                Assert.Fail();
+            }
+            catch (MattermostException mex)
+            {
+                mex.Message.Should().Be(error.message);
+                mex.Details.Should().Be(error.detailed_error);
+            }
+        }
+
+        private Thread SetupExampleThread()
+        {
+            return new Thread
+            {
+                Order = new[] {POST_ID},
+                Posts = new Dictionary<string, Post> {[POST_ID] = SetupExamplePost()}
+            };
         }
 
         private Post SetupExamplePost()
@@ -173,106 +234,6 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         private static Uri SetupExampleUri()
         {
             return new Uri("http://localhost");
-        }
-
-        private static Mock<IHttpResponse> MockHttpResponse(string payload, string token)
-        {
-            var httpResponse = new Mock<IHttpResponse>();
-            httpResponse.Setup(x => x.GetPayload()).Returns(payload);
-            httpResponse.Setup(x => x.GetHeaderValue("Token")).Returns(token);
-            return httpResponse;
-        }
-
-        private static Mock<IHttpClient> MockHttpClientUnauthorizedRequestWithResponse(
-            string request,
-            string token,
-            string response,
-            string restPath)
-        {
-            var httpResponse = MockHttpResponse(response, token);
-            return MockHttpClientUnauthorizedRequestWithResponse(request, httpResponse, restPath);
-        }
-
-        private static Mock<IHttpClient> MockHttpClientRequestWithResponse(
-            string request,
-            string token,
-            string response,
-            string restPath)
-        {
-            var httpResponse = MockHttpResponse(response, token);
-            return MockHttpClientRequestWithResponse(request, token, httpResponse, restPath);
-        }
-
-        private static Mock<IHttpRequest> MockHttpRequest(string request, Mock<IHttpResponse> response)
-        {
-            var httpRequest = new Mock<IHttpRequest>();
-            httpRequest.Setup(x => x.WithContentType("text/json")).Returns(httpRequest.Object);
-            httpRequest.Setup(x => x.Post(request)).Returns(response.Object);
-            return httpRequest;
-        }
-
-        private static Mock<IHttpClient> MockHttpClientUnauthorizedRequestWithResponse(
-            string request,
-            Mock<IHttpResponse> response,
-            string restPath)
-        {
-            Uri baseUri = SetupExampleUri();
-            var httpRequest = MockHttpRequest(request, response);
-            var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.Request(new Uri(baseUri, restPath)))
-                .Returns(httpRequest.Object);
-            return httpClient;
-        }
-
-        private static Mock<IHttpClient> MockHttpClientRequestWithResponse(
-            string request,
-            string token,
-            Mock<IHttpResponse> response,
-            string restPath)
-        {
-            Uri baseUri = SetupExampleUri();
-            var httpRequest = MockHttpRequest(request, response);
-            httpRequest.Setup(x => x.WithHeader("Authorization", "Bearer " + token)).Returns(httpRequest.Object);
-            var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.Request(new Uri(baseUri, restPath)))
-                .Returns(httpRequest.Object);
-            return httpClient;
-        }
-
-        private static Mock<IHttpClient> MockHttpClientUnauthorizedRequestWithError(
-            string request,
-            string error,
-            string restPath)
-        {
-            Uri baseUri = SetupExampleUri();
-            var httpResponse = MockHttpResponse(error, null);
-            var httpRequest = new Mock<IHttpRequest>();
-            httpRequest.Setup(x => x.WithContentType("text/json")).Returns(httpRequest.Object);
-            var httpException = new HttpException(httpResponse.Object);
-            httpRequest.Setup(x => x.Post(request)).Throws(httpException);
-            var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.Request(new Uri(baseUri, restPath)))
-                .Returns(httpRequest.Object);
-            return httpClient;
-        }
-
-        private static Mock<IHttpClient> MockHttpClientRequestWithError(
-            string request,
-            string token,
-            string error,
-            string restPath)
-        {
-            Uri baseUri = SetupExampleUri();
-            var httpResponse = MockHttpResponse(error, null);
-            var httpRequest = new Mock<IHttpRequest>();
-            httpRequest.Setup(x => x.WithContentType("text/json")).Returns(httpRequest.Object);
-            httpRequest.Setup(x => x.WithHeader("Authorization", "Bearer " + token)).Returns(httpRequest.Object);
-            var httpException = new HttpException(httpResponse.Object);
-            httpRequest.Setup(x => x.Post(request)).Throws(httpException);
-            var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.Request(new Uri(baseUri, restPath)))
-                .Returns(httpRequest.Object);
-            return httpClient;
         }
 
         private Error SetupExampleError()
@@ -322,7 +283,15 @@ namespace Test.OutlookMatters.Core.Mattermost.HttpImpl
         public static string SerializeToPayload(this Post post)
         {
             return "{\"id\":\"" + post.Id + "\",\"channel_id\":\"" + post.ChannelId + "\",\"message\":\"" + post.Message +
-                   "\",\"user_id\":\"" + post.UserId + "\",\"RootId\":\"" + post.RootId + "\"}";
+                   "\",\"user_id\":\"" + post.UserId + "\",\"root_id\":\"" + post.RootId + "\"}";
+        }
+
+        public static string SerializeToPayload(this Thread post)
+        {
+            return
+                "{\"order\":[\"" + string.Join(",", post.Order) + "\"],\"posts\":{" +
+                string.Join(",", post.Posts.Select(x => "\"" + x.Key + "\":" + x.Value.SerializeToPayload())) +
+                "}}";
         }
     }
 }
