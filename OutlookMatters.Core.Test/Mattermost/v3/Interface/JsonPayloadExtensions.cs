@@ -2,7 +2,7 @@
 
 namespace Test.OutlookMatters.Core.Mattermost.v3.Interface
 {
-    public static class SerializationHelper
+    public static class JsonPayloadExtensions
     {
         public static string SerializeToPayload(this Login login)
         {
