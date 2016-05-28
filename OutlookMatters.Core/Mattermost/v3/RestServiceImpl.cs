@@ -40,5 +40,24 @@ namespace OutlookMatters.Core.Mattermost.v3
             var exception = new MattermostException(error);
             return exception;
         }
+
+        public ChannelList GetChannelList(Uri uri, string token, string teamId)
+        {
+            try
+            {
+                var getUrl = new Uri(uri, "api/v3/teams/" + teamId + "/channels/");
+                using (var response = _httpClient.Request(getUrl)
+                    .WithHeader("Authorization", "Bearer " + token)
+                    .Get())
+                {
+                    var payload = response.GetPayload();
+                    return JsonConvert.DeserializeObject<ChannelList>(payload);
+                }
+            }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
+            }
+        }
     }
 }

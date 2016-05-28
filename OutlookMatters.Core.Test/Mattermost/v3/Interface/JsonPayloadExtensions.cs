@@ -1,4 +1,5 @@
-﻿using OutlookMatters.Core.Mattermost.v3.Interface;
+﻿using System.Linq;
+using OutlookMatters.Core.Mattermost.v3.Interface;
 
 namespace Test.OutlookMatters.Core.Mattermost.v3.Interface
 {
@@ -19,6 +20,21 @@ namespace Test.OutlookMatters.Core.Mattermost.v3.Interface
         public static string SerializeToPayload(this Error error)
         {
             return "{\"message\":\"" + error.Message + "\",\"detailed_error\":\"" + error.DetailedError + "\"}";
+        }
+
+        public static string SerializeToPayload(this Channel channel)
+        {
+            return "{\"id\":\"" + channel.ChannelId +
+                   "\",\"create_at\":1458911668852,\"update_at\":1458911668852,\"delete_at\":0,\"type\":\"" +
+                   channel.Type +
+                   "\",\"display_name\":\"" + channel.ChannelName + "\"}";
+        }
+
+        public static string SerializeToPayload(this ChannelList channelList)
+        {
+            return
+                "{\"channels\":[" + string.Join(",", channelList.Channels.Select(x => x.SerializeToPayload())) +
+                "]}";
         }
     }
 }

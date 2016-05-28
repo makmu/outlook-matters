@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -18,6 +19,14 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
         public const string PASSWORD = "password";
         public const string USER_ID = "user";
         public readonly Uri Uri = new Uri("http://localhost");
+        const string MESSAGE = "message";
+        const string TEAM_ID = "teamId";
+        const string USER_EMAIL = "user@norely.com";
+        const string USER_PASSWORD = "secret";
+        const string POST_ID = "postId";
+        const string CHANNEL_ID = "channelId";
+        const string CHANNEL_NAME = "FunnyChannelName";
+        const ChannelType CHANNEL_TYPE = ChannelType.Public;
 
         [Test]
         public void Login_ReturnsUser()
@@ -95,6 +104,72 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
                 mex.Message.Should().Be(error.Message);
                 mex.Details.Should().Be(error.DetailedError);
             }
+        }
+
+        [Test]
+        public void GetChannelList_GetsThreadViaHttp()
+        {
+            var channelList = SetupExampleChannelList();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v3/teams/" + TEAM_ID + "/channels/")
+                .WithToken(TOKEN)
+                .Get()
+                .Responses(channelList.SerializeToPayload());
+            var sut = new RestServiceImpl(httpClient.Object);
+
+            var result = sut.GetChannelList(Uri, TOKEN, TEAM_ID);
+
+            Assert.That(result, Is.EqualTo(channelList));
+        }
+
+        [Test]
+        public void GetChannelList_DisposesHttpRequest()
+        {
+            var channelList = SetupExampleChannelList();
+            var httpClient = new Mock<IHttpClient>();
+            var httpResponse = httpClient.SetupRequest("http://localhost/", "api/v3/teams/" + TEAM_ID + "/channels/")
+                .WithToken(TOKEN)
+                .Get()
+                .Responses(channelList.SerializeToPayload());
+            var sut = new RestServiceImpl(httpClient.Object);
+
+            sut.GetChannelList(Uri, TOKEN, TEAM_ID);
+
+            httpResponse.Verify(x => x.Dispose());
+        }
+
+        [Test]
+        public void GetChannelList_ThrowsMattermostExceptionWithError_IfHttpExceptionWithErrorPayload()
+        {
+            var error = SetupExampleError();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v3/teams/" + TEAM_ID + "/channels/")
+                .WithToken(TOKEN)
+                .FailsAtGet()
+                .Responses(error.SerializeToPayload());
+            var sut = new RestServiceImpl(httpClient.Object);
+
+            try
+            {
+                sut.GetChannelList(Uri, TOKEN, TEAM_ID);
+                Assert.Fail();
+            }
+            catch (MattermostException mex)
+            {
+                mex.Message.Should().Be(error.Message);
+                mex.Details.Should().Be(error.DetailedError);
+            }
+        }
+
+        private static ChannelList SetupExampleChannelList()
+        {
+            return new ChannelList
+            {
+                Channels = new List<Channel>
+                {
+                    new Channel {ChannelId = CHANNEL_ID, ChannelName = CHANNEL_NAME, Type = CHANNEL_TYPE}
+                }
+            };
         }
 
         private static Login SetupExampleLogin()
