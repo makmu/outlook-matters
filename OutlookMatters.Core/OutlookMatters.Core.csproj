@@ -108,7 +108,7 @@
     <Compile Include="Mattermost\v1\Interface\Post.cs" />
     <Compile Include="Mattermost\v1\Interface\Thread.cs" />
     <Compile Include="Mattermost\v1\Interface\User.cs" />
-    <Compile Include="Mattermost\v1\IRestService.cs" />
+    <Compile Include="Mattermost\v1\Interface\IRestService.cs" />
     <Compile Include="Mattermost\v1\ISessionFactory.cs" />
     <Compile Include="Session\ISessionRepository.cs" />
     <Compile Include="Mail\IExplorerService.cs" />
