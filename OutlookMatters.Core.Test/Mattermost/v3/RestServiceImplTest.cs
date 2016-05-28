@@ -21,6 +21,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
         public readonly Uri Uri = new Uri("http://localhost");
         const string MESSAGE = "message";
         const string TEAM_ID = "teamId";
+        const string TEAM_NAME = "teamName";
         const string USER_EMAIL = "user@norely.com";
         const string USER_PASSWORD = "secret";
         const string POST_ID = "postId";
@@ -29,7 +30,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
         const ChannelType CHANNEL_TYPE = ChannelType.Public;
 
         [Test]
-        public void Login_ReturnsUser()
+        public void Login_PerformsRestCall()
         {
             var login = SetupExampleLogin();
             var user = SetupExampleUserData();
@@ -107,7 +108,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
         }
 
         [Test]
-        public void GetChannelList_GetsThreadViaHttp()
+        public void GetChannelList_PerformsRestCall()
         {
             var channelList = SetupExampleChannelList();
             var httpClient = new Mock<IHttpClient>();
@@ -161,6 +162,61 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             }
         }
 
+        [Test]
+        public void GetInitialLoad_PerformsRestCall()
+        {
+            var initialLoad = SetupExampleInitialLoad();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v3/users/initial_load")
+                .WithToken(TOKEN)
+                .Get()
+                .Responses(initialLoad.SerializeToPayload());
+            var sut = new RestServiceImpl(httpClient.Object);
+
+            var result = sut.GetInitialLoad(Uri, TOKEN);
+
+            Assert.That(result, Is.EqualTo(initialLoad));
+        }
+
+        [Test]
+        public void GetInitialLoad_DisposesHttpRequest()
+        {
+            var channelList = SetupExampleChannelList();
+            var httpClient = new Mock<IHttpClient>();
+            var httpResponse = httpClient.SetupRequest("http://localhost/", "api/v3/users/initial_load")
+                .WithToken(TOKEN)
+                .Get()
+                .Responses(channelList.SerializeToPayload());
+            var sut = new RestServiceImpl(httpClient.Object);
+
+            sut.GetInitialLoad(Uri, TOKEN);
+
+            httpResponse.Verify(x => x.Dispose());
+        }
+
+        [Test]
+        public void GetInitialLoad_ThrowsMattermostExceptionWithError_IfHttpExceptionWithErrorPayload()
+        {
+            var error = SetupExampleError();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v3/users/initial_load")
+                .WithToken(TOKEN)
+                .FailsAtGet()
+                .Responses(error.SerializeToPayload());
+            var sut = new RestServiceImpl(httpClient.Object);
+
+            try
+            {
+                sut.GetInitialLoad(Uri, TOKEN);
+                Assert.Fail();
+            }
+            catch (MattermostException mex)
+            {
+                mex.Message.Should().Be(error.Message);
+                mex.Details.Should().Be(error.DetailedError);
+            }
+        }
+
         private static ChannelList SetupExampleChannelList()
         {
             return new ChannelList
@@ -168,6 +224,17 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
                 Channels = new List<Channel>
                 {
                     new Channel {ChannelId = CHANNEL_ID, ChannelName = CHANNEL_NAME, Type = CHANNEL_TYPE}
+                }
+            };
+        }
+
+        private static InitialLoad SetupExampleInitialLoad()
+        {
+            return new InitialLoad
+            {
+                Teams = new[]
+                {
+                    new Team {Id = TEAM_ID, Name = TEAM_NAME}
                 }
             };
         }

@@ -34,6 +34,27 @@ namespace OutlookMatters.Core.Mattermost.v3
             }
         }
 
+        public InitialLoad GetInitialLoad(Uri baseUri, string token)
+        {
+            try
+            {
+                var getUrl = new Uri(baseUri, "api/v3/users/initial_load");
+                using (
+                    var response = _httpClient.Request(getUrl)
+                        .WithHeader("Authorization", "Bearer " + token)
+                        .Get()
+                    )
+                {
+                    var payload = response.GetPayload();
+                    return JsonConvert.DeserializeObject<InitialLoad>(payload);
+                }
+            }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
+            }
+        }
+
         private static MattermostException TranslateException(HttpException hex)
         {
             var error = JsonConvert.DeserializeObject<Interface.Error>(hex.Response.GetPayload());

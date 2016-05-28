@@ -17,6 +17,11 @@ namespace Test.OutlookMatters.Core.Mattermost.v3.Interface
             return "{\"id\":\"" + user.Id + "\"}";
         }
 
+        public static string SerializeToPayload(this Team team)
+        {
+            return "{\"id\":\"" + team.Id + "\",\"name\":\"" + team.Name + "\"}";
+        }
+
         public static string SerializeToPayload(this Error error)
         {
             return "{\"message\":\"" + error.Message + "\",\"detailed_error\":\"" + error.DetailedError + "\"}";
@@ -34,6 +39,13 @@ namespace Test.OutlookMatters.Core.Mattermost.v3.Interface
         {
             return
                 "{\"channels\":[" + string.Join(",", channelList.Channels.Select(x => x.SerializeToPayload())) +
+                "]}";
+        }
+
+        public static string SerializeToPayload(this InitialLoad initialLoad)
+        {
+            return
+                "{\"teams\":[" + string.Join(",", initialLoad.Teams.Select(x => x.SerializeToPayload())) +
                 "]}";
         }
     }
