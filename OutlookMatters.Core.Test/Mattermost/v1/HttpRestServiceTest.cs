@@ -7,6 +7,7 @@ using NUnit.Framework;
 using OutlookMatters.Core.Http;
 using OutlookMatters.Core.Mattermost.v1;
 using OutlookMatters.Core.Mattermost.v1.Interface;
+using Test.OutlookMatters.Core.Http;
 
 namespace Test.OutlookMatters.Core.Mattermost.v1
 {

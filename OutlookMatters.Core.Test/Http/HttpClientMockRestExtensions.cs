@@ -2,9 +2,9 @@ using System;
 using Moq;
 using OutlookMatters.Core.Http;
 
-namespace Test.OutlookMatters.Core.Mattermost.v1
+namespace Test.OutlookMatters.Core.Http
 {
-    public static class HttpClientMockRestHelper
+    public static class HttpClientMockRestExtensions
     {
         public static Mock<IHttpRequest> SetupRequest(this Mock<IHttpClient> httpClient, string baseUri, string path)
         {

@@ -70,7 +70,7 @@
     </Compile>
     <Compile Include="Mattermost\v1\ChatChannelImplTest.cs" />
     <Compile Include="Mattermost\v1\ChatPostImplTest.cs" />
-    <Compile Include="Mattermost\v1\HttpClientMockRestHelper.cs" />
+    <Compile Include="Http\HttpClientMockRestExtensions.cs" />
     <Compile Include="Mattermost\v1\HttpClientTest.cs" />
     <Compile Include="Mattermost\v1\HttpRestServiceTest.cs" />
     <Compile Include="Mattermost\v1\HttpSessionTest.cs" />
