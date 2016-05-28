@@ -75,6 +75,8 @@
     <Compile Include="Mattermost\v1\HttpRestServiceTest.cs" />
     <Compile Include="Mattermost\v1\HttpSessionTest.cs" />
     <Compile Include="Mattermost\v1\Interface\MattermostExceptionTest.cs" />
+    <Compile Include="Mattermost\v3\Interface\SerializationHelper.cs" />
+    <Compile Include="Mattermost\v3\RestServiceImplTest.cs" />
     <Compile Include="Settings\CloseCommandTest.cs" />
     <Compile Include="ContextMenu\MailItemContextMenuEntryTest.cs" />
     <Compile Include="Mail\MailExceptionTest.cs" />
