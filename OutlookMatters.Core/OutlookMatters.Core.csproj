@@ -110,6 +110,9 @@
     <Compile Include="Mattermost\v1\Interface\User.cs" />
     <Compile Include="Mattermost\v1\Interface\IRestService.cs" />
     <Compile Include="Mattermost\v1\ISessionFactory.cs" />
+    <Compile Include="Mattermost\v3\ChatFactoryImpl.cs" />
+    <Compile Include="Mattermost\v3\ClientImpl.cs" />
+    <Compile Include="Mattermost\v3\IChatFactory.cs" />
     <Compile Include="Mattermost\v3\Interface\Error.cs" />
     <Compile Include="Mattermost\v3\Interface\IRestService.cs" />
     <Compile Include="Mattermost\v3\Interface\Login.cs" />

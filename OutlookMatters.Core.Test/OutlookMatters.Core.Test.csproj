@@ -76,6 +76,7 @@
     <Compile Include="Mattermost\v1\HttpSessionTest.cs" />
     <Compile Include="Mattermost\v1\Interface\MattermostExceptionTest.cs" />
     <Compile Include="Mattermost\v1\Interface\JsonPayloadExtensions.cs" />
+    <Compile Include="Mattermost\v3\ClientImplTest.cs" />
     <Compile Include="Mattermost\v3\Interface\JsonPayloadExtensions.cs" />
     <Compile Include="Mattermost\v3\RestServiceImplTest.cs" />
     <Compile Include="Settings\CloseCommandTest.cs" />
