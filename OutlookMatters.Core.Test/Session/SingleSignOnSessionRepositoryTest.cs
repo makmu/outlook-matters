@@ -16,7 +16,7 @@ namespace Test.OutlookMatters.Core.Session
         public async Task RestoreSession_ReturnsNewSessionFromClient()
         {
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
+            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels", It.IsAny<MattermostVersion>());
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var mattermost = new Mock<IClient>();
             var session = new Mock<ISession>();
@@ -80,7 +80,7 @@ namespace Test.OutlookMatters.Core.Session
             var session1 = new Mock<ISession>();
             var session2 = new Mock<ISession>();
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels");
+            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels", MattermostVersion.ApiVersionOne);
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
 
             mattermost.SetupSequence(
@@ -104,7 +104,7 @@ namespace Test.OutlookMatters.Core.Session
             get
             {
                 var settings = new AddInSettings("http://localhost", "teamId",
-                    "username", "channels");
+                    "username", "channels", MattermostVersion.ApiVersionOne);
                 var settingsLoadService = new Mock<ISettingsLoadService>();
                 settingsLoadService.Setup(x => x.Load()).Returns(settings);
                 return settingsLoadService.Object;
