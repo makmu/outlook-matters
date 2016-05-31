@@ -3,23 +3,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:settings="clr-namespace:OutlookMatters.Core.Settings"
         mc:Ignorable="d"
         Title="Mattermost Settings"
         Height="250"
         Width="400"
         Name="Window"
         d:DesignHeight="250" d:DesignWidth="400" ResizeMode="NoResize" WindowStyle="ToolWindow">
+    <Window.Resources>
+        <settings:EnumMatchToBooleanConverter x:Key="enumConverter"></settings:EnumMatchToBooleanConverter>
+    </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="105*"/>
+            <ColumnDefinition Width="289*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -32,8 +41,14 @@
             <Label Margin="5" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="55">Team Id:</Label>
             <Label Margin="5" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Width="105">Username (email):</Label>
             <TextBox Margin="5" Text="{Binding Username}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" />
+            <Label Margin="0,0,259,10" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" Width="125" Grid.ColumnSpan="2">Mattermost Version:</Label>
+            <StackPanel Grid.Row="4" Grid.Column="1">
+                <RadioButton Content="mattermost v1.3 - v2.2 " IsChecked="{Binding Path=Version, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=ApiVersionOne}"  Margin="5"/>
+                <RadioButton Content="mattermost v3.0 " IsChecked="{Binding Path=Version, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=ApiVersionThree}" Margin="5"/>
+            </StackPanel>
         </Grid>
-        <Grid Grid.Row="1">
+
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
