@@ -25,5 +25,19 @@ namespace Test.OutlookMatters.Core.Settings
 
             Assert.That(result, Is.EqualTo(expectedResult));
         }
+
+        [Test]
+        [TestCase(true, "ApiVersionOne", MattermostVersion.ApiVersionOne)]
+        [TestCase(false, "ApiVersionOne", null)]
+        [TestCase(true, null, null)]
+        [TestCase(null, "ApiVersionOne", null)]
+        public void ConvertBack_ConvertsToExpectedResult(object value, object parameter, object expectedResult)
+        {
+            var classUnderTest = new EnumMatchToBooleanConverter();
+
+            var result = classUnderTest.ConvertBack(value, typeof(MattermostVersion), parameter, It.IsAny<CultureInfo>());
+
+            Assert.That(result, Is.EqualTo(expectedResult));
+        }
     }
 }
