@@ -59,6 +59,7 @@
     <Reference Include="office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -88,6 +89,7 @@
     <Compile Include="Session\SingleSignOnSessionRepositoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\ApplicationSettingsServiceTest.cs" />
+    <Compile Include="Settings\EnumMatchToBooleanConverterTest.cs" />
     <Compile Include="Settings\SaveCommandTest.cs" />
     <Compile Include="Settings\AddInSettingsTest.cs" />
     <Compile Include="Settings\SettingsViewModelTest.cs" />

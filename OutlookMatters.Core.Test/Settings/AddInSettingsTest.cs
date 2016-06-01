@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using OutlookMatters.Core.Settings;
 
@@ -20,9 +21,10 @@ namespace Test.OutlookMatters.Core.Settings
             const string teamId = "team id";
             const string username = "user name";
             const string channelMap = "channel map";
+            const MattermostVersion version = MattermostVersion.ApiVersionOne;
             var otherSettings = new AddInSettings(url + urlModifier, teamId + teamIdModifier,
-                username + usernameModifier, channelMap + channelMapModifier);
-            var classUnderTest = new AddInSettings(url, teamId, username, channelMap);
+                username + usernameModifier, channelMap + channelMapModifier, version);
+            var classUnderTest = new AddInSettings(url, teamId, username, channelMap, version);
 
             var result = classUnderTest.Equals(otherSettings);
 
@@ -35,7 +37,7 @@ namespace Test.OutlookMatters.Core.Settings
         public void Equals_ReturnsFalse_IfObjectTypeDoesNotMatch(object other)
         {
             var classUnderTest = new AddInSettings(string.Empty, string.Empty,
-                string.Empty, string.Empty);
+                string.Empty, string.Empty, It.IsAny<MattermostVersion>());
 
             var result = classUnderTest.Equals(other);
 
@@ -46,7 +48,7 @@ namespace Test.OutlookMatters.Core.Settings
         public void Equals_ReturnsTrue_IfReferenceEqual()
         {
             var classUnderTest = new AddInSettings(string.Empty, string.Empty,
-                string.Empty, string.Empty);
+                string.Empty, string.Empty, It.IsAny<MattermostVersion>());
 
             var result = classUnderTest.Equals(classUnderTest);
 
@@ -66,9 +68,10 @@ namespace Test.OutlookMatters.Core.Settings
             const string teamId = "team id";
             const string username = "user name";
             const string channelMap = "channel map";
+            const MattermostVersion version = MattermostVersion.ApiVersionOne;
             var otherSettings = new AddInSettings(url + urlModifier, teamId + teamIdModifier,
-                username + usernameModifier, channelMap + channelMapModifier);
-            var classUnderTest = new AddInSettings(url, teamId, username, channelMap);
+                username + usernameModifier, channelMap + channelMapModifier, version);
+            var classUnderTest = new AddInSettings(url, teamId, username, channelMap, version);
 
             var result = classUnderTest.GetHashCode() == otherSettings.GetHashCode();
 
@@ -78,8 +81,8 @@ namespace Test.OutlookMatters.Core.Settings
         [Test]
         public void GetHashCode_ReturnsSameHashCodeIfAllMembersAreNull()
         {
-            var otherSettings = new AddInSettings(null, null, null, null);
-            var classUnderTest = new AddInSettings(null, null, null, null);
+            var otherSettings = new AddInSettings(null, null, null, null, It.IsAny<MattermostVersion>());
+            var classUnderTest = new AddInSettings(null, null, null, null, It.IsAny<MattermostVersion>());
 
             var result = classUnderTest.GetHashCode();
 

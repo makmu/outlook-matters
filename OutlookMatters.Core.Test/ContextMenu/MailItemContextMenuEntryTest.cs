@@ -29,7 +29,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
             get
             {
                 var settings = new AddInSettings("http://localhost", "teamId",
-                    "username", "channels");
+                    "username", "channels", MattermostVersion.ApiVersionOne);
                 var settingsLoadService = new Mock<ISettingsLoadService>();
                 settingsLoadService.Setup(x => x.Load()).Returns(settings);
                 return settingsLoadService.Object;
@@ -116,7 +116,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
             };
             var channels = JsonConvert.SerializeObject(channelList);
             var settings = new AddInSettings("http://localhost", "teamId",
-                "username", channels);
+                "username", channels, It.IsAny<MattermostVersion>());
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
 
@@ -154,7 +154,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
             };
             var channels = JsonConvert.SerializeObject(channelList);
             var settings = new AddInSettings("http://localhost", "teamId",
-                "username", channels);
+                "username", channels, It.IsAny<MattermostVersion>());
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
 
@@ -183,7 +183,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
         public void GetDynamicMenu_ReturnsReplyButton()
         {
             var settings = new AddInSettings("http://localhost", "teamId",
-                "username", string.Empty);
+                "username", string.Empty, It.IsAny<MattermostVersion>());
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var classUnderTest = new MailItemContextMenuEntry(
@@ -211,7 +211,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
         public void GetDynamicMenu_ReturnsSettingsButton()
         {
             var settings = new AddInSettings(string.Empty, string.Empty,
-                string.Empty, string.Empty);
+                string.Empty, string.Empty, It.IsAny<MattermostVersion>());
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var classUnderTest = new MailItemContextMenuEntry(
@@ -241,7 +241,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
             const string subscribedChannelAttribut = "OnPostIntoChannelClick";
             var channels = string.Empty;
             var settings = new AddInSettings("http://localhost", "teamId",
-                "username", channels);
+                "username", channels, It.IsAny<MattermostVersion>());
             var settingsLoadService = new Mock<ISettingsLoadService>();
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
 

@@ -70,5 +70,17 @@ namespace OutlookMatters.Properties {
                 this["ChannelsMap"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ApiVersionOne")]
+        public global::OutlookMatters.Core.Settings.MattermostVersion Version {
+            get {
+                return ((global::OutlookMatters.Core.Settings.MattermostVersion)(this["Version"]));
+            }
+            set {
+                this["Version"] = value;
+            }
+        }
     }
 }

@@ -18,14 +18,16 @@ namespace OutlookMatters
                 Properties.Settings.Default.MattermostUrl,
                 Properties.Settings.Default.TeamId,
                 Properties.Settings.Default.Username,
-                Properties.Settings.Default.ChannelsMap);
+                Properties.Settings.Default.ChannelsMap,
+                Properties.Settings.Default.Version);
         }
 
-        public void SaveCredentials(string mattermostUrl, string teamId, string username)
+        public void SaveCredentials(string mattermostUrl, string teamId, string username, MattermostVersion version)
         {
             Properties.Settings.Default.MattermostUrl = mattermostUrl;
             Properties.Settings.Default.TeamId = teamId;
             Properties.Settings.Default.Username = username;
+            Properties.Settings.Default.Version = version;
             Properties.Settings.Default.Save();
             _cache.Invalidate();
         }

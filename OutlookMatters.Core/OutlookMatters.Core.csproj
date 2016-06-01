@@ -146,10 +146,12 @@
     <Compile Include="Settings\ChannelListSetting.cs" />
     <Compile Include="Settings\ChannelTypeSetting.cs" />
     <Compile Include="Settings\CloseCommand.cs" />
+    <Compile Include="Settings\EnumMatchToBooleanConverter.cs" />
     <Compile Include="Settings\IClosableWindow.cs" />
     <Compile Include="Settings\ISettingsLoadService.cs" />
     <Compile Include="Settings\ISettingsSaveService.cs" />
     <Compile Include="Settings\ISettingsUserInterface.cs" />
+    <Compile Include="Settings\MattermostVersion.cs" />
     <Compile Include="Settings\SaveCommand.cs" />
     <Compile Include="Settings\AddInSettings.cs" />
     <Compile Include="Settings\SettingsViewModel.cs" />

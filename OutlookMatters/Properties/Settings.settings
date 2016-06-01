@@ -14,5 +14,8 @@
     <Setting Name="ChannelsMap" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="Version" Type="OutlookMatters.Core.Settings.MattermostVersion" Scope="User">
+      <Value Profile="(Default)">ApiVersionOne</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
