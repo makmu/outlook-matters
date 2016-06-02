@@ -26,7 +26,15 @@ namespace OutlookMatters.Core.Mattermost.v3
 
         public void CreatePost(string message)
         {
-            throw new NotImplementedException();
+            var post = new Post
+            {
+                Id = string.Empty,
+                ChannelId = _channel.ChannelId,
+                Message = message,
+                UserId = _userId,
+                RootId = string.Empty
+            };
+            _restService.CreatePost(_baseUri, _token, _channel.ChannelId, _teamId, post);
         }
 
         public ChannelSetting ToSetting()

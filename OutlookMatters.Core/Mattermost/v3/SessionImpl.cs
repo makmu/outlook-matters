@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.Mattermost.v3.Interface;
 
@@ -34,7 +33,8 @@ namespace OutlookMatters.Core.Mattermost.v3
 
         public IChatChannel GetChannel(string channelId)
         {
-            throw new NotImplementedException();
+            return _channelFactory.NewInstance(_restService, _uri, _token, _userId, _teamId,
+                new Channel {ChannelId = channelId});
         }
 
         public IChatPost GetPost(string postId)

@@ -6,6 +6,7 @@ namespace OutlookMatters.Core.Mattermost.v3.Interface
     {
         User Login(Uri baseUri, Login login, out string token);
         InitialLoad GetInitialLoad(Uri baseUri, string token);
-        ChannelList GetChannelList(Uri uri, string token, string teamId);
+        ChannelList GetChannelList(Uri uri, string token, string teamGuid);
+        void CreatePost(Uri baseUri, string token, string channelId, string teamGuid, Post newPost);
     }
 }

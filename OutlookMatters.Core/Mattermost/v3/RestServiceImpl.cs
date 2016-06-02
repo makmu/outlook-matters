@@ -62,17 +62,35 @@ namespace OutlookMatters.Core.Mattermost.v3
             return exception;
         }
 
-        public ChannelList GetChannelList(Uri uri, string token, string teamId)
+        public ChannelList GetChannelList(Uri uri, string token, string teamGuid)
         {
             try
             {
-                var getUrl = new Uri(uri, "api/v3/teams/" + teamId + "/channels/");
+                var getUrl = new Uri(uri, "api/v3/teams/" + teamGuid + "/channels/");
                 using (var response = _httpClient.Request(getUrl)
                     .WithHeader("Authorization", "Bearer " + token)
                     .Get())
                 {
                     var payload = response.GetPayload();
                     return JsonConvert.DeserializeObject<ChannelList>(payload);
+                }
+            }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
+            }
+        }
+
+        public void CreatePost(Uri baseUri, string token, string channelId, string teamGuid, Post newPost)
+        {
+            try
+            {
+                var postUrl = new Uri(baseUri, "api/v3/teams/" + teamGuid + "/channels/" + channelId + "/posts/create");
+                using (_httpClient.Request(postUrl)
+                    .WithContentType("text/json")
+                    .WithHeader("Authorization", "Bearer " + token)
+                    .Post(JsonConvert.SerializeObject(newPost)))
+                {
                 }
             }
             catch (HttpException hex)
