@@ -268,7 +268,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
             var control = MockOfRibbonControl();
             var passwordProvider = new Mock<IPasswordProvider>();
             passwordProvider.Setup(x => x.GetPassword(It.IsAny<string>())).Throws<Exception>();
-            var sessionCache = new SingleSignOnSessionRepository(Mock.Of<IClient>(),
+            var sessionCache = new SingleSignOnSessionRepository(Mock.Of<IClientFactory>(),
                 DefaultSettingsLoadService,
                 passwordProvider.Object);
 
