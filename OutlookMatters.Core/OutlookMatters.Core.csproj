@@ -91,6 +91,7 @@
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Http\IHttpResponse.cs" />
+    <Compile Include="Mattermost\MattermostClientFactory.cs" />
     <Compile Include="Mattermost\v1\ChatChannelImpl.cs" />
     <Compile Include="Mattermost\v1\ChatPostImpl.cs" />
     <Compile Include="Mattermost\v1\HttpClient.cs" />
@@ -110,8 +111,11 @@
     <Compile Include="Mattermost\v1\Interface\User.cs" />
     <Compile Include="Mattermost\v1\Interface\IRestService.cs" />
     <Compile Include="Mattermost\v1\ISessionFactory.cs" />
+    <Compile Include="Mattermost\v3\ChatChannelImpl.cs" />
+    <Compile Include="Chat\ChatException.cs" />
     <Compile Include="Mattermost\v3\ChatFactoryImpl.cs" />
     <Compile Include="Mattermost\v3\ClientImpl.cs" />
+    <Compile Include="Mattermost\v3\IChatChannelFactory.cs" />
     <Compile Include="Mattermost\v3\IChatFactory.cs" />
     <Compile Include="Mattermost\v3\Interface\InitialLoad.cs" />
     <Compile Include="Mattermost\v3\Interface\Channel.cs" />
@@ -121,9 +125,12 @@
     <Compile Include="Mattermost\v3\Interface\IRestService.cs" />
     <Compile Include="Mattermost\v3\Interface\Login.cs" />
     <Compile Include="Mattermost\v3\Interface\MattermostException.cs" />
+    <Compile Include="Mattermost\v3\Interface\Post.cs" />
     <Compile Include="Mattermost\v3\Interface\User.cs" />
     <Compile Include="Mattermost\v3\RestServiceImpl.cs" />
     <Compile Include="Mattermost\v3\Interface\Team.cs" />
+    <Compile Include="Mattermost\v3\SessionImpl.cs" />
+    <Compile Include="Session\IClientFactory.cs" />
     <Compile Include="Session\ISessionRepository.cs" />
     <Compile Include="Mail\IExplorerService.cs" />
     <Compile Include="Mail\IMailExplorer.cs" />
