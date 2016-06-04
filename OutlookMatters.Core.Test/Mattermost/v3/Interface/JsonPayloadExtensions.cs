@@ -12,6 +12,12 @@ namespace Test.OutlookMatters.Core.Mattermost.v3.Interface
                    "\"}";
         }
 
+        public static string SerializeToPayload(this Post post)
+        {
+            return "{\"id\":\"" + post.Id + "\",\"channel_id\":\"" + post.ChannelId + "\",\"message\":\"" + post.Message +
+                   "\",\"user_id\":\"" + post.UserId + "\",\"root_id\":\"" + post.RootId + "\"}";
+        }
+
         public static string SerializeToPayload(this User user)
         {
             return "{\"id\":\"" + user.Id + "\"}";
