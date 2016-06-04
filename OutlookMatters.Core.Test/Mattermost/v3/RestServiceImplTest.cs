@@ -22,6 +22,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
         const string MESSAGE = "message";
         const string TEAM_ID = "teamId";
         const string TEAM_NAME = "teamName";
+        const string TEAM_GUID = "teamGuid";
         const string POST_ID = "postId";
         const string CHANNEL_ID = "channelId";
         const string CHANNEL_NAME = "FunnyChannelName";
@@ -246,6 +247,22 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             sut.GetPostById(Uri, TOKEN, TEAM_ID, POST_ID);
 
             httpResponse.Verify(x => x.Dispose());
+        }
+
+        [Test]
+        public void CreatePost_MakesTheCorrectHttpRequests()
+        {
+            var post = SetupExamplePost();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/",
+                "api/v3/teams/" + TEAM_GUID + "/channels/" + post.ChannelId + "/posts/create")
+                .WithToken(TOKEN)
+                .Post(post.SerializeToPayload());
+            var sut = new RestServiceImpl(httpClient.Object);
+
+            sut.CreatePost(Uri, TOKEN, CHANNEL_ID, TEAM_GUID, post);
+
+            httpClient.VerifyAll();
         }
 
         [Test]
