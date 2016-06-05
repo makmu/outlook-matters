@@ -8,21 +8,25 @@ An Outlook Add-in to forward mails to [Mattermost](http://www.mattermost.org/)
 ### Installation
 * Make sure that [Microsoft Visual Studio Tools for Office Runtime 2010](https://www.microsoft.com/en-us/download/details.aspx?id=48217) is installed
 * Download the latest binary distribution from the [releases page](https://github.com/makmu/outlook-matters/releases)
-* Unzip the release to `C:\Program Files\OutlookMatters` (or any other folder where you want install the binaries)
-* Double-Click file `OutlookMatters.vsto` to install the Addin
+* Unzip the release file to `C:\Program Files\OutlookMatters` (or any other folder where you want install the binaries)
+  * To **update** your installation to a newer version, close MS Outlook and replace the old files in the installation folder with the new version. 
+* Double-Click file `OutlookMatters.vsto` to install/update the Addin.
 
 ### Configuration
 * In Outlook right-click on any e-mail in your mail folder
-* From the context menu select `Mattermost`-> `Settings...`
-  * Configure mattermost base url (e.g. `http://mattermost.some-company.com`)
-  * team id (e.g. `myteam`)
+* From the context menu select `Mattermost`-> `Settings...` and configure
+  * mattermost base url (e.g. `http://mattermost.some-company.com`)
+  * team id/name (e.g. `myteam`)
   * your email address as known to mattermost (i.e. username)
+  * mattermost server version
+* From the context menu select `Mattermost`-> `Refresh Channels`
 
 ### Usage
 * In Outlook right-click on any e-mail in your mail folder that you want to forward to Mattermost
-* From the context menu select `Mattermost` -> `Post`
+* **As new post**: From the context menu select `Mattermost` click on the channel you want to post into
+* **As reply**: Optain the Permalink of any post in a thread of posts you want to reply to and from the context menu select `Mattermost`-> `As Reply...`. Paste the Permalink and click `OK`.
 
-The contents of your mail should now appear in the configured channel.
+The contents of your mail should now appear mattermost.
 
 **Happy Posting :)**
 
