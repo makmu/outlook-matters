@@ -22,14 +22,15 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             const string password = "password";
             var token = "token";
             var login = new Login {LoginId = username, Password = password, Token = string.Empty};
-            var initialLoad = new InitialLoad { Teams = new[] { new Team { Id = teamGuid, Name = teamId } } };
+            var initialLoad = new InitialLoad {Teams = new[] {new Team {Id = teamGuid, Name = teamId}}};
             var user = new User {Id = userId};
             var restService = new Mock<IRestService>();
             restService.Setup(x => x.GetInitialLoad(new Uri(url), token)).Returns(initialLoad);
             restService.Setup(x => x.Login(new Uri(url), login, out token)).Returns(user);
             var session = new Mock<ISession>();
             var chatFactory = new Mock<IChatFactory>();
-            chatFactory.Setup(x => x.NewInstance(restService.Object, new Uri(url), token, userId, teamGuid)).Returns(session.Object);
+            chatFactory.Setup(x => x.NewInstance(restService.Object, new Uri(url), token, userId, teamGuid))
+                .Returns(session.Object);
             var sut = new ClientImpl(restService.Object, chatFactory.Object);
 
             var result = sut.LoginByUsername(url, teamId, username, password);

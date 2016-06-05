@@ -126,6 +126,7 @@
     <Compile Include="Mattermost\v3\Interface\Login.cs" />
     <Compile Include="Mattermost\v3\Interface\MattermostException.cs" />
     <Compile Include="Mattermost\v3\Interface\Post.cs" />
+    <Compile Include="Mattermost\v3\Interface\Thread.cs" />
     <Compile Include="Mattermost\v3\Interface\User.cs" />
     <Compile Include="Mattermost\v3\RestServiceImpl.cs" />
     <Compile Include="Mattermost\v3\Interface\Team.cs" />

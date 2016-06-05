@@ -40,7 +40,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
                     }
                 }
             };
-            var list = new List<IChatChannel> { Mock.Of<IChatChannel>(), Mock.Of<IChatChannel>() };
+            var list = new List<IChatChannel> {Mock.Of<IChatChannel>(), Mock.Of<IChatChannel>()};
             var restService = new Mock<IRestService>();
             restService.Setup(x => x.GetChannelList(baseUri, TOKEN, TEAM_GUID)).Returns(channelList);
             var channelFactory = new Mock<IChatChannelFactory>();

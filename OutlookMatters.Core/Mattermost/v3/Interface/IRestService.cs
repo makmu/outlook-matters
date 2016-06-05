@@ -8,5 +8,6 @@ namespace OutlookMatters.Core.Mattermost.v3.Interface
         InitialLoad GetInitialLoad(Uri baseUri, string token);
         ChannelList GetChannelList(Uri uri, string token, string teamGuid);
         void CreatePost(Uri baseUri, string token, string channelId, string teamGuid, Post newPost);
+        Thread GetPostById(Uri baseUri, string token, string teamGuid, string postId);
     }
 }

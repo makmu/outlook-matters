@@ -98,5 +98,24 @@ namespace OutlookMatters.Core.Mattermost.v3
                 throw TranslateException(hex);
             }
         }
+
+        public Thread GetPostById(Uri baseUri, string token, string teamGuid, string postId)
+        {
+            try
+            {
+                var getUrl = new Uri(baseUri, "api/v3/teams/" + teamGuid + "/posts/" + postId);
+                using (var response = _httpClient.Request(getUrl)
+                    .WithHeader("Authorization", "Bearer " + token)
+                    .Get())
+                {
+                    var payload = response.GetPayload();
+                    return JsonConvert.DeserializeObject<Thread>(payload);
+                }
+            }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
+            }
+        }
     }
 }

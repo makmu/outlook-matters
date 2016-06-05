@@ -31,7 +31,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
                 UserId = USER_ID,
                 RootId = string.Empty
             };
-            var channel = new Channel { ChannelId = CHANNEL_ID };
+            var channel = new Channel {ChannelId = CHANNEL_ID};
             var restService = new Mock<IRestService>();
             restService.Setup(x => x.CreatePost(baseUri, TOKEN, CHANNEL_ID, TEAM_GUID, post));
             var sut = new ChatChannelImpl(restService.Object, baseUri, TOKEN, USER_ID, TEAM_GUID, channel);
@@ -45,7 +45,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
         public void ToSetting_ReturnsChannelId()
         {
             var baseUri = new Uri("http://localhost/");
-            var channel = new Channel { ChannelId = CHANNEL_ID, ChannelName = CHANNEL_NAME, Type = CHANNEL_TYPE };
+            var channel = new Channel {ChannelId = CHANNEL_ID, ChannelName = CHANNEL_NAME, Type = CHANNEL_TYPE};
             var sut = new ChatChannelImpl(Mock.Of<IRestService>(), baseUri, TOKEN, USER_ID, TEAM_GUID, channel);
 
             var result = sut.ToSetting();
