@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>5</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -58,6 +59,7 @@
     <Reference Include="office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -67,22 +69,34 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Mattermost\v1\ChatChannelImplTest.cs" />
+    <Compile Include="Mattermost\v1\ChatPostImplTest.cs" />
+    <Compile Include="Http\HttpClientMockRestExtensions.cs" />
+    <Compile Include="Mattermost\v1\HttpClientTest.cs" />
+    <Compile Include="Mattermost\v1\HttpRestServiceTest.cs" />
+    <Compile Include="Mattermost\v1\HttpSessionTest.cs" />
+    <Compile Include="Mattermost\v1\Interface\MattermostExceptionTest.cs" />
+    <Compile Include="Mattermost\v1\Interface\JsonPayloadExtensions.cs" />
+    <Compile Include="Mattermost\v3\ChatChannelImplTest.cs" />
+    <Compile Include="Mattermost\v3\ChatPostImplTest.cs" />
+    <Compile Include="Mattermost\v3\ClientImplTest.cs" />
+    <Compile Include="Mattermost\v3\Interface\JsonPayloadExtensions.cs" />
+    <Compile Include="Mattermost\v3\RestServiceImplTest.cs" />
+    <Compile Include="Mattermost\v3\SessionImplTest.cs" />
     <Compile Include="Settings\CloseCommandTest.cs" />
     <Compile Include="ContextMenu\MailItemContextMenuEntryTest.cs" />
     <Compile Include="Mail\MailExceptionTest.cs" />
     <Compile Include="Mail\OutlookMailExplorerTest.cs" />
-    <Compile Include="Mattermost\Interface\MattermostExceptionTest.cs" />
     <Compile Include="Reply\PostIdFromPermalinkFilterTest.cs" />
     <Compile Include="Cache\CompositeCacheTest.cs" />
     <Compile Include="Session\SingleSignOnSessionRepositoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Mattermost\HttpImpl\HttpClientTest.cs" />
     <Compile Include="Settings\ApplicationSettingsServiceTest.cs" />
+    <Compile Include="Settings\EnumMatchToBooleanConverterTest.cs" />
     <Compile Include="Settings\SaveCommandTest.cs" />
     <Compile Include="Settings\AddInSettingsTest.cs" />
     <Compile Include="Settings\SettingsViewModelTest.cs" />
     <Compile Include="TestUtils\ExtensionMethods.cs" />
-    <Compile Include="Mattermost\HttpImpl\HttpSessionTest.cs" />
     <Compile Include="TestUtils\XmlAssertions.cs" />
     <Compile Include="Utils\UserAbortExceptionTest.cs" />
   </ItemGroup>
@@ -101,6 +115,7 @@
       <Name>OutlookMatters</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

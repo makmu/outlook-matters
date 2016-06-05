@@ -2,24 +2,27 @@
 {
     public class AddInSettings
     {
-        public AddInSettings(string mattermostUrl, string teamId, string username, string channelsMap)
+        public AddInSettings(string mattermostUrl, string teamId, string username, string channelsMap, MattermostVersion version)
         {
             MattermostUrl = mattermostUrl;
             TeamId = teamId;
             Username = username;
             ChannelsMap = channelsMap;
+            Version = version;
         }
 
         public string MattermostUrl { get; private set; }
         public string TeamId { get; private set; }
         public string Username { get; private set; }
         public string ChannelsMap { get; private set; }
+        public MattermostVersion Version { get; private set; }
 
         protected bool Equals(AddInSettings other)
         {
             return string.Equals(MattermostUrl, other.MattermostUrl) && string.Equals(TeamId, other.TeamId) &&
                    string.Equals(Username, other.Username) &&
-                   string.Equals(ChannelsMap, other.ChannelsMap);
+                   string.Equals(ChannelsMap, other.ChannelsMap) &&
+                   string.Equals(Version, other.Version);
         }
 
         public override bool Equals(object obj)

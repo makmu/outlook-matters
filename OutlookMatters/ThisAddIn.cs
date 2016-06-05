@@ -8,7 +8,7 @@ using OutlookMatters.Core.ContextMenu;
 using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Http;
 using OutlookMatters.Core.Mail;
-using OutlookMatters.Core.Mattermost.HttpImpl;
+using OutlookMatters.Core.Mattermost;
 using OutlookMatters.Core.Reply;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Session;
@@ -52,11 +52,11 @@ namespace OutlookMatters
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             var httpClient = new DotNetHttpClient();
-            var mattermost = new HttpClient(new HttpSessionFactory(httpClient), httpClient);
+            var clientFactory = new MattermostClientFactory(httpClient);
             var passwordDialog = new PasswordDialogShell();
             var caches = new CompositeCache();
             var settingsService = new ApplicationSettingsService(caches);
-            var sessionRepository = new SingleSignOnSessionRepository(mattermost, settingsService, passwordDialog);
+            var sessionRepository = new SingleSignOnSessionRepository(clientFactory, settingsService, passwordDialog);
             caches.Add(sessionRepository);
             var explorerService = new OutlookExplorerService();
             var mailExplorer = new OutlookMailExplorer(explorerService);
@@ -88,5 +88,7 @@ namespace OutlookMatters
         }
 
         #endregion
+
+        
     }
 }

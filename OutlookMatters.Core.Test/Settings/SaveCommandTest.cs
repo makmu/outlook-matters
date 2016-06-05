@@ -27,22 +27,40 @@ namespace Test.OutlookMatters.Core.Settings
             const string mattermostUrl = "http://localhost";
             const string teamId = "teamId";
             const string username = "username";
+            const MattermostVersion version = MattermostVersion.ApiVersionOne;
             var viewModel = new SettingsViewModel(
                 new AddInSettings(string.Empty, string.Empty, string.Empty,
-                    string.Empty),
+                    string.Empty, It.IsAny<MattermostVersion>()),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>())
             {
                 MattermostUrl = mattermostUrl,
                 TeamId = teamId,
-                Username = username
+                Username = username,
+                Version = version
             };
             var saveService = new Mock<ISettingsSaveService>();
             var classUnderTest = new SaveCommand(saveService.Object, Mock.Of<IClosableWindow>());
 
             classUnderTest.Execute(viewModel);
 
-            saveService.Verify(x => x.SaveCredentials(mattermostUrl, teamId, username));
+            saveService.Verify(x => x.SaveCredentials(mattermostUrl, teamId, username, version));
+        }
+
+        [Test]
+        public void Execute_ClearsChannelList()
+        {
+            var viewModel = new SettingsViewModel(
+                new AddInSettings(string.Empty, string.Empty, string.Empty,
+                    string.Empty, It.IsAny<MattermostVersion>()),
+                Mock.Of<ICommand>(),
+                Mock.Of<ICommand>());
+            var saveService = new Mock<ISettingsSaveService>();
+            var classUnderTest = new SaveCommand(saveService.Object, Mock.Of<IClosableWindow>());
+
+            classUnderTest.Execute(viewModel);
+
+            saveService.Verify(x => x.SaveChannels(string.Empty));
         }
 
         [Test]
@@ -50,7 +68,7 @@ namespace Test.OutlookMatters.Core.Settings
         {
             var viewModel = new SettingsViewModel(
                 new AddInSettings(string.Empty, string.Empty, string.Empty,
-                    string.Empty),
+                    string.Empty, It.IsAny<MattermostVersion>()),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>());
             var window = new Mock<IClosableWindow>();

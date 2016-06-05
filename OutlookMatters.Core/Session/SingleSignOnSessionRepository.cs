@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using OutlookMatters.Core.Cache;
-using OutlookMatters.Core.Mattermost.Interface;
+using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Settings;
 
@@ -8,16 +8,16 @@ namespace OutlookMatters.Core.Session
 {
     public class SingleSignOnSessionRepository : ICache, ISessionRepository
     {
-        private readonly IClient _client;
         private readonly IPasswordProvider _passwordProvider;
+        private readonly IClientFactory _clientFactory;
         private readonly ISettingsLoadService _settingsLoadService;
 
         private ISession _session;
 
-        public SingleSignOnSessionRepository(IClient client, ISettingsLoadService settingsLoadService,
+        public SingleSignOnSessionRepository(IClientFactory clientFactory, ISettingsLoadService settingsLoadService,
             IPasswordProvider passwordProvider)
         {
-            _client = client;
+            _clientFactory = clientFactory;
             _settingsLoadService = settingsLoadService;
             _passwordProvider = passwordProvider;
         }
@@ -33,13 +33,13 @@ namespace OutlookMatters.Core.Session
             {
                 var settings = _settingsLoadService.Load();
                 var password = _passwordProvider.GetPassword(settings.Username);
+                var client = _clientFactory.GetClient(settings.Version);
                 _session = await Task.Run(() =>
-                    _client.LoginByUsername(
+                    client.LoginByUsername(
                         settings.MattermostUrl,
                         settings.TeamId,
                         settings.Username,
                         password));
-                await Task.Run(() => _session.FetchChannelList());
             }
             return _session;
         }

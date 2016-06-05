@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using OutlookMatters.Core.Mattermost.Interface;
+using OutlookMatters.Core.Chat;
 
 namespace OutlookMatters.Core.Session
 {

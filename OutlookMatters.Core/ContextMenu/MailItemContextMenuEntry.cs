@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using OutlookMatters.Core.Cache;
+using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Mail;
-using OutlookMatters.Core.Mattermost.Interface;
+using OutlookMatters.Core.Mattermost.v1.Interface;
 using OutlookMatters.Core.Reply;
 using OutlookMatters.Core.Session;
 using OutlookMatters.Core.Settings;
@@ -60,12 +61,12 @@ namespace OutlookMatters.Core.ContextMenu
         {
             var xmlString = @"<menu xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">";
             var settings = _settingsLoadService.Load();
-            var channelList = JsonConvert.DeserializeObject<ChannelList>(settings.ChannelsMap);
+            var channelList = JsonConvert.DeserializeObject<ChannelListSetting>(settings.ChannelsMap);
             if (channelList != null)
             {
                 for (int index = 0; index < channelList.Channels.Count; index++)
                 {
-                    if (channelList.Channels[index].Type == ChannelType.Public)
+                    if (channelList.Channels[index].Type == ChannelTypeSetting.Public)
                     {
                         xmlString += CreateChannelButton(channelList.Channels[index].ChannelId,
                             channelList.Channels[index].ChannelName);
@@ -105,7 +106,8 @@ namespace OutlookMatters.Core.ContextMenu
             try
             {
                 var session = await _sessionRepository.RestoreSession();
-                await Task.Run(() => session.CreatePost(channelId, message));
+                var channel = session.GetChannel(channelId);
+                await Task.Run(() => channel.CreatePost(message));
             }
             catch (MattermostException mex)
             {
@@ -122,8 +124,12 @@ namespace OutlookMatters.Core.ContextMenu
             try
             {
                 var session = await _sessionRepository.RestoreSession();
-                var channelList = await Task.Run(() => session.FetchChannelList());
-                var channelMap = JsonConvert.SerializeObject(channelList);
+                var channelList = await Task.Run(() => session.GetChannels());
+                var channelSettings = new ChannelListSetting
+                {
+                    Channels = channelList.Select(x => x.ToSetting()).ToList()
+                };
+                var channelMap = JsonConvert.SerializeObject(channelSettings);
                 await Task.Run(() => _settingsSaveService.SaveChannels(channelMap));
             }
             catch (MattermostException mex)
@@ -143,10 +149,8 @@ namespace OutlookMatters.Core.ContextMenu
             {
                 var postId = _rootPostIdProvider.Get();
                 var session = await _sessionRepository.RestoreSession();
-                var rootPost = await Task.Run(() => session.GetRootPost(postId));
-                var rootId = rootPost.id;
-
-                await Task.Run(() => session.CreatePost(rootPost.channel_id, message, rootId));
+                var post = await Task.Run(() => session.GetPost(postId));
+                await Task.Run(() => post.Reply(message));
             }
             catch (UserAbortException)
             {

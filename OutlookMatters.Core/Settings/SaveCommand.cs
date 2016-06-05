@@ -26,7 +26,8 @@ namespace OutlookMatters.Core.Settings
             {
                 throw new ArgumentException(@"Invalid ViewModel ", "parameter");
             }
-            _saveService.SaveCredentials(viewModel.MattermostUrl, viewModel.TeamId, viewModel.Username);
+            _saveService.SaveCredentials(viewModel.MattermostUrl, viewModel.TeamId, viewModel.Username, viewModel.Version);
+            _saveService.SaveChannels(string.Empty);
             _window.Close();
         }
 
