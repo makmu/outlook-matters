@@ -14,7 +14,8 @@ namespace OutlookMatters.Core.Mattermost.v3
         private readonly Channel _channel;
         private readonly string _teamId;
 
-        public ChatChannelImpl(IRestService restService, Uri baseUri, string token, string userId, string teamId, Channel channel)
+        public ChatChannelImpl(IRestService restService, Uri baseUri, string token, string userId, string teamId,
+            Channel channel)
         {
             _restService = restService;
             _baseUri = baseUri;

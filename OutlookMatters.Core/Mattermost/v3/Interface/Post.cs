@@ -31,7 +31,7 @@ namespace OutlookMatters.Core.Mattermost.v3.Interface
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Post)obj);
+            return Equals((Post) obj);
         }
 
         public override int GetHashCode()
@@ -39,10 +39,10 @@ namespace OutlookMatters.Core.Mattermost.v3.Interface
             unchecked
             {
                 var hashCode = (Id != null ? Id.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (ChannelId != null ? ChannelId.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Message != null ? Message.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (UserId != null ? UserId.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (RootId != null ? RootId.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (ChannelId != null ? ChannelId.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Message != null ? Message.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (UserId != null ? UserId.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (RootId != null ? RootId.GetHashCode() : 0);
                 return hashCode;
             }
         }

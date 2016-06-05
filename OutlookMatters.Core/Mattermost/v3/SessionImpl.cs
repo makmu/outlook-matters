@@ -14,8 +14,16 @@ namespace OutlookMatters.Core.Mattermost.v3
         private readonly string _userId;
         private readonly string _teamId;
         private readonly IChatChannelFactory _channelFactory;
+        private readonly IChatPostFactory _postFactory;
 
-        public SessionImpl(IRestService restService, Uri uri, string token, string userId, string teamId, IChatChannelFactory channelFactory)
+        public SessionImpl(
+            IRestService restService,
+            Uri uri,
+            string token,
+            string userId,
+            string teamId,
+            IChatChannelFactory channelFactory,
+            IChatPostFactory postFactory)
         {
             _restService = restService;
             _uri = uri;
@@ -23,6 +31,7 @@ namespace OutlookMatters.Core.Mattermost.v3
             _userId = userId;
             _teamId = teamId;
             _channelFactory = channelFactory;
+            _postFactory = postFactory;
         }
 
         public IEnumerable<IChatChannel> GetChannels()
@@ -39,7 +48,8 @@ namespace OutlookMatters.Core.Mattermost.v3
 
         public IChatPost GetPost(string postId)
         {
-            throw new NotImplementedException();
+            var thread = _restService.GetPostById(_uri, _token, _teamId, postId);
+            return _postFactory.NewInstance(_restService, _uri, _token, _teamId, thread.Posts[postId]);
         }
     }
 }
