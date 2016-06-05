@@ -217,7 +217,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
         }
 
         [Test]
-        public void GetThreadOfPosts_GetsThreadViaHttp()
+        public void GetPostById_GetsThreadViaHttp()
         {
             var thread = SetupExampleThread();
             var httpClient = new Mock<IHttpClient>();
@@ -233,7 +233,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
         }
 
         [Test]
-        public void GetThreadOfPosts_DisposesHttpResonse()
+        public void GetPostById_DisposesHttpResonse()
         {
             var thread = SetupExampleThread();
             var httpClient = new Mock<IHttpClient>();
@@ -266,7 +266,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
         }
 
         [Test]
-        public void GetThreadOfPosts_ThrowsMattermostExceptionWithError_IfHttpExceptionWithErrorPayload()
+        public void GetPostById_ThrowsMattermostExceptionWithError_IfHttpExceptionWithErrorPayload()
         {
             var error = SetupExampleError();
             var httpClient = new Mock<IHttpClient>();
