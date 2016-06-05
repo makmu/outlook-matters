@@ -15,7 +15,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Version" Type="OutlookMatters.Core.Settings.MattermostVersion" Scope="User">
-      <Value Profile="(Default)">ApiVersionOne</Value>
+      <Value Profile="(Default)">ApiVersionThree</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -73,7 +73,7 @@ namespace OutlookMatters.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ApiVersionOne")]
+        [global::System.Configuration.DefaultSettingValueAttribute("ApiVersionThree")]
         public global::OutlookMatters.Core.Settings.MattermostVersion Version {
             get {
                 return ((global::OutlookMatters.Core.Settings.MattermostVersion)(this["Version"]));
