@@ -48,6 +48,22 @@ namespace Test.OutlookMatters.Core.Settings
         }
 
         [Test]
+        public void Execute_ClearsChannelList()
+        {
+            var viewModel = new SettingsViewModel(
+                new AddInSettings(string.Empty, string.Empty, string.Empty,
+                    string.Empty, It.IsAny<MattermostVersion>()),
+                Mock.Of<ICommand>(),
+                Mock.Of<ICommand>());
+            var saveService = new Mock<ISettingsSaveService>();
+            var classUnderTest = new SaveCommand(saveService.Object, Mock.Of<IClosableWindow>());
+
+            classUnderTest.Execute(viewModel);
+
+            saveService.Verify(x => x.SaveChannels(string.Empty));
+        }
+
+        [Test]
         public void Execute_ClosesWindow()
         {
             var viewModel = new SettingsViewModel(
