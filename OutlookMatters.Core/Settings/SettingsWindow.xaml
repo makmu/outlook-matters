@@ -43,8 +43,8 @@
             <TextBox Margin="5" Text="{Binding Username}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" />
             <Label Margin="0,0,259,10" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" Width="125" Grid.ColumnSpan="2">Mattermost Version:</Label>
             <StackPanel Grid.Row="4" Grid.Column="1">
-                <RadioButton Content="mattermost v1.3 - v2.2 " IsChecked="{Binding Path=Version, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=ApiVersionOne}"  Margin="5"/>
-                <RadioButton Content="mattermost v3.0 " IsChecked="{Binding Path=Version, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=ApiVersionThree}" Margin="5"/>
+                <RadioButton Content="mattermost v3.0 (default)" IsChecked="{Binding Path=Version, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=ApiVersionThree}" Margin="5"/>
+                <RadioButton Content="mattermost v1.3 - v2.2 (deprecated)" IsChecked="{Binding Path=Version, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=ApiVersionOne}"  Margin="5"/>
             </StackPanel>
         </Grid>
 
