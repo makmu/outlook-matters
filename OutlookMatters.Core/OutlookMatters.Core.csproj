@@ -86,7 +86,7 @@
     <Compile Include="Error\MessageBoxErrorDisplay.cs" />
     <Compile Include="Http\DefaultHttpResponse.cs" />
     <Compile Include="Http\DotNetHttpClient.cs" />
-    <Compile Include="Http\HttpException.cs" />
+    <Compile Include="Http\ServiceException.cs" />
     <Compile Include="Http\HttpWebRequestAdaptor.cs" />
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Http\IHttpRequest.cs" />
