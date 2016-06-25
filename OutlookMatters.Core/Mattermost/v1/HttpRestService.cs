@@ -28,7 +28,7 @@ namespace OutlookMatters.Core.Mattermost.v1
                     return JsonConvert.DeserializeObject<User>(payload);
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
@@ -46,7 +46,7 @@ namespace OutlookMatters.Core.Mattermost.v1
                 {
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
@@ -66,7 +66,7 @@ namespace OutlookMatters.Core.Mattermost.v1
                     return JsonConvert.DeserializeObject<Thread>(payload);
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
@@ -85,13 +85,13 @@ namespace OutlookMatters.Core.Mattermost.v1
                     return JsonConvert.DeserializeObject<ChannelList>(payload);
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
         }
 
-        private static MattermostException TranslateException(HttpException hex)
+        private static MattermostException TranslateException(ServiceException hex)
         {
             var error = JsonConvert.DeserializeObject<v1.Interface.Error>(hex.Response.GetPayload());
             var exception = new MattermostException(error);

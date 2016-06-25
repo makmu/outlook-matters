@@ -28,7 +28,7 @@ namespace OutlookMatters.Core.Mattermost.v3
                     return JsonConvert.DeserializeObject<User>(payload);
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
@@ -49,13 +49,13 @@ namespace OutlookMatters.Core.Mattermost.v3
                     return JsonConvert.DeserializeObject<InitialLoad>(payload);
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
         }
 
-        private static MattermostException TranslateException(HttpException hex)
+        private static MattermostException TranslateException(ServiceException hex)
         {
             var error = JsonConvert.DeserializeObject<Interface.Error>(hex.Response.GetPayload());
             var exception = new MattermostException(error);
@@ -75,7 +75,7 @@ namespace OutlookMatters.Core.Mattermost.v3
                     return JsonConvert.DeserializeObject<ChannelList>(payload);
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
@@ -93,7 +93,7 @@ namespace OutlookMatters.Core.Mattermost.v3
                 {
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
@@ -112,7 +112,7 @@ namespace OutlookMatters.Core.Mattermost.v3
                     return JsonConvert.DeserializeObject<Thread>(payload);
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
