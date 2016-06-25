@@ -56,7 +56,9 @@ namespace OutlookMatters
             var passwordDialog = new PasswordDialogShell();
             var caches = new CompositeCache();
             var settingsService = new ApplicationSettingsService(caches);
-            var sessionRepository = new SingleSignOnSessionRepository(clientFactory, settingsService, passwordDialog);
+            var invalidCertificateDialog = new InvalidCertificateDialogShell();
+            var staticValidationManager = new StaticServicePointManager();
+            var sessionRepository = new SingleSignOnSessionRepository(clientFactory, settingsService, passwordDialog, invalidCertificateDialog, staticValidationManager);
             caches.Add(sessionRepository);
             var explorerService = new OutlookExplorerService();
             var mailExplorer = new OutlookMailExplorer(explorerService);
