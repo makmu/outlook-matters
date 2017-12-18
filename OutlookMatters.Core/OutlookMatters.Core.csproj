@@ -121,7 +121,6 @@
     <Compile Include="Mattermost\v3\IChatPostFactory.cs" />
     <Compile Include="Mattermost\v3\Interface\InitialLoad.cs" />
     <Compile Include="Mattermost\v3\Interface\Channel.cs" />
-    <Compile Include="Mattermost\v3\Interface\ChannelList.cs" />
     <Compile Include="Mattermost\v3\Interface\ChannelType.cs" />
     <Compile Include="Mattermost\v3\Interface\Error.cs" />
     <Compile Include="Mattermost\v3\Interface\IRestService.cs" />

@@ -180,12 +180,12 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
         [Test]
         public void GetInitialLoad_DisposesHttpRequest()
         {
-            var channelList = SetupExampleChannelList();
+            var initialLoad = SetupExampleInitialLoad();
             var httpClient = new Mock<IHttpClient>();
             var httpResponse = httpClient.SetupRequest("http://localhost/", "api/v3/users/initial_load")
                 .WithToken(TOKEN)
                 .Get()
-                .Responses(channelList.SerializeToPayload());
+                .Responses(initialLoad.SerializeToPayload());
             var sut = new RestServiceImpl(httpClient.Object);
 
             sut.GetInitialLoad(Uri, TOKEN);
@@ -255,7 +255,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             var post = SetupExamplePost();
             var httpClient = new Mock<IHttpClient>();
             httpClient.SetupRequest("http://localhost/",
-                "api/v3/teams/" + TEAM_GUID + "/channels/" + post.ChannelId + "/posts/create")
+                    "api/v3/teams/" + TEAM_GUID + "/channels/" + post.ChannelId + "/posts/create")
                 .WithToken(TOKEN)
                 .Post(post.SerializeToPayload());
             var sut = new RestServiceImpl(httpClient.Object);
@@ -311,14 +311,11 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             };
         }
 
-        private static ChannelList SetupExampleChannelList()
+        private static IEnumerable<Channel> SetupExampleChannelList()
         {
-            return new ChannelList
+            return new List<Channel>
             {
-                Channels = new List<Channel>
-                {
-                    new Channel {ChannelId = CHANNEL_ID, ChannelName = CHANNEL_NAME, Type = CHANNEL_TYPE}
-                }
+                new Channel {ChannelId = CHANNEL_ID, ChannelName = CHANNEL_NAME, Type = CHANNEL_TYPE}
             };
         }
 

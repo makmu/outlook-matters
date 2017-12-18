@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using OutlookMatters.Core.Http;
 using OutlookMatters.Core.Mattermost.v3.Interface;
@@ -62,7 +65,7 @@ namespace OutlookMatters.Core.Mattermost.v3
             return exception;
         }
 
-        public ChannelList GetChannelList(Uri uri, string token, string teamGuid)
+        public IEnumerable<Channel> GetChannelList(Uri uri, string token, string teamGuid)
         {
             try
             {
@@ -72,7 +75,7 @@ namespace OutlookMatters.Core.Mattermost.v3
                     .Get())
                 {
                     var payload = response.GetPayload();
-                    return JsonConvert.DeserializeObject<ChannelList>(payload);
+                    return JsonConvert.DeserializeObject<IEnumerable<Channel>>(payload);
                 }
             }
             catch (HttpException hex)
