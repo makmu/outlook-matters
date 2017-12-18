@@ -36,8 +36,8 @@ namespace OutlookMatters.Core.Mattermost.v3
 
         public IEnumerable<IChatChannel> GetChannels()
         {
-            return _restService.GetChannelList(_uri, _token, _teamId)
-                .Channels.Select(c => _channelFactory.NewInstance(_restService, _uri, _token, _userId, _teamId, c));
+            return _restService.GetChannelList(_uri, _token, _teamId).
+                Select(c => _channelFactory.NewInstance(_restService, _uri, _token, _userId, _teamId, c));
         }
 
         public IChatChannel GetChannel(string channelId)
