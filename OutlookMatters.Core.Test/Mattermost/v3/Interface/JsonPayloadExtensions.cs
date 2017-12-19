@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using OutlookMatters.Core.Mattermost.v3.Interface;
 
 namespace Test.OutlookMatters.Core.Mattermost.v3.Interface
@@ -41,11 +42,11 @@ namespace Test.OutlookMatters.Core.Mattermost.v3.Interface
                    "\",\"display_name\":\"" + channel.ChannelName + "\"}";
         }
 
-        public static string SerializeToPayload(this ChannelList channelList)
+        public static string SerializeToPayload(this IEnumerable<Channel> channelList)
         {
             return
-                "{\"channels\":[" + string.Join(",", channelList.Channels.Select(x => x.SerializeToPayload())) +
-                "]}";
+                "[" + string.Join(",", channelList.Select(x => x.SerializeToPayload())) +
+                "]";
         }
 
         public static string SerializeToPayload(this InitialLoad initialLoad)

@@ -26,20 +26,17 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
         public void GetChannels_GetsChannelsFromRestAndCreateChannelObjects()
         {
             var baseUri = new Uri("http://localhost/");
-            var channelList = new ChannelList
+            var channelList = new List<Channel>
             {
-                Channels = new List<Channel>
+                new Channel
                 {
-                    new Channel
-                    {
-                        ChannelId = CHANNEL1_ID,
-                        ChannelName = CHANNEL1_NAME
-                    },
-                    new Channel
-                    {
-                        ChannelId = CHANNEL2_ID,
-                        ChannelName = CHANNEL2_NAME
-                    }
+                    ChannelId = CHANNEL1_ID,
+                    ChannelName = CHANNEL1_NAME
+                },
+                new Channel
+                {
+                    ChannelId = CHANNEL2_ID,
+                    ChannelName = CHANNEL2_NAME
                 }
             };
             var list = new List<IChatChannel> {Mock.Of<IChatChannel>(), Mock.Of<IChatChannel>()};
@@ -47,10 +44,10 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             restService.Setup(x => x.GetChannelList(baseUri, TOKEN, TEAM_GUID)).Returns(channelList);
             var channelFactory = new Mock<IChatChannelFactory>();
             channelFactory.Setup(
-                x => x.NewInstance(restService.Object, baseUri, TOKEN, USER_ID, TEAM_GUID, channelList.Channels[0]))
+                    x => x.NewInstance(restService.Object, baseUri, TOKEN, USER_ID, TEAM_GUID, channelList[0]))
                 .Returns(list[0]);
             channelFactory.Setup(
-                x => x.NewInstance(restService.Object, baseUri, TOKEN, USER_ID, TEAM_GUID, channelList.Channels[1]))
+                    x => x.NewInstance(restService.Object, baseUri, TOKEN, USER_ID, TEAM_GUID, channelList[1]))
                 .Returns(list[1]);
             var sut = new SessionImpl(restService.Object, baseUri,
                 TOKEN, USER_ID, TEAM_GUID, channelFactory.Object, Mock.Of<IChatPostFactory>());
@@ -72,7 +69,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             var restService = Mock.Of<IRestService>();
             var channelFactory = new Mock<IChatChannelFactory>();
             channelFactory.Setup(
-                x => x.NewInstance(restService, baseUri, TOKEN, USER_ID, TEAM_GUID, channel))
+                    x => x.NewInstance(restService, baseUri, TOKEN, USER_ID, TEAM_GUID, channel))
                 .Returns(channelObj.Object);
             var sut = new SessionImpl(restService, baseUri,
                 TOKEN, USER_ID, TEAM_GUID, channelFactory.Object, Mock.Of<IChatPostFactory>());
@@ -97,7 +94,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             var chatPost = new Mock<IChatPost>();
             var channelFactory = new Mock<IChatPostFactory>();
             channelFactory.Setup(
-                x => x.NewInstance(restService.Object, baseUri, TOKEN, TEAM_GUID, thread.Posts[POST_ID]))
+                    x => x.NewInstance(restService.Object, baseUri, TOKEN, TEAM_GUID, thread.Posts[POST_ID]))
                 .Returns(chatPost.Object);
             restService.Setup(x => x.GetPostById(baseUri, TOKEN, TEAM_GUID, POST_ID)).Returns(thread);
             var sut = new SessionImpl(restService.Object, baseUri,
