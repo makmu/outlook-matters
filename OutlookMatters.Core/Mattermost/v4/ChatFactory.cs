@@ -6,7 +6,7 @@ namespace OutlookMatters.Core.Mattermost.v4
 {
     public class ChatFactory : IChatFactory, IChatChannelFactory, IChatPostFactory
     {
-        public ISession NewInstance(IRestService restService, Uri uri, string token, string userId, string teamId)
+        public ISession NewInstance(IRestService restService, Uri uri, string token, string teamId)
         {
             throw new NotImplementedException();
         }
