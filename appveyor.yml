@@ -4,6 +4,7 @@ before_build:
 build:
   verbosity: minimal
   project: OutlookMatters.sln
+    - cmd: msbuild OutlookMatter.sln
 after_test:
     - cmd: .\scripts\coverage.cmd
     - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
