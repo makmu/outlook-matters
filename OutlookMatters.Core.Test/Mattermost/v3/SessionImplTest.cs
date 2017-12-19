@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Office.Interop.Outlook;
 using Moq;
 using NUnit.Framework;
 using OutlookMatters.Core.Chat;
