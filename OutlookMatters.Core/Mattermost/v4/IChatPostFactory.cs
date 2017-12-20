@@ -6,6 +6,6 @@ namespace OutlookMatters.Core.Mattermost.v4
 {
     public interface IChatPostFactory
     {
-        IChatPost NewInstance(Uri baseUri, string token, string userId, Post posts);
+        IChatPost NewInstance(IRestService restService, Uri baseUri, string token, string teamId, Post post);
     }
 }
