@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.Mattermost.v4.Interface;
 
 namespace OutlookMatters.Core.Mattermost.v4
 {
-    public class Session : ISession
+    public class SessionImpl : ISession
     {
         private readonly IRestService _restService;
         private readonly Uri _baseUri;
@@ -17,7 +15,7 @@ namespace OutlookMatters.Core.Mattermost.v4
         private readonly IChatChannelFactory _chatChannelFactory;
         private readonly IChatPostFactory _chatPostFactory;
 
-        public Session(IRestService restService, Uri baseUri, string token, string teamId,
+        public SessionImpl(IRestService restService, Uri baseUri, string token, string teamId,
             IChatChannelFactory chatChannelFactory, IChatPostFactory chatPostFactory)
         {
             _restService = restService;

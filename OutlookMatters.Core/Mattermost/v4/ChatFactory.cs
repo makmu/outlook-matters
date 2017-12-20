@@ -8,7 +8,7 @@ namespace OutlookMatters.Core.Mattermost.v4
     {
         public ISession NewInstance(IRestService restService, Uri baseUri, string token, string teamId)
         {
-            return new Session(restService, baseUri, token, teamId, this, this);
+            return new SessionImpl(restService, baseUri, token, teamId, this, this);
         }
 
         public IChatChannel NewInstance(IRestService restService, Uri baseUri, string token, string teamId,

@@ -147,7 +147,7 @@
     <Compile Include="Mattermost\v4\Interface\Post.cs" />
     <Compile Include="Mattermost\v4\Interface\Team.cs" />
     <Compile Include="Mattermost\v4\RestService.cs" />
-    <Compile Include="Mattermost\v4\Session.cs" />
+    <Compile Include="Mattermost\v4\SessionImpl.cs" />
     <Compile Include="Session\IClientFactory.cs" />
     <Compile Include="Session\ISessionRepository.cs" />
     <Compile Include="Mail\IExplorerService.cs" />
