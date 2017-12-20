@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Controls;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -23,6 +24,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v1
         const string POST_ID = "postId";
         const string CHANNEL_ID = "channelId";
         const string CHANNEL_NAME = "FunnyChannelName";
+        private readonly string CONTENT_TYPE = "text/json";
         const ChannelType CHANNEL_TYPE = ChannelType.Public;
 
         [Test]
@@ -32,6 +34,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v1
             var user = SetupExampleUserData();
             var httpClient = new Mock<IHttpClient>();
             httpClient.SetupRequest("http://localhost/", "api/v1/users/login")
+                .WithContentType(CONTENT_TYPE)
                 .Post(login.SerializeToPayload())
                 .Responses(user.SerializeToPayload())
                 .WithToken(TOKEN);
@@ -50,6 +53,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v1
             var user = SetupExampleUserData();
             var httpClient = new Mock<IHttpClient>();
             httpClient.SetupRequest("http://localhost/", "api/v1/users/login")
+                .WithContentType(CONTENT_TYPE)
                 .Post(login.SerializeToPayload())
                 .Responses(user.SerializeToPayload())
                 .WithToken(TOKEN);
@@ -68,6 +72,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v1
             var user = SetupExampleUserData();
             var httpClient = new Mock<IHttpClient>();
             var httpResponse = httpClient.SetupRequest("http://localhost/", "api/v1/users/login")
+                .WithContentType(CONTENT_TYPE)
                 .Post(login.SerializeToPayload())
                 .Responses(user.SerializeToPayload())
                 .WithToken(TOKEN);
@@ -110,6 +115,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v1
             var httpClient = new Mock<IHttpClient>();
             httpClient.SetupRequest("http://localhost/", "api/v1/channels/" + post.ChannelId + "/create")
                 .WithToken(TOKEN)
+                .WithContentType(CONTENT_TYPE)
                 .Post(post.SerializeToPayload());
             var sut = new HttpRestService(httpClient.Object);
 
@@ -126,6 +132,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v1
             var httpResponse = httpClient.SetupRequest("http://localhost/",
                 "api/v1/channels/" + post.ChannelId + "/create")
                 .WithToken(TOKEN)
+                .WithContentType(CONTENT_TYPE)
                 .Post(post.SerializeToPayload());
             var sut = new HttpRestService(httpClient.Object);
 
