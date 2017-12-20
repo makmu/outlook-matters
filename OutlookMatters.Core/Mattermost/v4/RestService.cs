@@ -19,7 +19,7 @@ namespace OutlookMatters.Core.Mattermost.v4
         {
             var loginUrl = new Uri(baseUri, "api/v4/users/login");
             using (var response = _httpClient.Request(loginUrl)
-                .WithContentType("text/json")
+                .WithContentType("application/json")
                 .Post(JsonConvert.SerializeObject(login)))
             {
                 token = response.GetHeaderValue("Token");
@@ -28,7 +28,14 @@ namespace OutlookMatters.Core.Mattermost.v4
 
         public IEnumerable<Team> GetTeams(Uri baseUri, string token)
         {
-            throw new NotImplementedException();
+            var teamsUrl = new Uri(baseUri, "api/v4/teams");
+            using (var response = _httpClient.Request(teamsUrl)
+                .WithHeader("Authorization", "Bearer " + token)
+                .Get())
+            {
+                var payload = response.GetPayload();
+                return JsonConvert.DeserializeObject<IEnumerable<Team>>(payload);
+            }
         }
     }
 }
