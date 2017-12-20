@@ -135,6 +135,7 @@
     <Compile Include="Mattermost\v3\SessionImpl.cs" />
     <Compile Include="Mattermost\v4\ChatChannel.cs" />
     <Compile Include="Mattermost\v4\ChatFactory.cs" />
+    <Compile Include="Mattermost\v4\ChatPost.cs" />
     <Compile Include="Mattermost\v4\Client.cs" />
     <Compile Include="Mattermost\v4\IChatChannelFactory.cs" />
     <Compile Include="Mattermost\v4\IChatFactory.cs" />

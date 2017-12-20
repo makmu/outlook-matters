@@ -17,9 +17,9 @@ namespace OutlookMatters.Core.Mattermost.v4
             return new ChatChannel(restService, baseUri, token, teamId, channel);
         }
 
-        public IChatPost NewInstance(Uri baseUri, string token, string userId, Post posts)
+        public IChatPost NewInstance(IRestService restService, Uri baseUri, string token, string teamId, Post post)
         {
-            throw new NotImplementedException();
+            return new ChatPost(restService, baseUri, token, teamId, post);
         }
     }
 }
