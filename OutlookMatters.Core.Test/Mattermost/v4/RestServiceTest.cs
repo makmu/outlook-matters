@@ -17,8 +17,10 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
         private const string LOGIN_ID = "login";
         private const string PASSWORD = "password";
         private readonly string TOKEN = "token";
-        private const string TEAM_ID = "token";
-        private const string TEAM_NAME = "token";
+        private const string TEAM_ID = "team id";
+        private const string TEAM_NAME = "team name";
+        private const string CHANNEL_ID = "channel id";
+        private const string CHANNEL_NAME = "channel name";
         private readonly string CONTENT_TYPE = "application/json";
         public readonly Uri Uri = new Uri("http://localhost");
 
@@ -57,7 +59,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
         }
 
         [Test]
-        public void GetTeams_ReturnsListOfTeams()
+        public void GetTeams_PerformsRestCall()
         {
             var teamList = SetupExampleTeamList();
             var httpClient = new Mock<IHttpClient>();
@@ -70,12 +72,67 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
             teams.ShouldBeEquivalentTo(teamList);
         }
 
+        [Test]
+        public void GetTeams_DisposesHttpResponse()
+        {
+            var teamList = SetupExampleTeamList();
+            var httpClient = new Mock<IHttpClient>();
+            var httpResponse = httpClient.SetupRequest("http://localhost/", "api/v4/users/me/teams")
+                .WithToken(TOKEN).Get().Responses(teamList.SerializeToPayload());
+            var sut = new RestService(httpClient.Object);
+
+            sut.GetTeams(Uri, TOKEN);
+
+            httpResponse.Verify(h => h.Dispose());
+        }
+
+        [Test]
+        public void GetChannelList_PerformsRestCall()
+        {
+            var channelList = SetupExampleChannelList();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v4/users/me/teams/" + TEAM_ID + "/channels")
+                .WithToken(TOKEN)
+                .Get()
+                .Responses(channelList.SerializeToPayload());
+            var sut = new RestService(httpClient.Object);
+
+            var channels = sut.GetChannels(Uri, TOKEN, TEAM_ID);
+
+            channels.ShouldBeEquivalentTo(channelList);
+        }
+
+        [Test]
+        public void GetChannelList_DisposesHttpResponse()
+        {
+            var channelList = SetupExampleChannelList();
+            var httpClient = new Mock<IHttpClient>();
+            var httpResponse = httpClient.SetupRequest("http://localhost/", "api/v4/users/me/teams/" + TEAM_ID + "/channels")
+                .WithToken(TOKEN)
+                .Get()
+                .Responses(channelList.SerializeToPayload());
+            var sut = new RestService(httpClient.Object);
+
+            sut.GetChannels(Uri, TOKEN, TEAM_ID);
+
+            httpResponse.Verify(h => h.Dispose());
+        }
+
         private static IEnumerable<Team> SetupExampleTeamList()
         {
             return new[]
             {
                 new Team {Id = TEAM_ID, Name = TEAM_NAME},
                 new Team {Id = TEAM_ID, Name = TEAM_NAME}
+            };
+        }
+
+        private static IEnumerable<Channel> SetupExampleChannelList()
+        {
+            return new[]
+            {
+                new Channel {Id = CHANNEL_ID, Name = CHANNEL_NAME},
+                new Channel {Id = CHANNEL_ID, Name = CHANNEL_NAME}
             };
         }
 
