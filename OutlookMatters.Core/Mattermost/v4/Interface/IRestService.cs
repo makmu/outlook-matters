@@ -8,5 +8,7 @@ namespace OutlookMatters.Core.Mattermost.v4.Interface
         void Login(Uri baseUri, Login login, out string token);
 
         IEnumerable<Team> GetTeams(Uri baseUri, string token);
+
+        IEnumerable<Channel> GetChannels(Uri baseUri, string token, string teamId);
     }
 }

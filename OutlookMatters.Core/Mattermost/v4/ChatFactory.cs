@@ -6,14 +6,15 @@ namespace OutlookMatters.Core.Mattermost.v4
 {
     public class ChatFactory : IChatFactory, IChatChannelFactory, IChatPostFactory
     {
-        public ISession NewInstance(IRestService restService, Uri uri, string token, string teamId)
+        public ISession NewInstance(IRestService restService, Uri baseUri, string token, string teamId)
         {
-            throw new NotImplementedException();
+            return new Session(restService, baseUri, token, teamId, this, this);
         }
 
-        public IChatChannel NewInstance(IRestService restService, Uri baseUri, string token, string userId, Channel channel)
+        public IChatChannel NewInstance(IRestService restService, Uri baseUri, string token, string teamId,
+            Channel channel)
         {
-            throw new NotImplementedException();
+            return new ChatChannel(restService, baseUri, token, teamId, channel);
         }
 
         public IChatPost NewInstance(Uri baseUri, string token, string userId, Post posts)

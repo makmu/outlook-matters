@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 
 namespace OutlookMatters.Core.Mattermost.v4.Interface
 {
-    [JsonObject]
     public class Team
     {
         [JsonProperty("name")]

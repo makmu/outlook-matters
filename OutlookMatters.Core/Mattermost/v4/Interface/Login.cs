@@ -2,7 +2,6 @@
 
 namespace OutlookMatters.Core.Mattermost.v4.Interface
 {
-    [JsonObject]
     public class Login
     {
         [JsonProperty("login_id")]

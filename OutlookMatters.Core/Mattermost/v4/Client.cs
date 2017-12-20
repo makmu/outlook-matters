@@ -26,7 +26,7 @@ namespace OutlookMatters.Core.Mattermost.v4
             };
             var baseUri = new Uri(url);
             _restService.Login(baseUri, login, out token);
-            var team = _restService.GetTeams(baseUri, token).SingleOrDefault(t => t.Name == teamId);
+            var team = _restService.GetTeams(baseUri, token).SingleOrDefault(t => t.Name == teamId || t.Id == teamId);
             if (team == null)
             {
                 throw new ChatException("Invalid Team Id in Settings!");

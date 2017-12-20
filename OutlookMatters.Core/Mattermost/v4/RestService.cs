@@ -28,13 +28,25 @@ namespace OutlookMatters.Core.Mattermost.v4
 
         public IEnumerable<Team> GetTeams(Uri baseUri, string token)
         {
-            var teamsUrl = new Uri(baseUri, "api/v4/teams");
+            var teamsUrl = new Uri(baseUri, "api/v4/users/me/teams");
             using (var response = _httpClient.Request(teamsUrl)
                 .WithHeader("Authorization", "Bearer " + token)
                 .Get())
             {
                 var payload = response.GetPayload();
                 return JsonConvert.DeserializeObject<IEnumerable<Team>>(payload);
+            }
+        }
+
+        public IEnumerable<Channel> GetChannels(Uri baseUri, string token, string teamId)
+        {
+            var getChannelsUrl = new Uri(baseUri, "api/v4/users/me/teams/" + teamId + "/channels");
+            using (var response = _httpClient.Request(getChannelsUrl)
+                .WithHeader("Authorization", "Bearer " + token)
+                .Get())
+            {
+                var payload = response.GetPayload();
+                return JsonConvert.DeserializeObject<IEnumerable<Channel>>(payload);
             }
         }
     }
