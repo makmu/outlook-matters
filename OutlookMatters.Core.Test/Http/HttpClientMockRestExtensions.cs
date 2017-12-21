@@ -30,9 +30,14 @@ namespace Test.OutlookMatters.Core.Http
         public static Mock<IHttpResponse> Post(this Mock<IHttpRequest> httpRequest, string payload)
         {
             var httpResponse = new Mock<IHttpResponse>();
-            httpRequest.Setup(x => x.WithContentType("text/json")).Returns(httpRequest.Object);
             httpRequest.Setup(x => x.Post(payload)).Returns(httpResponse.Object);
             return httpResponse;
+        }
+
+        public static Mock<IHttpRequest> WithContentType(this Mock<IHttpRequest> httpRequest, string contentType)
+        {
+            httpRequest.Setup(x => x.WithContentType(contentType)).Returns(httpRequest.Object);
+            return httpRequest;
         }
 
         public static Mock<IHttpResponse> Responses(this Mock<IHttpResponse> httpResponse, string payload)

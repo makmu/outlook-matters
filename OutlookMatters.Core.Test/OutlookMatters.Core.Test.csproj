@@ -83,6 +83,11 @@
     <Compile Include="Mattermost\v3\Interface\JsonPayloadExtensions.cs" />
     <Compile Include="Mattermost\v3\RestServiceImplTest.cs" />
     <Compile Include="Mattermost\v3\SessionImplTest.cs" />
+    <Compile Include="Mattermost\v4\ChatChannelTest.cs" />
+    <Compile Include="Mattermost\v4\ClientTest.cs" />
+    <Compile Include="Mattermost\v4\Interface\JsonPayloadExtensions.cs" />
+    <Compile Include="Mattermost\v4\RestServiceTest.cs" />
+    <Compile Include="Mattermost\v4\SessionImplTest.cs" />
     <Compile Include="Settings\CloseCommandTest.cs" />
     <Compile Include="ContextMenu\MailItemContextMenuEntryTest.cs" />
     <Compile Include="Mail\MailExceptionTest.cs" />
