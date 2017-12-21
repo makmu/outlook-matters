@@ -36,12 +36,13 @@ namespace OutlookMatters.Core.Mattermost.v4
         public IChatChannel GetChannel(string channelId)
         {
             return _chatChannelFactory.NewInstance(_restService, _baseUri, _token, _teamId,
-                new Channel());
+                new Channel {Id = channelId});
         }
 
         public IChatPost GetPost(string postId)
         {
-            return _chatPostFactory.NewInstance(_restService, _baseUri, _token, _teamId, new Post());
+            var post = _restService.GetPostById(_baseUri, _token, postId);
+            return _chatPostFactory.NewInstance(_restService, _baseUri, _token, _teamId, post);
         }
     }
 }

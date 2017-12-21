@@ -49,5 +49,29 @@ namespace OutlookMatters.Core.Mattermost.v4
                 return JsonConvert.DeserializeObject<IEnumerable<Channel>>(payload);
             }
         }
+
+        public void CreatePost(Uri baseUri, string token, Post newPost)
+        {
+            var postUrl = new Uri(baseUri, "api/v4/posts");
+            using (_httpClient.Request(postUrl)
+                .WithContentType("application/json")
+                .WithHeader("Authorization", "Bearer " + token)
+                .Post(JsonConvert.SerializeObject(newPost)))
+            {
+            }
+        }
+
+        public Post GetPostById(Uri baseUri, string token, string postId)
+        {
+            var postUrl = new Uri(baseUri, "api/v4/posts/" + postId);
+            using (var response = _httpClient.Request(postUrl)
+                .WithContentType("application/json")
+                .WithHeader("Authorization", "Bearer " + token)
+                .Get())
+            {
+                var payload = response.GetPayload();
+                return JsonConvert.DeserializeObject<Post>(payload);
+            }
+        }
     }
 }

@@ -84,6 +84,7 @@
     <Compile Include="Mattermost\v3\RestServiceImplTest.cs" />
     <Compile Include="Mattermost\v3\SessionImplTest.cs" />
     <Compile Include="Mattermost\v4\ChatChannelTest.cs" />
+    <Compile Include="Mattermost\v4\ChatPostTest.cs" />
     <Compile Include="Mattermost\v4\ClientTest.cs" />
     <Compile Include="Mattermost\v4\Interface\JsonPayloadExtensions.cs" />
     <Compile Include="Mattermost\v4\RestServiceTest.cs" />

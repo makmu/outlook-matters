@@ -21,6 +21,8 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
         private const string TEAM_NAME = "team name";
         private const string CHANNEL_ID = "channel id";
         private const string CHANNEL_NAME = "channel name";
+        private const string POST_ID = "post id";
+        private const string MESSAGE = "message";
         private readonly string CONTENT_TYPE = "application/json";
         public readonly Uri Uri = new Uri("http://localhost");
 
@@ -118,6 +120,56 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
             httpResponse.Verify(h => h.Dispose());
         }
 
+        [Test]
+        public void GetPostById_GetsPostViaHttp()
+        {
+            var post = SetupExamplePost();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v4/posts/" + POST_ID)
+                .WithContentType(CONTENT_TYPE)
+                .WithToken(TOKEN)
+                .Get()
+                .Responses(post.SerializeToPayload());
+            var sut = new RestService(httpClient.Object);
+
+            var result = sut.GetPostById(Uri, TOKEN, POST_ID);
+
+            result.ShouldBeEquivalentTo(post);
+        }
+
+        [Test]
+        public void GetPostById_DisposesHttpResonse()
+        {
+            var post = SetupExamplePost();
+            var httpClient = new Mock<IHttpClient>();
+            var httpResponse =
+                httpClient.SetupRequest("http://localhost/", "api/v4/posts/" + POST_ID)
+                .WithContentType(CONTENT_TYPE)
+                    .WithToken(TOKEN)
+                    .Get().Responses(post.SerializeToPayload());
+            var sut = new RestService(httpClient.Object);
+
+            sut.GetPostById(Uri, TOKEN, POST_ID);
+
+            httpResponse.Verify(x => x.Dispose());
+        }
+
+        [Test]
+        public void CreatePost_MakesTheCorrectHttpRequests()
+        {
+            var post = SetupExamplePost();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v4/posts")
+                .WithContentType(CONTENT_TYPE)
+                .WithToken(TOKEN)
+                .Post(post.SerializeToPayload());
+            var sut = new RestService(httpClient.Object);
+
+            sut.CreatePost(Uri, TOKEN, post);
+
+            httpClient.VerifyAll();
+        }
+
         private static IEnumerable<Team> SetupExampleTeamList()
         {
             return new[]
@@ -133,6 +185,16 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
             {
                 new Channel {Id = CHANNEL_ID, Name = CHANNEL_NAME},
                 new Channel {Id = CHANNEL_ID, Name = CHANNEL_NAME}
+            };
+        }
+
+        private static Post SetupExamplePost()
+        {
+            return new Post
+            {
+                Id = string.Empty,
+                ChannelId = CHANNEL_ID,
+                Message = MESSAGE
             };
         }
 

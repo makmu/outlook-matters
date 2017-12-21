@@ -8,7 +8,7 @@ using OutlookMatters.Core.Mattermost.v4.Interface;
 
 namespace OutlookMatters.Core.Mattermost.v4
 {
-    class ChatPost : IChatPost
+    public class ChatPost : IChatPost
     {
         private readonly IRestService _restService;
         private readonly Uri _baseUri;
@@ -27,7 +27,14 @@ namespace OutlookMatters.Core.Mattermost.v4
 
         public void Reply(string message)
         {
-            throw new NotImplementedException();
+            var rootId = _post.RootId == "" ? _post.Id : _post.RootId;
+            var newPost = new Post
+            {
+                ChannelId = _post.ChannelId,
+                Message = message,
+                RootId = rootId
+            };
+            _restService.CreatePost(_baseUri, _token, newPost);
         }
     }
 }

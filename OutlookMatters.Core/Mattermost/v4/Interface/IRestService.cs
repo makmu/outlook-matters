@@ -10,5 +10,9 @@ namespace OutlookMatters.Core.Mattermost.v4.Interface
         IEnumerable<Team> GetTeams(Uri baseUri, string token);
 
         IEnumerable<Channel> GetChannels(Uri baseUri, string token, string teamId);
+
+        void CreatePost(Uri baseUri, string token, Post newPost);
+
+        Post GetPostById(Uri baseUri, string token, string postId);
     }
 }

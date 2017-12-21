@@ -129,7 +129,6 @@
     <Compile Include="Mattermost\v3\Interface\Post.cs" />
     <Compile Include="Mattermost\v3\Interface\Thread.cs" />
     <Compile Include="Mattermost\v3\Interface\User.cs" />
-    <Compile Include="Mattermost\v3\PostImpl.cs" />
     <Compile Include="Mattermost\v3\RestServiceImpl.cs" />
     <Compile Include="Mattermost\v3\Interface\Team.cs" />
     <Compile Include="Mattermost\v3\SessionImpl.cs" />
