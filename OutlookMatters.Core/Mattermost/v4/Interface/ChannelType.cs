@@ -1,10 +1,10 @@
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace OutlookMatters.Core.Mattermost.v1.Interface
+namespace OutlookMatters.Core.Mattermost.v4.Interface
 {
-    [JsonConverter(typeof (StringEnumConverter))]
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum ChannelType
     {
         [EnumMember(Value = "O")] Public,

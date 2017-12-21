@@ -69,20 +69,19 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Mattermost\v1\ChatChannelImplTest.cs" />
-    <Compile Include="Mattermost\v1\ChatPostImplTest.cs" />
     <Compile Include="Http\HttpClientMockRestExtensions.cs" />
-    <Compile Include="Mattermost\v1\HttpClientTest.cs" />
-    <Compile Include="Mattermost\v1\HttpRestServiceTest.cs" />
-    <Compile Include="Mattermost\v1\HttpSessionTest.cs" />
-    <Compile Include="Mattermost\v1\Interface\MattermostExceptionTest.cs" />
-    <Compile Include="Mattermost\v1\Interface\JsonPayloadExtensions.cs" />
     <Compile Include="Mattermost\v3\ChatChannelImplTest.cs" />
     <Compile Include="Mattermost\v3\ChatPostImplTest.cs" />
     <Compile Include="Mattermost\v3\ClientImplTest.cs" />
     <Compile Include="Mattermost\v3\Interface\JsonPayloadExtensions.cs" />
     <Compile Include="Mattermost\v3\RestServiceImplTest.cs" />
     <Compile Include="Mattermost\v3\SessionImplTest.cs" />
+    <Compile Include="Mattermost\v4\ChatChannelTest.cs" />
+    <Compile Include="Mattermost\v4\ChatPostTest.cs" />
+    <Compile Include="Mattermost\v4\ClientTest.cs" />
+    <Compile Include="Mattermost\v4\Interface\JsonPayloadExtensions.cs" />
+    <Compile Include="Mattermost\v4\RestServiceTest.cs" />
+    <Compile Include="Mattermost\v4\SessionImplTest.cs" />
     <Compile Include="Settings\CloseCommandTest.cs" />
     <Compile Include="ContextMenu\MailItemContextMenuEntryTest.cs" />
     <Compile Include="Mail\MailExceptionTest.cs" />

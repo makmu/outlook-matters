@@ -27,7 +27,7 @@ namespace Test.OutlookMatters.Core.Settings
             const string mattermostUrl = "http://localhost";
             const string teamId = "teamId";
             const string username = "username";
-            const MattermostVersion version = MattermostVersion.ApiVersionOne;
+            const MattermostVersion version = MattermostVersion.ApiVersionFour;
             var viewModel = new SettingsViewModel(
                 new AddInSettings(string.Empty, string.Empty, string.Empty,
                     string.Empty, It.IsAny<MattermostVersion>()),

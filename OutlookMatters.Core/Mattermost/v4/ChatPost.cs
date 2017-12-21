@@ -1,23 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using OutlookMatters.Core.Chat;
-using OutlookMatters.Core.Mattermost.v1.Interface;
+using OutlookMatters.Core.Mattermost.v4.Interface;
 
-namespace OutlookMatters.Core.Mattermost.v1
+namespace OutlookMatters.Core.Mattermost.v4
 {
-    public class ChatPostImpl : IChatPost
+    public class ChatPost : IChatPost
     {
         private readonly IRestService _restService;
         private readonly Uri _baseUri;
         private readonly string _token;
-        private readonly string _userId;
+        private readonly string _teamId;
         private readonly Post _post;
 
-        public ChatPostImpl(IRestService restService, Uri baseUri, string token, string userId, Post post)
+        public ChatPost(IRestService restService, Uri baseUri, string token, string teamId, Post post)
         {
             _restService = restService;
             _baseUri = baseUri;
             _token = token;
-            _userId = userId;
+            _teamId = teamId;
             _post = post;
         }
 
@@ -26,13 +30,11 @@ namespace OutlookMatters.Core.Mattermost.v1
             var rootId = _post.RootId == "" ? _post.Id : _post.RootId;
             var newPost = new Post
             {
-                Id = string.Empty,
                 ChannelId = _post.ChannelId,
                 Message = message,
-                UserId = _userId,
                 RootId = rootId
             };
-            _restService.CreatePost(_baseUri, _token, _post.ChannelId, newPost);
+            _restService.CreatePost(_baseUri, _token, newPost);
         }
     }
 }

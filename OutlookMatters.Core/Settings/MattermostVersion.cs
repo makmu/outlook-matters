@@ -2,7 +2,7 @@
 {
     public enum MattermostVersion
     {
-        ApiVersionOne,
-        ApiVersionThree
+        ApiVersionThree,
+        ApiVersionFour
     }
 }

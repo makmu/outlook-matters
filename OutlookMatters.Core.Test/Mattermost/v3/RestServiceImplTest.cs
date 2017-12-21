@@ -26,6 +26,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
         const string POST_ID = "postId";
         const string CHANNEL_ID = "channelId";
         const string CHANNEL_NAME = "FunnyChannelName";
+        private readonly string CONTENT_TYPE = "text/json";
         const ChannelType CHANNEL_TYPE = ChannelType.Public;
 
         [Test]
@@ -35,6 +36,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             var user = SetupExampleUserData();
             var httpClient = new Mock<IHttpClient>();
             httpClient.SetupRequest("http://localhost/", "api/v3/users/login")
+                .WithContentType(CONTENT_TYPE)
                 .Post(login.SerializeToPayload())
                 .Responses(user.SerializeToPayload())
                 .WithToken(TOKEN);
@@ -53,6 +55,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             var user = SetupExampleUserData();
             var httpClient = new Mock<IHttpClient>();
             httpClient.SetupRequest("http://localhost/", "api/v3/users/login")
+                .WithContentType(CONTENT_TYPE)
                 .Post(login.SerializeToPayload())
                 .Responses(user.SerializeToPayload())
                 .WithToken(TOKEN);
@@ -71,6 +74,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             var user = SetupExampleUserData();
             var httpClient = new Mock<IHttpClient>();
             var httpResponse = httpClient.SetupRequest("http://localhost/", "api/v3/users/login")
+                .WithContentType(CONTENT_TYPE)
                 .Post(login.SerializeToPayload())
                 .Responses(user.SerializeToPayload())
                 .WithToken(TOKEN);
@@ -89,6 +93,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             var error = SetupExampleError();
             var httpClient = new Mock<IHttpClient>();
             httpClient.SetupRequest("http://localhost/", "api/v3/users/login")
+                .WithContentType(CONTENT_TYPE)
                 .FailsAtPost(login.SerializeToPayload())
                 .Responses(error.SerializeToPayload());
             var sut = new RestServiceImpl(httpClient.Object);
@@ -257,6 +262,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             httpClient.SetupRequest("http://localhost/",
                     "api/v3/teams/" + TEAM_GUID + "/channels/" + post.ChannelId + "/posts/create")
                 .WithToken(TOKEN)
+                .WithContentType(CONTENT_TYPE)
                 .Post(post.SerializeToPayload());
             var sut = new RestServiceImpl(httpClient.Object);
 

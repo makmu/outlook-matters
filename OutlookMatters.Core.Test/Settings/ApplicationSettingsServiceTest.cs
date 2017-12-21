@@ -16,7 +16,7 @@ namespace Test.OutlookMatters.Core.Settings
             var cache = new Mock<ICache>();
             var classUnderTest = new ApplicationSettingsService(cache.Object);
 
-            classUnderTest.SaveCredentials("url42", "teamId42", "username42", MattermostVersion.ApiVersionOne);
+            classUnderTest.SaveCredentials("url42", "teamId42", "username42", MattermostVersion.ApiVersionFour);
 
             cache.Verify(c => c.Invalidate());
         }
@@ -25,8 +25,8 @@ namespace Test.OutlookMatters.Core.Settings
         public void Load_ReturnsSavedSettings()
         {
             var classUnderTest = new ApplicationSettingsService(Mock.Of<ICache>());
-            var settings = new AddInSettings("url42", "teamId42", "username42", "channelMap", MattermostVersion.ApiVersionOne);
-            classUnderTest.SaveCredentials("url42", "teamId42", "username42", MattermostVersion.ApiVersionOne);
+            var settings = new AddInSettings("url42", "teamId42", "username42", "channelMap", MattermostVersion.ApiVersionFour);
+            classUnderTest.SaveCredentials("url42", "teamId42", "username42", MattermostVersion.ApiVersionFour);
             classUnderTest.SaveChannels("channelMap");
 
             var loaded = classUnderTest.Load();

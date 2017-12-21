@@ -1,24 +1,25 @@
 ﻿using System;
 using OutlookMatters.Core.Chat;
-using OutlookMatters.Core.Mattermost.v1.Interface;
+using OutlookMatters.Core.Mattermost.v4.Interface;
 using OutlookMatters.Core.Settings;
 
-namespace OutlookMatters.Core.Mattermost.v1
+namespace OutlookMatters.Core.Mattermost.v4
 {
-    public class ChatChannelImpl : IChatChannel
-    {
-        private readonly string _userId;
-        private readonly Uri _baseUri;
-        private readonly string _token;
-        private readonly IRestService _restService;
-        private readonly Channel _channel;
+    public class ChatChannel : IChatChannel
 
-        public ChatChannelImpl(IRestService restService, Uri baseUri, string token, string userId, Channel channel)
+    {
+        private Uri _baseUri;
+        private Channel _channel;
+        private IRestService _restService;
+        private string _teamId;
+        private string _token;
+
+        public ChatChannel(IRestService restService, Uri baseUri, string token, string teamId, Channel channel)
         {
-            _userId = userId;
+            _restService = restService;
             _baseUri = baseUri;
             _token = token;
-            _restService = restService;
+            _teamId = teamId;
             _channel = channel;
         }
 
@@ -26,21 +27,18 @@ namespace OutlookMatters.Core.Mattermost.v1
         {
             var post = new Post
             {
-                Id = string.Empty,
-                ChannelId = _channel.ChannelId,
-                Message = message,
-                UserId = _userId,
-                RootId = string.Empty
+                ChannelId = _channel.Id,
+                Message = message
             };
-            _restService.CreatePost(_baseUri, _token, _channel.ChannelId, post);
+            _restService.CreatePost(_baseUri, _token, post);
         }
 
         public ChannelSetting ToSetting()
         {
             return new ChannelSetting
             {
-                ChannelId = _channel.ChannelId,
-                ChannelName = _channel.ChannelName,
+                ChannelId = _channel.Id,
+                ChannelName = _channel.Name,
                 Type = ConvertType(_channel.Type)
             };
         }

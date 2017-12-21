@@ -1,16 +1,16 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
-using OutlookMatters.Core.Mattermost.v1;
-using OutlookMatters.Core.Mattermost.v1.Interface;
+using OutlookMatters.Core.Mattermost.v4;
+using OutlookMatters.Core.Mattermost.v4.Interface;
 
-namespace Test.OutlookMatters.Core.Mattermost.v1
+namespace Test.OutlookMatters.Core.Mattermost.v4
 {
     [TestFixture]
-    public class ChatPostImplTest
+    class ChatPostTest
     {
         public const string MESSAGE = "message";
-        public const string USER_ID = "userId";
+        public const string TEAM_ID = "rootPost";
         public const string POST_ID = "postId";
         public const string ROOT_ID = "rootPost";
         public const string TOKEN = "token";
@@ -20,18 +20,16 @@ namespace Test.OutlookMatters.Core.Mattermost.v1
         [Test]
         public void Reply_CreateNewPostForRoot_IfThisPostIsNotRoot()
         {
-            var post = new Post {Id = POST_ID, ChannelId = CHANNEL_ID, RootId = ROOT_ID};
+            var post = new Post { Id = POST_ID, ChannelId = CHANNEL_ID, RootId = ROOT_ID };
             var newPost = new Post
             {
-                Id = string.Empty,
                 ChannelId = CHANNEL_ID,
                 Message = MESSAGE,
-                UserId = USER_ID,
                 RootId = ROOT_ID
             };
             var restService = new Mock<IRestService>();
-            restService.Setup(x => x.CreatePost(BaseUri, TOKEN, CHANNEL_ID, newPost));
-            var sut = new ChatPostImpl(restService.Object, BaseUri, TOKEN, USER_ID, post);
+            restService.Setup(x => x.CreatePost(BaseUri, TOKEN, newPost));
+            var sut = new ChatPost(restService.Object, BaseUri, TOKEN, TEAM_ID, post);
 
             sut.Reply(MESSAGE);
 
@@ -41,18 +39,16 @@ namespace Test.OutlookMatters.Core.Mattermost.v1
         [Test]
         public void Reply_CreatesNewPostWithThisPostAsRootPost_IfThisPostIsRoot()
         {
-            var post = new Post {Id = POST_ID, ChannelId = CHANNEL_ID, RootId = string.Empty};
+            var post = new Post { Id = POST_ID, ChannelId = CHANNEL_ID, RootId = string.Empty };
             var newPost = new Post
             {
-                Id = string.Empty,
                 ChannelId = CHANNEL_ID,
                 Message = MESSAGE,
-                UserId = USER_ID,
                 RootId = POST_ID
             };
             var restService = new Mock<IRestService>();
-            restService.Setup(x => x.CreatePost(BaseUri, TOKEN, CHANNEL_ID, newPost));
-            var sut = new ChatPostImpl(restService.Object, BaseUri, TOKEN, USER_ID, post);
+            restService.Setup(x => x.CreatePost(BaseUri, TOKEN, newPost));
+            var sut = new ChatPost(restService.Object, BaseUri, TOKEN, TEAM_ID, post);
 
             sut.Reply(MESSAGE);
 

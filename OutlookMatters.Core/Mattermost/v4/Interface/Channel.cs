@@ -1,21 +1,21 @@
 ﻿using Newtonsoft.Json;
 
-namespace OutlookMatters.Core.Mattermost.v1.Interface
+namespace OutlookMatters.Core.Mattermost.v4.Interface
 {
     public class Channel
     {
         [JsonProperty("id")]
-        public string ChannelId { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("display_name")]
-        public string ChannelName { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty("type")]
         public ChannelType Type { get; set; }
 
         protected bool Equals(Channel other)
         {
-            return string.Equals(ChannelId, other.ChannelId) && string.Equals(ChannelName, other.ChannelName) &&
+            return string.Equals(Id, other.Id) && string.Equals(Name, other.Name) &&
                    Type == other.Type;
         }
 
@@ -31,8 +31,8 @@ namespace OutlookMatters.Core.Mattermost.v1.Interface
         {
             unchecked
             {
-                var hashCode = (ChannelId != null ? ChannelId.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (ChannelName != null ? ChannelName.GetHashCode() : 0);
+                var hashCode = (Id != null ? Id.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Name != null ? Name.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ (int) Type;
                 return hashCode;
             }
