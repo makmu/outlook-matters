@@ -122,8 +122,10 @@
     <Compile Include="Mattermost\v4\IChatPostFactory.cs" />
     <Compile Include="Mattermost\v4\Interface\Channel.cs" />
     <Compile Include="Mattermost\v4\Interface\ChannelType.cs" />
+    <Compile Include="Mattermost\v4\Interface\Error.cs" />
     <Compile Include="Mattermost\v4\Interface\IRestService.cs" />
     <Compile Include="Mattermost\v4\Interface\Login.cs" />
+    <Compile Include="Mattermost\v4\Interface\MattermostException.cs" />
     <Compile Include="Mattermost\v4\Interface\Post.cs" />
     <Compile Include="Mattermost\v4\Interface\Team.cs" />
     <Compile Include="Mattermost\v4\RestService.cs" />

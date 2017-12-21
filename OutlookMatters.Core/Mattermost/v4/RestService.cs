@@ -17,61 +17,103 @@ namespace OutlookMatters.Core.Mattermost.v4
 
         public void Login(Uri baseUri, Login login, out string token)
         {
-            var loginUrl = new Uri(baseUri, "api/v4/users/login");
-            using (var response = _httpClient.Request(loginUrl)
-                .WithContentType("application/json")
-                .Post(JsonConvert.SerializeObject(login)))
+            try
             {
-                token = response.GetHeaderValue("Token");
+                var loginUrl = new Uri(baseUri, "api/v4/users/login");
+                using (var response = _httpClient.Request(loginUrl)
+                    .WithContentType("application/json")
+                    .Post(JsonConvert.SerializeObject(login)))
+                {
+                    token = response.GetHeaderValue("Token");
+                }
+            }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
             }
         }
 
         public IEnumerable<Team> GetTeams(Uri baseUri, string token)
         {
-            var teamsUrl = new Uri(baseUri, "api/v4/users/me/teams");
-            using (var response = _httpClient.Request(teamsUrl)
-                .WithHeader("Authorization", "Bearer " + token)
-                .Get())
+            try
             {
-                var payload = response.GetPayload();
-                return JsonConvert.DeserializeObject<IEnumerable<Team>>(payload);
+                var teamsUrl = new Uri(baseUri, "api/v4/users/me/teams");
+                using (var response = _httpClient.Request(teamsUrl)
+                    .WithHeader("Authorization", "Bearer " + token)
+                    .Get())
+                {
+                    var payload = response.GetPayload();
+                    return JsonConvert.DeserializeObject<IEnumerable<Team>>(payload);
+                }
+            }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
             }
         }
 
         public IEnumerable<Channel> GetChannels(Uri baseUri, string token, string teamId)
         {
-            var getChannelsUrl = new Uri(baseUri, "api/v4/users/me/teams/" + teamId + "/channels");
-            using (var response = _httpClient.Request(getChannelsUrl)
-                .WithHeader("Authorization", "Bearer " + token)
-                .Get())
+            try
             {
-                var payload = response.GetPayload();
-                return JsonConvert.DeserializeObject<IEnumerable<Channel>>(payload);
+                var getChannelsUrl = new Uri(baseUri, "api/v4/users/me/teams/" + teamId + "/channels");
+                using (var response = _httpClient.Request(getChannelsUrl)
+                    .WithHeader("Authorization", "Bearer " + token)
+                    .Get())
+                {
+                    var payload = response.GetPayload();
+                    return JsonConvert.DeserializeObject<IEnumerable<Channel>>(payload);
+                }
+            }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
             }
         }
 
         public void CreatePost(Uri baseUri, string token, Post newPost)
         {
-            var postUrl = new Uri(baseUri, "api/v4/posts");
-            using (_httpClient.Request(postUrl)
-                .WithContentType("application/json")
-                .WithHeader("Authorization", "Bearer " + token)
-                .Post(JsonConvert.SerializeObject(newPost)))
+            try
             {
+                var postUrl = new Uri(baseUri, "api/v4/posts");
+                using (_httpClient.Request(postUrl)
+                    .WithContentType("application/json")
+                    .WithHeader("Authorization", "Bearer " + token)
+                    .Post(JsonConvert.SerializeObject(newPost)))
+                {
+                }
+            }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
             }
         }
 
         public Post GetPostById(Uri baseUri, string token, string postId)
         {
-            var postUrl = new Uri(baseUri, "api/v4/posts/" + postId);
-            using (var response = _httpClient.Request(postUrl)
-                .WithContentType("application/json")
-                .WithHeader("Authorization", "Bearer " + token)
-                .Get())
+            try
             {
-                var payload = response.GetPayload();
-                return JsonConvert.DeserializeObject<Post>(payload);
+                var postUrl = new Uri(baseUri, "api/v4/posts/" + postId);
+                using (var response = _httpClient.Request(postUrl)
+                    .WithContentType("application/json")
+                    .WithHeader("Authorization", "Bearer " + token)
+                    .Get())
+                {
+                    var payload = response.GetPayload();
+                    return JsonConvert.DeserializeObject<Post>(payload);
+                }
             }
+            catch (HttpException hex)
+            {
+                throw TranslateException(hex);
+            }
+        }
+
+        private static MattermostException TranslateException(HttpException hex)
+        {
+            var error = JsonConvert.DeserializeObject<Interface.Error>(hex.Response.GetPayload());
+            var exception = new MattermostException(error);
+            return exception;
         }
     }
 }
