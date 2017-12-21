@@ -93,6 +93,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
             var error = SetupExampleError();
             var httpClient = new Mock<IHttpClient>();
             httpClient.SetupRequest("http://localhost/", "api/v3/users/login")
+                .WithContentType(CONTENT_TYPE)
                 .FailsAtPost(login.SerializeToPayload())
                 .Responses(error.SerializeToPayload());
             var sut = new RestServiceImpl(httpClient.Object);

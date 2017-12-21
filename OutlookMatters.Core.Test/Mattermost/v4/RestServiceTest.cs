@@ -61,6 +61,25 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
         }
 
         [Test]
+        public void Login_ThrowsMattermostExceptionWithError_IfHttpExceptionWithErrorPayload()
+        {
+            string token;
+            var login = SetupExampleLogin();
+            var error = SetupExampleError();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v4/users/login")
+                .WithContentType(CONTENT_TYPE)
+                .FailsAtPost(login.SerializeToPayload())
+                .Responses(error.SerializeToPayload());
+            var sut = new RestService(httpClient.Object);
+
+            Action action = () => sut.Login(Uri, login, out token);
+
+            action.ShouldThrow<MattermostException>().Where(m => m.Details == error.DetailedError).And.Message.Should()
+                .Be(error.Message);
+        }
+
+        [Test]
         public void GetTeams_PerformsRestCall()
         {
             var teamList = SetupExampleTeamList();
@@ -68,6 +87,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
             httpClient.SetupRequest("http://localhost/", "api/v4/users/me/teams")
                 .WithToken(TOKEN).Get().Responses(teamList.SerializeToPayload());
             var sut = new RestService(httpClient.Object);
+
 
             var teams = sut.GetTeams(Uri, TOKEN);
 
@@ -86,6 +106,21 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
             sut.GetTeams(Uri, TOKEN);
 
             httpResponse.Verify(h => h.Dispose());
+        }
+
+        [Test]
+        public void GetTeams_ThrowsMattermostExceptionWithError_IfHttpExceptionWithErrorPayload()
+        {
+            var error = SetupExampleError();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v4/users/me/teams")
+                .WithToken(TOKEN).FailsAtGet().Responses(error.SerializeToPayload());
+            var sut = new RestService(httpClient.Object);
+
+            Action action = () => sut.GetTeams(Uri, TOKEN);
+
+            action.ShouldThrow<MattermostException>().Where(m => m.Details == error.DetailedError).And.Message.Should()
+                .Be(error.Message);
         }
 
         [Test]
@@ -109,7 +144,8 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
         {
             var channelList = SetupExampleChannelList();
             var httpClient = new Mock<IHttpClient>();
-            var httpResponse = httpClient.SetupRequest("http://localhost/", "api/v4/users/me/teams/" + TEAM_ID + "/channels")
+            var httpResponse = httpClient.SetupRequest("http://localhost/",
+                    "api/v4/users/me/teams/" + TEAM_ID + "/channels")
                 .WithToken(TOKEN)
                 .Get()
                 .Responses(channelList.SerializeToPayload());
@@ -118,6 +154,24 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
             sut.GetChannels(Uri, TOKEN, TEAM_ID);
 
             httpResponse.Verify(h => h.Dispose());
+        }
+
+        [Test]
+        public void GetChannelList_ThrowsMattermostExceptionWithError_IfHttpExceptionWithErrorPayload()
+        {
+            var error = SetupExampleError();
+            var httpClient = new Mock<IHttpClient>();
+            var httpResponse = httpClient.SetupRequest("http://localhost/",
+                    "api/v4/users/me/teams/" + TEAM_ID + "/channels")
+                .WithToken(TOKEN)
+                .FailsAtGet()
+                .Responses(error.SerializeToPayload());
+            var sut = new RestService(httpClient.Object);
+
+            Action action = () => sut.GetChannels(Uri, TOKEN, TEAM_ID);
+
+            action.ShouldThrow<MattermostException>().Where(m => m.Details == error.DetailedError).And.Message.Should()
+                .Be(error.Message);
         }
 
         [Test]
@@ -144,7 +198,7 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
             var httpClient = new Mock<IHttpClient>();
             var httpResponse =
                 httpClient.SetupRequest("http://localhost/", "api/v4/posts/" + POST_ID)
-                .WithContentType(CONTENT_TYPE)
+                    .WithContentType(CONTENT_TYPE)
                     .WithToken(TOKEN)
                     .Get().Responses(post.SerializeToPayload());
             var sut = new RestService(httpClient.Object);
@@ -152,6 +206,23 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
             sut.GetPostById(Uri, TOKEN, POST_ID);
 
             httpResponse.Verify(x => x.Dispose());
+        }
+
+        [Test]
+        public void GetPostById_ThrowsMattermostExceptionWithError_IfHttpExceptionWithErrorPayload()
+        {
+            var error = SetupExampleError();
+            var httpClient = new Mock<IHttpClient>();
+            httpClient.SetupRequest("http://localhost/", "api/v4/posts/" + POST_ID)
+                .WithContentType(CONTENT_TYPE)
+                .WithToken(TOKEN)
+                .FailsAtGet().Responses(error.SerializeToPayload());
+            var sut = new RestService(httpClient.Object);
+
+            Action action = () => sut.GetPostById(Uri, TOKEN, POST_ID);
+
+            action.ShouldThrow<MattermostException>().Where(m => m.Details == error.DetailedError).And.Message.Should()
+                .Be(error.Message);
         }
 
         [Test]
@@ -204,6 +275,15 @@ namespace Test.OutlookMatters.Core.Mattermost.v4
             {
                 LoginId = LOGIN_ID,
                 Password = PASSWORD
+            };
+        }
+
+        private Error SetupExampleError()
+        {
+            return new Error
+            {
+                Message = "message",
+                DetailedError = "detailed_error"
             };
         }
     }

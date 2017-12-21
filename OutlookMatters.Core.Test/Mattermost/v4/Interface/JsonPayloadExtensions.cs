@@ -69,5 +69,10 @@ namespace Test.OutlookMatters.Core.Mattermost.v4.Interface
         {
             return "{\"id\":\"" + post.Id + "\",\"message\":\"" + post.Message + "\",\"channel_id\":\"" + post.ChannelId + "\",\"root_id\":\"" + post.RootId + "\"}";
         }
+
+        public static string SerializeToPayload(this Error error)
+        {
+            return "{\"message\":\"" + error.Message + "\",\"detailed_error\":\"" + error.DetailedError + "\"}";
+        }
     }
 }
