@@ -6,7 +6,7 @@
         xmlns:settings="clr-namespace:OutlookMatters.Core.Settings"
         mc:Ignorable="d"
         Title="Mattermost Settings"
-        Height="279"
+        Height="250"
         Width="400"
         Name="Window"
         d:DesignHeight="250" d:DesignWidth="400" ResizeMode="NoResize" WindowStyle="ToolWindow">
@@ -45,7 +45,6 @@
             <StackPanel Grid.Row="4" Grid.Column="1">
                 <RadioButton Content="mattermost v4.0 (default)" IsChecked="{Binding Path=Version, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=ApiVersionFour}" Margin="5"/>
                 <RadioButton Content="mattermost v3.0 (deprecated)" IsChecked="{Binding Path=Version, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=ApiVersionThree}" Margin="5"/>
-                <RadioButton Content="mattermost v1.3 - v2.2 (deprecated)" IsChecked="{Binding Path=Version, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=ApiVersionOne}"  Margin="5"/>
             </StackPanel>
         </Grid>
 

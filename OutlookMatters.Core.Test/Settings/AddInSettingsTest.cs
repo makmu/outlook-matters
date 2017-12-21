@@ -21,7 +21,7 @@ namespace Test.OutlookMatters.Core.Settings
             const string teamId = "team id";
             const string username = "user name";
             const string channelMap = "channel map";
-            const MattermostVersion version = MattermostVersion.ApiVersionOne;
+            const MattermostVersion version = MattermostVersion.ApiVersionFour;
             var otherSettings = new AddInSettings(url + urlModifier, teamId + teamIdModifier,
                 username + usernameModifier, channelMap + channelMapModifier, version);
             var classUnderTest = new AddInSettings(url, teamId, username, channelMap, version);
@@ -68,7 +68,7 @@ namespace Test.OutlookMatters.Core.Settings
             const string teamId = "team id";
             const string username = "user name";
             const string channelMap = "channel map";
-            const MattermostVersion version = MattermostVersion.ApiVersionOne;
+            const MattermostVersion version = MattermostVersion.ApiVersionFour;
             var otherSettings = new AddInSettings(url + urlModifier, teamId + teamIdModifier,
                 username + usernameModifier, channelMap + channelMapModifier, version);
             var classUnderTest = new AddInSettings(url, teamId, username, channelMap, version);

@@ -12,10 +12,10 @@ namespace Test.OutlookMatters.Core.Settings
     public class EnumMatchToBooleanConverterTest
     {
         [Test]
-        [TestCase(MattermostVersion.ApiVersionOne, MattermostVersion.ApiVersionOne, true)]
-        [TestCase(MattermostVersion.ApiVersionOne, MattermostVersion.ApiVersionThree, false)]
-        [TestCase(null, MattermostVersion.ApiVersionThree, false)]
-        [TestCase(MattermostVersion.ApiVersionOne, null, false)]
+        [TestCase(MattermostVersion.ApiVersionFour, MattermostVersion.ApiVersionFour, true)]
+        [TestCase(MattermostVersion.ApiVersionThree, MattermostVersion.ApiVersionFour, false)]
+        [TestCase(null, MattermostVersion.ApiVersionFour, false)]
+        [TestCase(MattermostVersion.ApiVersionThree, null, false)]
         public void Convert_ConvertsToExpectedResult(object parameter, object value,
             bool expectedResult)
         {
@@ -27,10 +27,10 @@ namespace Test.OutlookMatters.Core.Settings
         }
 
         [Test]
-        [TestCase(true, "ApiVersionOne", MattermostVersion.ApiVersionOne)]
-        [TestCase(false, "ApiVersionOne", null)]
+        [TestCase(true, "ApiVersionFour", MattermostVersion.ApiVersionFour)]
+        [TestCase(false, "ApiVersionFour", null)]
         [TestCase(true, null, null)]
-        [TestCase(null, "ApiVersionOne", null)]
+        [TestCase(null, "ApiVersionFour", null)]
         public void ConvertBack_ConvertsToExpectedResult(object value, object parameter, object expectedResult)
         {
             var classUnderTest = new EnumMatchToBooleanConverter();

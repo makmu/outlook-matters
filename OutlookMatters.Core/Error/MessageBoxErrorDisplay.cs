@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using OutlookMatters.Core.Chat;
-using OutlookMatters.Core.Mattermost.v1.Interface;
+using OutlookMatters.Core.Mattermost.v3.Interface;
 
 namespace OutlookMatters.Core.Error
 {

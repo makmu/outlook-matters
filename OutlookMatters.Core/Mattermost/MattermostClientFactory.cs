@@ -1,7 +1,6 @@
 ﻿using System;
 using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.Http;
-using OutlookMatters.Core.Mattermost.v1;
 using OutlookMatters.Core.Mattermost.v3;
 using OutlookMatters.Core.Mattermost.v4;
 using OutlookMatters.Core.Session;
@@ -22,11 +21,6 @@ namespace OutlookMatters.Core.Mattermost
         {
             switch (version)
             {
-                case MattermostVersion.ApiVersionOne:
-                    var restService1 = new HttpRestService(_httpClient);
-                    var sessionFactory1 = new HttpSessionFactory(restService1);
-                    return new HttpClient(sessionFactory1, restService1);
-
                 case MattermostVersion.ApiVersionThree:
                     var restService3 = new RestServiceImpl(_httpClient);
                     var sessionFactory3 = new ChatFactoryImpl();

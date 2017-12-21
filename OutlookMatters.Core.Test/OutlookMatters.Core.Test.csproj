@@ -69,14 +69,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Mattermost\v1\ChatChannelImplTest.cs" />
-    <Compile Include="Mattermost\v1\ChatPostImplTest.cs" />
     <Compile Include="Http\HttpClientMockRestExtensions.cs" />
-    <Compile Include="Mattermost\v1\HttpClientTest.cs" />
-    <Compile Include="Mattermost\v1\HttpRestServiceTest.cs" />
-    <Compile Include="Mattermost\v1\HttpSessionTest.cs" />
-    <Compile Include="Mattermost\v1\Interface\MattermostExceptionTest.cs" />
-    <Compile Include="Mattermost\v1\Interface\JsonPayloadExtensions.cs" />
     <Compile Include="Mattermost\v3\ChatChannelImplTest.cs" />
     <Compile Include="Mattermost\v3\ChatPostImplTest.cs" />
     <Compile Include="Mattermost\v3\ClientImplTest.cs" />

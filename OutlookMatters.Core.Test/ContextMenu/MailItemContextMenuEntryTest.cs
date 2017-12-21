@@ -10,13 +10,15 @@ using OutlookMatters.Core.Chat;
 using OutlookMatters.Core.ContextMenu;
 using OutlookMatters.Core.Error;
 using OutlookMatters.Core.Mail;
-using OutlookMatters.Core.Mattermost.v1.Interface;
+using OutlookMatters.Core.Mattermost.v3.Interface;
 using OutlookMatters.Core.Reply;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Session;
 using OutlookMatters.Core.Settings;
 using OutlookMatters.Core.Utils;
 using Test.OutlookMatters.Core.TestUtils;
+using Channel = OutlookMatters.Core.Mattermost.v4.Interface.Channel;
+using ChannelType = OutlookMatters.Core.Mattermost.v4.Interface.ChannelType;
 using Exception = System.Exception;
 
 namespace Test.OutlookMatters.Core.ContextMenu
@@ -29,7 +31,7 @@ namespace Test.OutlookMatters.Core.ContextMenu
             get
             {
                 var settings = new AddInSettings("http://localhost", "teamId",
-                    "username", "channels", MattermostVersion.ApiVersionOne);
+                    "username", "channels", MattermostVersion.ApiVersionFour);
                 var settingsLoadService = new Mock<ISettingsLoadService>();
                 settingsLoadService.Setup(x => x.Load()).Returns(settings);
                 return settingsLoadService.Object;
@@ -104,14 +106,14 @@ namespace Test.OutlookMatters.Core.ContextMenu
         {
             const string channelName = "FunnyChannelName";
             const string channelId = "1234";
-            const ChannelType directChannel = ChannelType.Direct;
+            const ChannelTypeSetting directChannel = ChannelTypeSetting.Direct;
             const string subscribedChannelAttribut = "OnPostIntoChannelClick";
-            var channelList = new ChannelList
+            var channelList = new ChannelListSetting
             {
                 Channels =
-                    new List<Channel>
+                    new List<ChannelSetting>
                     {
-                        new Channel {ChannelName = channelName, ChannelId = channelId, Type = directChannel}
+                        new ChannelSetting {ChannelName = channelName, ChannelId = channelId, Type = directChannel}
                     }
             };
             var channels = JsonConvert.SerializeObject(channelList);
@@ -143,14 +145,13 @@ namespace Test.OutlookMatters.Core.ContextMenu
             const string channelButtonIdPrefix = "channel_id-";
             const string channelName = "FunnyChannelName";
             const string channelId = "1234";
-            const ChannelType publicChannel = ChannelType.Public;
-            var channelList = new ChannelList
+            const ChannelTypeSetting publicChannel = ChannelTypeSetting.Public;
+            var channelList = new ChannelListSetting
             {
-                Channels =
-                    new List<Channel>
-                    {
-                        new Channel {ChannelName = channelName, ChannelId = channelId, Type = publicChannel}
-                    }
+                Channels = new List<ChannelSetting>
+                {
+                    new ChannelSetting {ChannelName = channelName, ChannelId = channelId, Type = publicChannel}
+                }
             };
             var channels = JsonConvert.SerializeObject(channelList);
             var settings = new AddInSettings("http://localhost", "teamId",
@@ -454,7 +455,8 @@ namespace Test.OutlookMatters.Core.ContextMenu
             var session = new Mock<ISession>();
             var mattermost = new Mock<IClient>();
             mattermost.Setup(
-                x => x.LoginByUsername(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                    x => x.LoginByUsername(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+                        It.IsAny<string>()))
                 .Returns(session.Object);
             var errorDisplay = new Mock<IErrorDisplay>();
 

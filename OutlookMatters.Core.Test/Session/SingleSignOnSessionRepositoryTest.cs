@@ -83,7 +83,7 @@ namespace Test.OutlookMatters.Core.Session
             var session1 = new Mock<ISession>();
             var session2 = new Mock<ISession>();
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels", MattermostVersion.ApiVersionOne);
+            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels", MattermostVersion.ApiVersionFour);
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var clientFactory = SetupClientFactoryMock(mattermost);
             mattermost.SetupSequence(
@@ -107,7 +107,7 @@ namespace Test.OutlookMatters.Core.Session
             get
             {
                 var settings = new AddInSettings("http://localhost", "teamId",
-                    "username", "channels", MattermostVersion.ApiVersionOne);
+                    "username", "channels", MattermostVersion.ApiVersionFour);
                 var settingsLoadService = new Mock<ISettingsLoadService>();
                 settingsLoadService.Setup(x => x.Load()).Returns(settings);
                 return settingsLoadService.Object;
