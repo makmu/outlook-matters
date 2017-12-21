@@ -26,7 +26,6 @@ namespace OutlookMatters.Core.Mattermost.v4
             _chatPostFactory = chatPostFactory;
         }
 
-
         public IEnumerable<IChatChannel> GetChannels()
         {
             return _restService.GetChannels(_baseUri, _token, _teamId)
