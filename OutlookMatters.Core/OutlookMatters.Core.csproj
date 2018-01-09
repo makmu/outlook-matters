@@ -86,7 +86,7 @@
     <Compile Include="Error\MessageBoxErrorDisplay.cs" />
     <Compile Include="Http\DefaultHttpResponse.cs" />
     <Compile Include="Http\DotNetHttpClient.cs" />
-    <Compile Include="Http\HttpException.cs" />
+    <Compile Include="Http\ServiceException.cs" />
     <Compile Include="Http\HttpWebRequestAdaptor.cs" />
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Http\IHttpRequest.cs" />
@@ -130,6 +130,13 @@
     <Compile Include="Mattermost\v4\Interface\Team.cs" />
     <Compile Include="Mattermost\v4\RestService.cs" />
     <Compile Include="Mattermost\v4\SessionImpl.cs" />
+    <Compile Include="Security\InvalidCertificateDialogShell.cs" />
+    <Compile Include="Security\IServerCertificateValidator.cs" />
+    <Compile Include="Security\ITrustInvalidSslQuestion.cs" />
+    <Compile Include="Security\InvalidCertificateDialog.xaml.cs">
+      <DependentUpon>InvalidCertificateDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Security\StaticServicePointManager.cs" />
     <Compile Include="Session\IClientFactory.cs" />
     <Compile Include="Session\ISessionRepository.cs" />
     <Compile Include="Mail\IExplorerService.cs" />
@@ -178,6 +185,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Security\InvalidCertificateDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Security\PasswordDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -194,7 +205,9 @@
   <ItemGroup>
     <Resource Include="Security\Profile.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Security\NoEncryption.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

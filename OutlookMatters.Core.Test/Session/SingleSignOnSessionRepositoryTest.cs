@@ -26,7 +26,9 @@ namespace Test.OutlookMatters.Core.Session
                 .Returns(session.Object);
             var classUnderTest = new SingleSignOnSessionRepository(clientFactory.Object,
                 settingsLoadService.Object,
-                Mock.Of<IPasswordProvider>());
+                Mock.Of<IPasswordProvider>(),
+                Mock.Of<ITrustInvalidSslQuestion>(),
+                Mock.Of<IServerCertificateValidator>());
 
             var result = await classUnderTest.RestoreSession();
 
@@ -47,7 +49,9 @@ namespace Test.OutlookMatters.Core.Session
                 .Returns(session.Object);
             var classUnderTest = new SingleSignOnSessionRepository(clientFactory.Object,
                 DefaultSettingsLoadService,
-                passwordProvider.Object);
+                passwordProvider.Object,
+                Mock.Of<ITrustInvalidSslQuestion>(),
+                Mock.Of<IServerCertificateValidator>());
 
             var result = await classUnderTest.RestoreSession();
 
@@ -67,7 +71,9 @@ namespace Test.OutlookMatters.Core.Session
                 .Returns(session2.Object);
             var classUnderTest = new SingleSignOnSessionRepository(clientFactory.Object,
                 DefaultSettingsLoadService,
-                Mock.Of<IPasswordProvider>());
+                Mock.Of<IPasswordProvider>(),
+                Mock.Of<ITrustInvalidSslQuestion>(),
+                Mock.Of<IServerCertificateValidator>());
 
             var result1 = await classUnderTest.RestoreSession();
             var result2 = await classUnderTest.RestoreSession();
@@ -92,7 +98,9 @@ namespace Test.OutlookMatters.Core.Session
                 .Returns(session2.Object);
             var classUnderTest = new SingleSignOnSessionRepository(clientFactory.Object,
                 settingsLoadService.Object,
-                Mock.Of<IPasswordProvider>());
+                Mock.Of<IPasswordProvider>(),
+                Mock.Of<ITrustInvalidSslQuestion>(),
+                Mock.Of<IServerCertificateValidator>());
 
             var result1 = await classUnderTest.RestoreSession();
             classUnderTest.Invalidate();

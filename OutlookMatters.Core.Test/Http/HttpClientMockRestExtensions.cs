@@ -55,7 +55,7 @@ namespace Test.OutlookMatters.Core.Http
         public static Mock<IHttpResponse> FailsAtGet(this Mock<IHttpRequest> httpRequest)
         {
             var httpResponse = new Mock<IHttpResponse>();
-            var httpException = new HttpException(httpResponse.Object);
+            var httpException = new ServiceException(httpResponse.Object);
             httpRequest.Setup(x => x.Get()).Throws(httpException);
             return httpResponse;
         }
@@ -63,7 +63,8 @@ namespace Test.OutlookMatters.Core.Http
         public static Mock<IHttpResponse> FailsAtPost(this Mock<IHttpRequest> httpRequest, string payload)
         {
             var httpResponse = new Mock<IHttpResponse>();
-            var httpException = new HttpException(httpResponse.Object);
+            var httpException = new ServiceException(httpResponse.Object);
+            httpRequest.Setup(x => x.WithContentType("text/json")).Returns(httpRequest.Object);
             httpRequest.Setup(x => x.Post(payload)).Throws(httpException);
             return httpResponse;
         }

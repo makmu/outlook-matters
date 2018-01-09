@@ -27,7 +27,7 @@ namespace OutlookMatters.Core.Mattermost.v4
                     token = response.GetHeaderValue("Token");
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
@@ -46,7 +46,7 @@ namespace OutlookMatters.Core.Mattermost.v4
                     return JsonConvert.DeserializeObject<IEnumerable<Team>>(payload);
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
@@ -65,7 +65,7 @@ namespace OutlookMatters.Core.Mattermost.v4
                     return JsonConvert.DeserializeObject<IEnumerable<Channel>>(payload);
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
@@ -83,7 +83,7 @@ namespace OutlookMatters.Core.Mattermost.v4
                 {
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
@@ -103,13 +103,13 @@ namespace OutlookMatters.Core.Mattermost.v4
                     return JsonConvert.DeserializeObject<Post>(payload);
                 }
             }
-            catch (HttpException hex)
+            catch (ServiceException hex)
             {
                 throw TranslateException(hex);
             }
         }
 
-        private static MattermostException TranslateException(HttpException hex)
+        private static MattermostException TranslateException(ServiceException hex)
         {
             var error = JsonConvert.DeserializeObject<Interface.Error>(hex.Response.GetPayload());
             var exception = new MattermostException(error);

@@ -3,22 +3,22 @@
 namespace OutlookMatters.Core.Security
 {
     /// <summary>
-    ///     Interaction logic for PasswordDialog.xaml
+    ///     Interaction logic for InvalidCertificateDialog.xaml
     /// </summary>
-    public partial class PasswordDialog
+    public partial class InvalidCertificateDialog
     {
-        public PasswordDialog()
+        public InvalidCertificateDialog()
         {
             InitializeComponent();
         }
 
-        private void OnOkClick(object sender, RoutedEventArgs e)
+        private void OnAcceptClick(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
             Close();
         }
 
-        private void OnCancelClick(object sender, RoutedEventArgs e)
+        private void OnAbortClick(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
             Close();

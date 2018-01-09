@@ -112,6 +112,9 @@ namespace OutlookMatters.Core.ContextMenu
             {
                 _errorDisplay.Display(mex);
             }
+            catch (UserAbortException)
+            {
+            }
             catch (Exception exception)
             {
                 _errorDisplay.Display(exception);
