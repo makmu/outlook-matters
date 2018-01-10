@@ -64,7 +64,6 @@ namespace Test.OutlookMatters.Core.Http
         {
             var httpResponse = new Mock<IHttpResponse>();
             var httpException = new ServiceException(httpResponse.Object);
-            httpRequest.Setup(x => x.WithContentType("text/json")).Returns(httpRequest.Object);
             httpRequest.Setup(x => x.Post(payload)).Throws(httpException);
             return httpResponse;
         }
