@@ -5,7 +5,6 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using OutlookMatters.Core.Chat;
-using OutlookMatters.Core.Http;
 using OutlookMatters.Core.Security;
 using OutlookMatters.Core.Session;
 using OutlookMatters.Core.Settings;
