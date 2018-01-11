@@ -5,6 +5,6 @@ namespace OutlookMatters.Core.Session
 {
     public interface IClientFactory
     {
-        IClient GetClient(MattermostVersion version);
+        IClient GetClient(MattermostVersion version, LoginType loginType);
     }
 }

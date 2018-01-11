@@ -17,19 +17,40 @@ namespace OutlookMatters.Core.Mattermost
             _httpClient = httpClient;
         }
 
-        public IClient GetClient(MattermostVersion version)
+        public IClient GetClient(MattermostVersion version, LoginType loginType)
         {
+            IAuthenticationService authenticationService;
             switch (version)
             {
                 case MattermostVersion.ApiVersionThree:
                     var restService3 = new RestServiceImpl(_httpClient);
                     var sessionFactory3 = new ChatFactoryImpl();
-                    return new ClientImpl(restService3, sessionFactory3);
+
+                    if (loginType == LoginType.Gitlab)
+                    {
+                        authenticationService = new GitlabAuthenticationService();
+                    }
+                    else
+                    {
+                        authenticationService = new v3.DirectAuthenticationSerivce(restService3);
+                    }
+
+                    return new ClientImpl(authenticationService, restService3, sessionFactory3);
 
                 case MattermostVersion.ApiVersionFour:
                     var restService4 = new RestService(_httpClient);
                     var sessionFactory4 = new ChatFactory();
-                    return new Client(restService4, sessionFactory4);
+
+                    if (loginType == LoginType.Gitlab)
+                    {
+                        authenticationService = new GitlabAuthenticationService();
+                    }
+                    else
+                    {
+                        authenticationService = new v4.DirectAuthenticationSerivce(restService4);
+                    }
+
+                    return new Client(authenticationService, restService4, sessionFactory4);
 
                 default:
                     throw new ArgumentOutOfRangeException("version");

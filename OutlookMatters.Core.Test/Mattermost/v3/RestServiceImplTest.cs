@@ -312,7 +312,6 @@ namespace Test.OutlookMatters.Core.Mattermost.v3
                 Id = string.Empty,
                 ChannelId = CHANNEL_ID,
                 Message = MESSAGE,
-                UserId = USER_ID,
                 RootId = string.Empty
             };
         }

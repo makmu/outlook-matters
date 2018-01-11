@@ -6,6 +6,6 @@ namespace OutlookMatters.Core.Mattermost.v3
 {
     public interface IChatFactory
     {
-        ISession NewInstance(IRestService restService, Uri uri, string token, string userId, string teamId);
+        ISession NewInstance(IRestService restService, Uri uri, string token, string teamId);
     }
 }

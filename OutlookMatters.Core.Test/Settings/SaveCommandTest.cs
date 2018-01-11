@@ -30,7 +30,7 @@ namespace Test.OutlookMatters.Core.Settings
             const MattermostVersion version = MattermostVersion.ApiVersionFour;
             var viewModel = new SettingsViewModel(
                 new AddInSettings(string.Empty, string.Empty, string.Empty,
-                    string.Empty, It.IsAny<MattermostVersion>()),
+                    string.Empty, It.IsAny<MattermostVersion>(), It.IsAny<LoginType>()),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>())
             {
@@ -52,7 +52,7 @@ namespace Test.OutlookMatters.Core.Settings
         {
             var viewModel = new SettingsViewModel(
                 new AddInSettings(string.Empty, string.Empty, string.Empty,
-                    string.Empty, It.IsAny<MattermostVersion>()),
+                    string.Empty, It.IsAny<MattermostVersion>(), It.IsAny<LoginType>()),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>());
             var saveService = new Mock<ISettingsSaveService>();
@@ -68,7 +68,7 @@ namespace Test.OutlookMatters.Core.Settings
         {
             var viewModel = new SettingsViewModel(
                 new AddInSettings(string.Empty, string.Empty, string.Empty,
-                    string.Empty, It.IsAny<MattermostVersion>()),
+                    string.Empty, It.IsAny<MattermostVersion>(), It.IsAny<LoginType>()),
                 Mock.Of<ICommand>(),
                 Mock.Of<ICommand>());
             var window = new Mock<IClosableWindow>();

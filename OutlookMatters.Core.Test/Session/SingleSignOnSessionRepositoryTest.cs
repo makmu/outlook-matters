@@ -54,8 +54,7 @@ namespace Test.OutlookMatters.Core.Session
             var session1 = new Mock<ISession>();
             var session2 = new Mock<ISession>();
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels",
-                MattermostVersion.ApiVersionFour);
+            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels", It.IsAny<MattermostVersion>(), It.IsAny<LoginType>());
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var clientFactory = SetupClientFactoryMock(mattermost);
             mattermost.SetupSequence(
@@ -93,7 +92,7 @@ namespace Test.OutlookMatters.Core.Session
                 .Returns(session.Object);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels",
-                MattermostVersion.ApiVersionFour);
+                MattermostVersion.ApiVersionFour, It.IsAny<LoginType>());
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var invalidSslQuestion = new Mock<ITrustInvalidSslQuestion>();
             invalidSslQuestion.Setup(x => x.GetAnswer(settings.MattermostUrl, exception.InnerException.Message))
@@ -147,8 +146,7 @@ namespace Test.OutlookMatters.Core.Session
                 .Throws(exception)
                 .Returns(session.Object);
             var settingsLoadService = new Mock<ISettingsLoadService>();
-            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels",
-                MattermostVersion.ApiVersionFour);
+            var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels", MattermostVersion.ApiVersionFour, It.IsAny<LoginType>());
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var invalidSslQuestion = new Mock<ITrustInvalidSslQuestion>();
             invalidSslQuestion.Setup(x => x.GetAnswer(settings.MattermostUrl, exception.InnerException.Message))
@@ -167,7 +165,7 @@ namespace Test.OutlookMatters.Core.Session
         {
             var settingsLoadService = new Mock<ISettingsLoadService>();
             var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels",
-                It.IsAny<MattermostVersion>());
+                It.IsAny<MattermostVersion>(), It.IsAny<LoginType>());
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var mattermost = new Mock<IClient>();
             var clientFactory = SetupClientFactoryMock(mattermost);
@@ -202,7 +200,7 @@ namespace Test.OutlookMatters.Core.Session
                 .Returns(session.Object);
             var settingsLoadService = new Mock<ISettingsLoadService>();
             var settings = new AddInSettings("myUrl", "testTeamId", "Donald Duck", "channels",
-                MattermostVersion.ApiVersionFour);
+                MattermostVersion.ApiVersionFour, It.IsAny<LoginType>());
             settingsLoadService.Setup(x => x.Load()).Returns(settings);
             var invalidSslQuestion = new Mock<ITrustInvalidSslQuestion>();
             invalidSslQuestion.Setup(x => x.GetAnswer(settings.MattermostUrl, exception.InnerException.Message))

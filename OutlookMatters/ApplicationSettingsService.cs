@@ -19,7 +19,8 @@ namespace OutlookMatters
                 Properties.Settings.Default.TeamId,
                 Properties.Settings.Default.Username,
                 Properties.Settings.Default.ChannelsMap,
-                Properties.Settings.Default.Version);
+                Properties.Settings.Default.Version,
+                Properties.Settings.Default.LoginType);
         }
 
         public void SaveCredentials(string mattermostUrl, string teamId, string username, MattermostVersion version)

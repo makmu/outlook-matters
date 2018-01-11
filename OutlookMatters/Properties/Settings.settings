@@ -17,5 +17,8 @@
     <Setting Name="Version" Type="OutlookMatters.Core.Settings.MattermostVersion" Scope="User">
       <Value Profile="(Default)">ApiVersionThree</Value>
     </Setting>
+    <Setting Name="LoginType" Type="OutlookMatters.Core.Settings.LoginType" Scope="User">
+      <Value Profile="(Default)">Direct</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

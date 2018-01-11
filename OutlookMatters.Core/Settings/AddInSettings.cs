@@ -2,13 +2,14 @@
 {
     public class AddInSettings
     {
-        public AddInSettings(string mattermostUrl, string teamId, string username, string channelsMap, MattermostVersion version)
+        public AddInSettings(string mattermostUrl, string teamId, string username, string channelsMap, MattermostVersion version, LoginType loginType)
         {
             MattermostUrl = mattermostUrl;
             TeamId = teamId;
             Username = username;
             ChannelsMap = channelsMap;
             Version = version;
+            LoginType = loginType;
         }
 
         public string MattermostUrl { get; private set; }
@@ -16,6 +17,7 @@
         public string Username { get; private set; }
         public string ChannelsMap { get; private set; }
         public MattermostVersion Version { get; private set; }
+        public LoginType LoginType { get; private set; }
 
         protected bool Equals(AddInSettings other)
         {

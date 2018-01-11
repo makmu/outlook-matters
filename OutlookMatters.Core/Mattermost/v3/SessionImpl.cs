@@ -11,7 +11,6 @@ namespace OutlookMatters.Core.Mattermost.v3
         private readonly IRestService _restService;
         private readonly Uri _uri;
         private readonly string _token;
-        private readonly string _userId;
         private readonly string _teamId;
         private readonly IChatChannelFactory _channelFactory;
         private readonly IChatPostFactory _postFactory;
@@ -20,7 +19,6 @@ namespace OutlookMatters.Core.Mattermost.v3
             IRestService restService,
             Uri uri,
             string token,
-            string userId,
             string teamId,
             IChatChannelFactory channelFactory,
             IChatPostFactory postFactory)
@@ -28,7 +26,6 @@ namespace OutlookMatters.Core.Mattermost.v3
             _restService = restService;
             _uri = uri;
             _token = token;
-            _userId = userId;
             _teamId = teamId;
             _channelFactory = channelFactory;
             _postFactory = postFactory;
@@ -37,12 +34,12 @@ namespace OutlookMatters.Core.Mattermost.v3
         public IEnumerable<IChatChannel> GetChannels()
         {
             return _restService.GetChannelList(_uri, _token, _teamId).
-                Select(c => _channelFactory.NewInstance(_restService, _uri, _token, _userId, _teamId, c));
+                Select(c => _channelFactory.NewInstance(_restService, _uri, _token, _teamId, c));
         }
 
         public IChatChannel GetChannel(string channelId)
         {
-            return _channelFactory.NewInstance(_restService, _uri, _token, _userId, _teamId,
+            return _channelFactory.NewInstance(_restService, _uri, _token, _teamId,
                 new Channel {ChannelId = channelId});
         }
 

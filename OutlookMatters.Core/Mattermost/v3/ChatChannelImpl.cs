@@ -10,17 +10,15 @@ namespace OutlookMatters.Core.Mattermost.v3
         private readonly IRestService _restService;
         private readonly Uri _baseUri;
         private readonly string _token;
-        private readonly string _userId;
         private readonly Channel _channel;
         private readonly string _teamId;
 
-        public ChatChannelImpl(IRestService restService, Uri baseUri, string token, string userId, string teamId,
+        public ChatChannelImpl(IRestService restService, Uri baseUri, string token, string teamId,
             Channel channel)
         {
             _restService = restService;
             _baseUri = baseUri;
             _token = token;
-            _userId = userId;
             _channel = channel;
             _teamId = teamId;
         }
@@ -32,7 +30,6 @@ namespace OutlookMatters.Core.Mattermost.v3
                 Id = string.Empty,
                 ChannelId = _channel.ChannelId,
                 Message = message,
-                UserId = _userId,
                 RootId = string.Empty
             };
             _restService.CreatePost(_baseUri, _token, _channel.ChannelId, _teamId, post);

@@ -25,7 +25,7 @@ namespace Test.OutlookMatters.Core.Settings
         public void Load_ReturnsSavedSettings()
         {
             var classUnderTest = new ApplicationSettingsService(Mock.Of<ICache>());
-            var settings = new AddInSettings("url42", "teamId42", "username42", "channelMap", MattermostVersion.ApiVersionFour);
+            var settings = new AddInSettings("url42", "teamId42", "username42", "channelMap", MattermostVersion.ApiVersionFour, LoginType.Direct);
             classUnderTest.SaveCredentials("url42", "teamId42", "username42", MattermostVersion.ApiVersionFour);
             classUnderTest.SaveChannels("channelMap");
 

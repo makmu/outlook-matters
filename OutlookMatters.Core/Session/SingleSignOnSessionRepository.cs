@@ -44,7 +44,7 @@ namespace OutlookMatters.Core.Session
             {
                 var settings = _settingsLoadService.Load();
                 var password = _passwordProvider.GetPassword(settings.Username);
-                var client = _clientFactory.GetClient(settings.Version);
+                var client = _clientFactory.GetClient(settings.Version, settings.LoginType);
                 bool retryLogin;
                 do
                 {

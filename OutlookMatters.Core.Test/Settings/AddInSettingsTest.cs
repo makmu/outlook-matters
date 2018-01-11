@@ -22,9 +22,10 @@ namespace Test.OutlookMatters.Core.Settings
             const string username = "user name";
             const string channelMap = "channel map";
             const MattermostVersion version = MattermostVersion.ApiVersionFour;
+            const LoginType loginType = LoginType.Direct;
             var otherSettings = new AddInSettings(url + urlModifier, teamId + teamIdModifier,
-                username + usernameModifier, channelMap + channelMapModifier, version);
-            var classUnderTest = new AddInSettings(url, teamId, username, channelMap, version);
+                username + usernameModifier, channelMap + channelMapModifier, version, loginType);
+            var classUnderTest = new AddInSettings(url, teamId, username, channelMap, version, loginType);
 
             var result = classUnderTest.Equals(otherSettings);
 
@@ -37,7 +38,7 @@ namespace Test.OutlookMatters.Core.Settings
         public void Equals_ReturnsFalse_IfObjectTypeDoesNotMatch(object other)
         {
             var classUnderTest = new AddInSettings(string.Empty, string.Empty,
-                string.Empty, string.Empty, It.IsAny<MattermostVersion>());
+                string.Empty, string.Empty, It.IsAny<MattermostVersion>(), It.IsAny<LoginType>());
 
             var result = classUnderTest.Equals(other);
 
@@ -48,7 +49,7 @@ namespace Test.OutlookMatters.Core.Settings
         public void Equals_ReturnsTrue_IfReferenceEqual()
         {
             var classUnderTest = new AddInSettings(string.Empty, string.Empty,
-                string.Empty, string.Empty, It.IsAny<MattermostVersion>());
+                string.Empty, string.Empty, It.IsAny<MattermostVersion>(), It.IsAny<LoginType>());
 
             var result = classUnderTest.Equals(classUnderTest);
 
@@ -69,9 +70,10 @@ namespace Test.OutlookMatters.Core.Settings
             const string username = "user name";
             const string channelMap = "channel map";
             const MattermostVersion version = MattermostVersion.ApiVersionFour;
+            const LoginType loginType = LoginType.Direct;
             var otherSettings = new AddInSettings(url + urlModifier, teamId + teamIdModifier,
-                username + usernameModifier, channelMap + channelMapModifier, version);
-            var classUnderTest = new AddInSettings(url, teamId, username, channelMap, version);
+                username + usernameModifier, channelMap + channelMapModifier, version, loginType);
+            var classUnderTest = new AddInSettings(url, teamId, username, channelMap, version, loginType);
 
             var result = classUnderTest.GetHashCode() == otherSettings.GetHashCode();
 
@@ -81,8 +83,8 @@ namespace Test.OutlookMatters.Core.Settings
         [Test]
         public void GetHashCode_ReturnsSameHashCodeIfAllMembersAreNull()
         {
-            var otherSettings = new AddInSettings(null, null, null, null, It.IsAny<MattermostVersion>());
-            var classUnderTest = new AddInSettings(null, null, null, null, It.IsAny<MattermostVersion>());
+            var otherSettings = new AddInSettings(null, null, null, null, It.IsAny<MattermostVersion>(), It.IsAny<LoginType>());
+            var classUnderTest = new AddInSettings(null, null, null, null, It.IsAny<MattermostVersion>(), It.IsAny<LoginType>());
 
             var result = classUnderTest.GetHashCode();
 

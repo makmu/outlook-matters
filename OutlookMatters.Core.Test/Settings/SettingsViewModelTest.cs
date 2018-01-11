@@ -12,7 +12,7 @@ namespace Test.OutlookMatters.Core.Settings
         [Test]
         public void MattermostUrl_ReturnsUrlFromSettingsProvider()
         {
-            var settings = new AddInSettings("http://localhost", "teamId", "username", "channels", It.IsAny<MattermostVersion>());
+            var settings = new AddInSettings("http://localhost", "teamId", "username", "channels", It.IsAny<MattermostVersion>(), It.IsAny<LoginType>());
             var classUnderTest = new SettingsViewModel(settings, Mock.Of<ICommand>(), Mock.Of<ICommand>());
 
             var result = classUnderTest.MattermostUrl;
@@ -24,7 +24,7 @@ namespace Test.OutlookMatters.Core.Settings
         [Test]
         public void TeamId_ReturnsTeamIdFromSettingsProvider()
         {
-            var settings = new AddInSettings("http://localhost", "teamId", "username", "channels", It.IsAny<MattermostVersion>());
+            var settings = new AddInSettings("http://localhost", "teamId", "username", "channels", It.IsAny<MattermostVersion>(), It.IsAny<LoginType>());
             var classUnderTest = new SettingsViewModel(settings, Mock.Of<ICommand>(), Mock.Of<ICommand>());
 
             var result = classUnderTest.TeamId;
@@ -36,7 +36,7 @@ namespace Test.OutlookMatters.Core.Settings
         [Test]
         public void Username_ReturnsUsernameFromSettingsProvider()
         {
-            var settings = new AddInSettings("http://localhost", "teamId", "username", "channels", It.IsAny<MattermostVersion>());
+            var settings = new AddInSettings("http://localhost", "teamId", "username", "channels", It.IsAny<MattermostVersion>(), It.IsAny<LoginType>());
             var classUnderTest = new SettingsViewModel(settings, Mock.Of<ICommand>(), Mock.Of<ICommand>());
 
             var result = classUnderTest.Username;
@@ -48,7 +48,7 @@ namespace Test.OutlookMatters.Core.Settings
         [Test]
         public void Save_ReturnsSaveCommand()
         {
-            var settings = new AddInSettings("http://localhost", "teamId", "username", "channels", It.IsAny<MattermostVersion>());
+            var settings = new AddInSettings("http://localhost", "teamId", "username", "channels", It.IsAny<MattermostVersion>(), It.IsAny<LoginType>());
             var saveCommand = new Mock<ICommand>();
             var classUnderTest = new SettingsViewModel(settings, saveCommand.Object, Mock.Of<ICommand>());
 
@@ -60,7 +60,7 @@ namespace Test.OutlookMatters.Core.Settings
         [Test]
         public void Cancel_ReturnsCancelCommand()
         {
-            var settings = new AddInSettings("http://localhost", "teamId", "username", "channels", It.IsAny<MattermostVersion>());
+            var settings = new AddInSettings("http://localhost", "teamId", "username", "channels", It.IsAny<MattermostVersion>(), It.IsAny<LoginType>());
             var cancelCommand = new Mock<ICommand>();
             var classUnderTest = new SettingsViewModel(settings, Mock.Of<ICommand>(), cancelCommand.Object);
 

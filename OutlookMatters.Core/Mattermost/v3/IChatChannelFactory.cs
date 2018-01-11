@@ -6,7 +6,7 @@ namespace OutlookMatters.Core.Mattermost.v3
 {
     public interface IChatChannelFactory
     {
-        IChatChannel NewInstance(IRestService restService, Uri baseUri, string token, string userId, string teamId,
+        IChatChannel NewInstance(IRestService restService, Uri baseUri, string token, string teamId,
             Channel channel);
     }
 }

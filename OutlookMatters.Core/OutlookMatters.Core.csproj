@@ -91,6 +91,8 @@
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Http\IHttpResponse.cs" />
+    <Compile Include="Mattermost\GitlabAuthenticationService.cs" />
+    <Compile Include="Mattermost\IAuthenticationService.cs" />
     <Compile Include="Mattermost\MattermostClientFactory.cs" />
     <Compile Include="Mattermost\v3\ChatChannelImpl.cs" />
     <Compile Include="Chat\ChatException.cs" />
@@ -130,6 +132,8 @@
     <Compile Include="Mattermost\v4\Interface\Team.cs" />
     <Compile Include="Mattermost\v4\RestService.cs" />
     <Compile Include="Mattermost\v4\SessionImpl.cs" />
+    <Compile Include="Mattermost\v3\DirectAuthenticationSerivce.cs" />
+    <Compile Include="Mattermost\v4\DirectAuthenticationSerivce.cs" />
     <Compile Include="Security\InvalidCertificateDialogShell.cs" />
     <Compile Include="Security\IServerCertificateValidator.cs" />
     <Compile Include="Security\ITrustInvalidSslQuestion.cs" />
@@ -165,6 +169,7 @@
     <Compile Include="Settings\ISettingsLoadService.cs" />
     <Compile Include="Settings\ISettingsSaveService.cs" />
     <Compile Include="Settings\ISettingsUserInterface.cs" />
+    <Compile Include="Settings\LoginType.cs" />
     <Compile Include="Settings\MattermostVersion.cs" />
     <Compile Include="Settings\SaveCommand.cs" />
     <Compile Include="Settings\AddInSettings.cs" />
