@@ -56,7 +56,11 @@ namespace OutlookMatters.Core.Http
             }
             catch (WebException wex)
             {
-                throw new HttpException(new DefaultHttpResponse((HttpWebResponse) wex.Response));
+                if (wex.Response != null)
+                {
+                    throw new ServiceException(new DefaultHttpResponse((HttpWebResponse) wex.Response));
+                }
+                throw;
             }
         }
     }

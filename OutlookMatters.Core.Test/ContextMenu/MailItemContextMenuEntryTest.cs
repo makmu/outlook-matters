@@ -271,7 +271,9 @@ namespace Test.OutlookMatters.Core.ContextMenu
             passwordProvider.Setup(x => x.GetPassword(It.IsAny<string>())).Throws<Exception>();
             var sessionCache = new SingleSignOnSessionRepository(Mock.Of<IClientFactory>(),
                 DefaultSettingsLoadService,
-                passwordProvider.Object);
+                passwordProvider.Object,
+                Mock.Of<ITrustInvalidSslQuestion>(),
+                Mock.Of<IServerCertificateValidator>());
 
             var classUnderTest = new MailItemContextMenuEntry(
                 MockOfMailExplorer(),
