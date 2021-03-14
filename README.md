@@ -1,3 +1,10 @@
+Time to pass on the torch
+=========================
+
+Since my current company does not use Mattermost, I no longer use the plugin myself and development basically stalled.
+
+Do you want to bring new enthusiasm to outlook matters and take over active development? Comment on [this issue](https://github.com/makmu/outlook-matters/issues/82), or contact me directly at mue dot ma at gmx dot net.
+
 [![Build status](https://ci.appveyor.com/api/projects/status/gvddf3tonfjuwaoi?svg=true)](https://ci.appveyor.com/project/makmu/outlook-matters)
 [![codecov.io](https://codecov.io/github/makmu/outlook-matters/coverage.svg?branch=master)](https://codecov.io/github/makmu/outlook-matters?branch=master)
 ### Introduction
