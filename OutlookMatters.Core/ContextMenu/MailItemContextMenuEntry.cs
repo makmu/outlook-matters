@@ -65,7 +65,7 @@ namespace OutlookMatters.Core.ContextMenu
             {
                 for (int index = 0; index < channelList.Channels.Count; index++)
                 {
-                    if (channelList.Channels[index].Type == ChannelTypeSetting.Public)
+                    if(channelList.Channels[index].Type == ChannelTypeSetting.Public || channelList.Channels[index].Type == ChannelTypeSetting.Private) 
                     {
                         xmlString += CreateChannelButton(channelList.Channels[index].ChannelId,
                             channelList.Channels[index].ChannelName);
